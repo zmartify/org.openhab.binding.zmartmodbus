@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="zmartifymodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+	<thing-type id="nilancomfort300" listed="false">
+	    <supported-bridge-type-refs>
+            <bridge-type-ref id="serialbridge" />
+            <bridge-type-ref id="tcpbridge" />
+        </supported-bridge-type-refs>
+
+	
+		<label>Nilan Comfort 300</label>
+		<description>Nilan Comfort 3000 Air Ventilation controller</description>
+
+		<channels>
+            <channel id="power_consumption" typeId="sensor_energy">
+                <properties>
+                    <property name="category">0x00</property>
+                    <property name="index">0x10</property>
+                    <property name="page">0x00</property>
+                    <property name="valuetype">float32_swap</property>
+                    <property name="bit">0x0D</property>
+                </properties>
+            </channel>
+            <channel id="DHW_enable" typeId="switch_binary">
+                <properties>
+                    <property name="category">0x00</property>
+                    <property name="index">0x08</property>
+                    <property name="page">0x00</property>
+                    <property name="valuetype">bit</property>
+                    <property name="bit">0x0D</property>
+                </properties>
+            </channel>
+			<channel id="HTC_enable" typeId="switch_binary">
+				<properties>
+					<property name="category">0x00</property>
+					<property name="index">0x08</property>
+					<property name="page">0x00</property>
+					<property name="valuetype">bit</property>
+					<property name="bit">0x0C</property>
+				</properties>
+			</channel>
+			<channel id="Inlet_sensor_present" typeId="sensor_binary">
+                <properties>
+                    <property name="category">0x00</property>
+                    <property name="index">0x08</property>
+                    <property name="page">0x00</property>
+                    <property name="valuetype">bit</property>
+                    <property name="bit">0x0B</property>
+                </properties>
+            </channel>
+			<channel id="DHW_sensor_present" typeId="sensor_binary">
+                <properties>
+                    <property name="category">0x00</property>
+                    <property name="index">0x08</property>
+                    <property name="page">0x00</property>
+                    <property name="valuetype">bit</property>
+                    <property name="bit">0x0A</property>
+                </properties>
+            </channel>
+            <!-- NOT IMPLEMENTED YET  
+			<channel id="Inlet_sensor" typeId="sensor_temperature"></channel>
+			<channel id="DHW_sensor" typeId="sensor_temperature"></channel>
+			<channel id="DHW_comfort_temperature" typeId="thermostat_setpoint"></channel>
+			<channel id="DHW_eco_temperature" typeId="thermostat_setpoint"></channel>
+			<channel id="DHW_cleaning_temperature" typeId="thermostat_setpoint"></channel>
+			<channel id="DHW_standby_temperature" typeId="thermostat_setpoint"></channel>
+			<channel id="hightemp_cutoff_temperature" typeId="thermostat_setpoint"></channel>
+			<channel id="hightemp_cutoff_delay" typeId="number"></channel>
+			<channel id="auto_kickin_temperature" typeId="thermostat_setpoint"></channel>
+			<channel id="actuator_activation_interval" typeId="number"></channel>
+			<channel id="actuator_activation_duration" typeId="number"></channel>
+            -->
+		</channels>
+
+		<config-description>
+			<parameter-group name="modbusslaves">
+				<context>modbudsslaves</context>
+				<label>Modbus slaves</label>
+				<description></description>
+			</parameter-group>
+
+			<parameter name="logical_address" type="integer" groupName="modbusslaves" required="true" min="01" max="248">
+				<label>Logical Address</label>
+				<description>Logical Address of the unit</description>
+				<default>2</default>
+			</parameter>
+		</config-description>
+	</thing-type>
+</thing:thing-descriptions>
