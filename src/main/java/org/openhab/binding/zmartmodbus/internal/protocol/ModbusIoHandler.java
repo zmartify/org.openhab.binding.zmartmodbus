@@ -11,7 +11,6 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 import java.io.IOException;
 import java.util.TooManyListenersException;
 
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 
@@ -19,9 +18,12 @@ import gnu.io.NoSuchPortException;
 import gnu.io.PortInUseException;
 import gnu.io.UnsupportedCommOperationException;
 
+/**
+ *
+ * @author Peter Kristensen
+ *
+ */
 public interface ModbusIoHandler {
-    void deviceDiscovered(ThingTypeUID thingTypeUID, int unitAddress, int channelId, int elementId);
-
     byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException;
 
     byte[] msgTransaction(byte[] msg) throws ModbusProtocolException;

@@ -17,6 +17,12 @@ import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ *
+ * @author Peter Kristensen
+ *
+ * @param <T>
+ */
 public class ModbusActionFeed<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusActionFeed.class);
@@ -95,7 +101,7 @@ public class ModbusActionFeed<T> {
                     }
                 }
             } catch (InterruptedException e) {
-                // TODO Auto-generated catch block
+                // TODO: Auto-generated catch block
                 e.printStackTrace();
             }
             logger.info("Leaving THREAD");
@@ -105,8 +111,8 @@ public class ModbusActionFeed<T> {
     void launchPublisher() {
         logger.info("LaunchPublisher");
         running = true;
-        Thread ActionThread = new ActionThread();
-        ActionThread.start();
+        Thread actionThread = new ActionThread();
+        actionThread.start();
     }
 
     public void setSlowPoll(int slowPoll) {

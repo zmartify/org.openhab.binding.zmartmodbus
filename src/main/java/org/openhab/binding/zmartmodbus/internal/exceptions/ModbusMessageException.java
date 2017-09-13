@@ -8,6 +8,11 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+/**
+ *
+ * @author Peter Kristensen
+ *
+ */
 public class ModbusMessageException extends Exception {
 
     /**

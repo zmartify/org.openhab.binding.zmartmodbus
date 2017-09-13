@@ -14,13 +14,8 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Hashtable;
-import java.util.Map;
-import java.util.Map.Entry;
-// import java.util.TooManyListenersException;
 import java.util.TooManyListenersException;
 
-import org.eclipse.smarthome.config.core.Configuration;
-import org.eclipse.smarthome.config.core.validation.ConfigValidationException;
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
@@ -34,9 +29,8 @@ import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
-import org.openhab.binding.zmartmodbus.internal.discovery.ModbusThingDiscoveryService;
+import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusIoHandler;
@@ -79,8 +73,8 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
     // Checks if msgCounter should update to smarthome - can be set from UI
     boolean updateCounter = false;
 
-    ModbusThingDiscoveryService discoveryService = null;
-    ServiceRegistration discoveryRegistration = null;
+    ModbusSlaveDiscoveryService discoveryService = null;
+    ServiceRegistration<?> discoveryRegistration = null;
 
     StateListener stateSubscriber = null;
 
@@ -96,18 +90,6 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
     }
 
     @Override
-    public void deviceDiscovered(ThingTypeUID thingTypeUID, int unitAddress, int channelId, int elementId) {
-        if (discoveryService == null) {
-            return;
-        }
-        discoveryService.deviceDiscovered(thingTypeUID, unitAddress, channelId, elementId);
-    }
-
-    public void deviceDiscovered(ThingTypeUID thingType, int unitAddress) {
-        deviceDiscovered(thingType, unitAddress, ID_NOT_USED, ID_NOT_USED);
-    }
-
-    @Override
     public void disconnect() {
     }
 
@@ -117,7 +99,8 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
         // Remove the discovery service
 
         if (discoveryService != null) {
-            discoveryService.deactivate();
+            discoveryService.abortScan();
+            ;
         }
         if (discoveryRegistration != null) {
             discoveryRegistration.unregister();
@@ -128,7 +111,6 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
         // }
 
         if (controller != null) {
-
             controller.stopListening();
         }
     }
@@ -136,22 +118,6 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
     @Override
     public boolean isConnected() {
         return controller.isConnected();
-    }
-
-    public int getConfigParamInt(String keyword, int defValue) {
-        Object param = getConfig().get(keyword);
-        if (param instanceof BigDecimal && param != null) {
-            return ((BigDecimal) param).intValue();
-        }
-        return defValue;
-    }
-
-    public String getConfigParamStr(String keyword, String defValue) {
-        Object param = getConfig().get(keyword);
-        if (param instanceof String && param != null) {
-            return (String) param;
-        }
-        return defValue;
     }
 
     public boolean getListening() {
@@ -241,82 +207,6 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
         updateStatus(ThingStatus.REMOVED);
     }
 
-    @Override
-    public void handleConfigurationUpdate(Map<String, Object> configurationParameters)
-            throws ConfigValidationException {
-        logger.info("Controller Configuration update received");
-
-        // Perform checking on the configuration
-        validateConfigurationParameters(configurationParameters);
-
-        boolean reinitialise = false;
-
-        Configuration configuration = editConfiguration();
-        for (Entry<String, Object> configurationParameter : configurationParameters.entrySet()) {
-            Object value = configurationParameter.getValue();
-            logger.debug("Controller Configuration update {} to {}", configurationParameter.getKey(), value);
-            String[] cfg = configurationParameter.getKey().split("_");
-            switch (cfg[0]) {
-                case "controller":
-                    if (controller == null) {
-                        logger.info("Trying to send controller command, but controller is not initialised");
-                        continue;
-                    }
-
-                    if (cfg[1].equals("softreset") && value instanceof BigDecimal
-                            && ((BigDecimal) value).intValue() == ZmartModbusBindingConstants.ACTION_CHECK_VALUE) {
-                        controller.requestSoftReset();
-
-                        value = new BigDecimal(0);
-                    } else if (cfg[1].equals("hardreset") && value instanceof BigDecimal
-                            && ((BigDecimal) value).intValue() == ZmartModbusBindingConstants.ACTION_CHECK_VALUE) {
-                        controller.requestHardReset();
-
-                        value = new BigDecimal(0);
-                    } else if (cfg[1].equals("exclude") && value instanceof BigDecimal
-                            && ((BigDecimal) value).intValue() == ZmartModbusBindingConstants.ACTION_CHECK_VALUE) {
-                        controller.requestRemoveNodesStart();
-
-                        value = new BigDecimal(0);
-                    } else if (cfg[1].equals("sync") && value instanceof BigDecimal
-                            && ((BigDecimal) value).intValue() == ZmartModbusBindingConstants.ACTION_CHECK_VALUE) {
-                        controller.requestRequestNetworkUpdate();
-
-                        value = new BigDecimal(0);
-                    } else if (cfg[1].equals("inclusiontimeout") && value instanceof BigDecimal) {
-                        reinitialise = true;
-                    }
-                case "slave": {
-                    reinitialise = true;
-                    switch (cfg[1]) {
-                        case THING_TYPE_JABLOTRON_AC116:
-                            break;
-                        case THING_TYPE_NILAN_COMFORT_300:
-                            break;
-                        default:
-                            break;
-                    }
-                }
-                    break;
-                case "port":
-                    reinitialise = true;
-                    break;
-                default:
-                    break;
-            }
-
-            configuration.put(configurationParameter.getKey(), value);
-        }
-
-        // Persist changes
-        updateConfiguration(configuration);
-
-        if (reinitialise == true) {
-            dispose();
-            initialize();
-        }
-    }
-
     protected void incomingMessage() {
         if (controller == null) {
             return;
@@ -367,21 +257,27 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
 
         // Start the discovery service
         // TODO
-        discoveryService = new ModbusThingDiscoveryService(this, searchTime);
-        discoveryService.activate();
+        discoveryService = new ModbusSlaveDiscoveryService(this, searchTime);
 
         // And register it as an OSGi service
         discoveryRegistration = bundleContext.registerService(DiscoveryService.class.getName(), discoveryService,
                 new Hashtable<String, Object>());
 
         updateStatus(ThingStatus.ONLINE, ThingStatusDetail.BRIDGE_OFFLINE, "Zmartify ModbusFunction controller online");
-
     }
 
+    /**
+     *
+     * @param listener
+     */
     public void register(StateListener listener) {
         stateSubscriber = listener;
     }
 
+    /**
+     *
+     *
+     */
     @Override
     public byte[] msgTransaction(byte[] msg) throws ModbusProtocolException {
         return msgTransaction(msg, CUSTOMCODE_STANDARD);
@@ -403,30 +299,24 @@ public class ZmartModbusHandler extends BaseBridgeHandler implements ModbusIoHan
         controller.setListening(listening);
     }
 
-    public void startDeviceDiscovery() {
-        int unitAddress;
-
-        if (controller == null) {
-            return;
-        }
-
-        for (String supportedSlave : SUPPORTED_SLAVES) {
-            unitAddress = getConfigParamInt("slave_" + supportedSlave, SLAVE_UNAVAILABLE);
-            if (unitAddress != SLAVE_UNAVAILABLE) {
-                deviceDiscovered(new ThingTypeUID(BINDING_ID, supportedSlave), unitAddress);
-            }
-        }
-
-        controller.getNodes().forEach(node -> {
-            if (node.getNodeClass().supportDiscovery()) {
-                node.getModbusFunction().startSubDeviceDiscovery(node.getNodeId());
-            }
-        });
+    public ModbusSlaveDiscoveryService getDiscoveryService() {
+        return discoveryService;
     }
 
-    public void stopDeviceDiscovery() {
-        if (controller == null) {
-            return;
+    public int getConfigParamInt(String keyword, int defValue) {
+        Object param = getConfig().get(keyword);
+        if (param instanceof BigDecimal && param != null) {
+            return ((BigDecimal) param).intValue();
         }
+        return defValue;
     }
+
+    public String getConfigParamStr(String keyword, String defValue) {
+        Object param = getConfig().get(keyword);
+        if (param instanceof String && param != null) {
+            return (String) param;
+        }
+        return defValue;
+    }
+
 }

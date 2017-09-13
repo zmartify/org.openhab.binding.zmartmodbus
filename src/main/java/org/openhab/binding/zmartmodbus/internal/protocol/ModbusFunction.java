@@ -1,3 +1,12 @@
+/**
+ * Copyright (c) 2010-2017 by the respective copyright holders.
+ *
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
+ */
+
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
 import java.util.Arrays;
@@ -8,47 +17,62 @@ import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolExcepti
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
 /**
- * OSGI service providing a connection to a device via Serial link (RS232/RS485) or Ethernet using ModbusFunction
- * protocol.
- * This service implements a subset of ModbusFunction Application Protocol as defined by ModbusFunction Organization :
- * http://www.modbus.org/specs.php.<br>
- * For the moment in Ethernet mode, only RTU over TCP/IP is supported
- * <p>
- * Function codes implemented are :
- * <ul>
- * <li>01 (0x01) readCoils(int dataAddress, int count) : Read 1 to 2000 max contiguous status of coils from the attached
- * field device.
- * It returns an array of booleans representing the requested data points.
- * <li>02 (0x02) readDiscreteInputs(int dataAddress, int count) : Read 1 to 2000 max contiguous status of discrete
- * inputs
- * from the attached field device. It returns an array of booleans representing the requested data points.
- * <li>03 (0x03) readHoldingRegisters(int dataAddress, int count) : Read contents of 1 to 125 max contiguous block of
- * holding
- * registers from the attached field device. It returns an array of int representing the requested data points
- * (data registers on 2 bytes).
- * <li>04 (0x04) readInputRegisters(int dataAddress, int count) : Read contents of 1 to 125 max contiguous block of
- * input registers
- * from the attached field device. It returns an array of int representing the requested data points (data registers on
- * 2 bytes).
- * <li>05 (0x05) writeSingleCoil(int dataAddress, boolean data) : Write a single output to either ON or OFF in the
- * attached field
- * device.
- * <li>06 (0x06) writeSingleRegister(int dataAddress, int data) : write a single holding register in the attached field
- * device.
- * <li>07 (0x07) readExceptionStatus() : read the content of 8 Exception Status outputs in the field
- * device.
- * <li>11 (0x0B) getCommEventCounter() : Get a status word and an event count from the field
- * device.
- * <li>12 (0x0C) getCommEventLog() : Get a status word, an event count, a message count and a list of event bytes from
- * the field
- * device.
- * <li>15 (0x0F) writeMultipleCoils(int dataAddress, boolean[] data) : Write multiple coils in a sequence of coils to
- * either
- * ON or OFF in the attached field device.
- * <li>16 (0x10) writeMultipleRegister(int dataAddress, int[] data) : write a block of contiguous registers (1 to 123)
- * in the attached
- * field device.
- * </ul>
+ *
+ * @author Peter Kristensen
+ *
+ *         OSGI service providing a connection to a device via Serial link (RS232/RS485) or Ethernet using
+ *         ModbusFunction
+ *         protocol.
+ *         This service implements a subset of ModbusFunction Application Protocol as defined by ModbusFunction
+ *         Organization :
+ *         http://www.modbus.org/specs.php.<br>
+ *         For the moment in Ethernet mode, only RTU over TCP/IP is supported
+ *         <p>
+ *         Function codes implemented are :
+ *         <ul>
+ *         <li>01 (0x01) readCoils(int dataAddress, int count) : Read 1 to 2000 max contiguous status of coils from the
+ *         attached
+ *         field device.
+ *         It returns an array of booleans representing the requested data points.
+ *         <li>02 (0x02) readDiscreteInputs(int dataAddress, int count) : Read 1 to 2000 max contiguous status of
+ *         discrete
+ *         inputs
+ *         from the attached field device. It returns an array of booleans representing the requested data points.
+ *         <li>03 (0x03) readHoldingRegisters(int dataAddress, int count) : Read contents of 1 to 125 max contiguous
+ *         block of
+ *         holding
+ *         registers from the attached field device. It returns an array of int representing the requested data points
+ *         (data registers on 2 bytes).
+ *         <li>04 (0x04) readInputRegisters(int dataAddress, int count) : Read contents of 1 to 125 max contiguous block
+ *         of
+ *         input registers
+ *         from the attached field device. It returns an array of int representing the requested data points (data
+ *         registers on
+ *         2 bytes).
+ *         <li>05 (0x05) writeSingleCoil(int dataAddress, boolean data) : Write a single output to either ON or OFF in
+ *         the
+ *         attached field
+ *         device.
+ *         <li>06 (0x06) writeSingleRegister(int dataAddress, int data) : write a single holding register in the
+ *         attached field
+ *         device.
+ *         <li>07 (0x07) readExceptionStatus() : read the content of 8 Exception Status outputs in the field
+ *         device.
+ *         <li>11 (0x0B) getCommEventCounter() : Get a status word and an event count from the field
+ *         device.
+ *         <li>12 (0x0C) getCommEventLog() : Get a status word, an event count, a message count and a list of event
+ *         bytes from
+ *         the field
+ *         device.
+ *         <li>15 (0x0F) writeMultipleCoils(int dataAddress, boolean[] data) : Write multiple coils in a sequence of
+ *         coils to
+ *         either
+ *         ON or OFF in the attached field device.
+ *         <li>16 (0x10) writeMultipleRegister(int dataAddress, int[] data) : write a block of contiguous registers (1
+ *         to 123)
+ *         in the attached
+ *         field device.
+ *         </ul>
  */
 
 public class ModbusFunction {

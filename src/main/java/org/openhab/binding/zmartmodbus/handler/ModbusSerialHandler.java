@@ -81,7 +81,6 @@ public class ModbusSerialHandler extends ZmartModbusHandler {
         fastPoll = getConfigParamInt(CONFIGURATION_FASTPOLL, DEFAULT_POLLS);
 
         initializeNetwork();
-
     }
 
     @Override
@@ -105,7 +104,6 @@ public class ModbusSerialHandler extends ZmartModbusHandler {
     public void connect() throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException,
             TooManyListenersException, IOException {
         try {
-
             logger.info("Trying to connect to serial port {}", port);
             CommPortIdentifier portIdentifier = CommPortIdentifier.getPortIdentifier(port);
 
@@ -125,7 +123,6 @@ public class ModbusSerialHandler extends ZmartModbusHandler {
             }
             setConnected(true);
             updateStatus(ThingStatus.ONLINE);
-
         } catch (NoSuchPortException e) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
                     String.format("Offline - serial port '%s' does not exist", port));
@@ -135,9 +132,6 @@ public class ModbusSerialHandler extends ZmartModbusHandler {
         } catch (UnsupportedCommOperationException e) {
             updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
                     String.format("Offline - serial port '%s' is not supported", port));
-            // } catch (TooManyListenersException e) {
-            // updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
-            // getI18nConstant(OFFLINE_SERIAL_LISTENERS, controller.port));
         } catch (Exception e) {
             logger.error("Unknown communication error {}", e.getMessage());
         }
@@ -274,7 +268,6 @@ public class ModbusSerialHandler extends ZmartModbusHandler {
         // logger.info("MODBUS send : {}", DatatypeConverter.printHexBinary(cmd));
         // Send the message
         try {
-
             //
             try {
                 Thread.sleep(delayBetweenMessages); // ensure delay between polling

@@ -209,7 +209,8 @@ public class ModbusController {
 
         // thing was already created,
         if (thingTypeUID != null) {
-            this.bridgeHandler.deviceDiscovered(thingTypeUID, unitAddress, getChannelId(nodeId), getElementId(nodeId));
+            this.bridgeHandler.getDiscoveryService().deviceDiscovered(thingTypeUID, unitAddress, getChannelId(nodeId),
+                    getElementId(nodeId));
         }
         initializeNode(nodeId, unitAddress, nodeClass);
     }

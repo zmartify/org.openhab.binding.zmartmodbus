@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2017 by the respective copyright holders.
+ * Copyright (c) 2014-2016 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
@@ -19,52 +19,56 @@ import org.eclipse.smarthome.config.discovery.DiscoveryServiceCallback;
 import org.eclipse.smarthome.config.discovery.ExtendedDiscoveryService;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ZmartModbusHandler;
+import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
+ * Responsible for discovering Modbus devices attached to the controller
  *
  * @author Peter Kristensen
+ *
+ *
  */
-public class ModbusThingDiscoveryService extends AbstractDiscoveryService implements ExtendedDiscoveryService {
 
-    private Logger logger = LoggerFactory.getLogger(ModbusThingDiscoveryService.class);
+public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService implements ExtendedDiscoveryService {
 
-    private ZmartModbusHandler controllerHandler;
-    private DiscoveryServiceCallback discoveryServiceCallback;
+    private final Logger logger = LoggerFactory.getLogger(ModbusSlaveDiscoveryService.class);
 
-    public ModbusThingDiscoveryService(ZmartModbusHandler modbusControllerHandler, int searchTime) {
-        super(searchTime);
-        this.controllerHandler = modbusControllerHandler;
+    DiscoveryServiceCallback discoveryServiceCallback;
+
+    private ZmartModbusHandler modbusHandler;
+
+    public ModbusSlaveDiscoveryService(ZmartModbusHandler modbusHandler, int searchTime) {
+        super(SUPPORTED_SLAVE_THING_TYPES_UIDS, searchTime, false);
+        this.modbusHandler = modbusHandler;
     }
 
-    public void activate() {
-
-    }
-
-    @Override
-    public void deactivate() {
-    }
-
-    @Override
-    public void setDiscoveryServiceCallback(DiscoveryServiceCallback discoveryServiceCallback) {
-        this.discoveryServiceCallback = discoveryServiceCallback;
+    private ModbusController getController() {
+        return modbusHandler.getController();
     }
 
     @Override
     public Set<ThingTypeUID> getSupportedThingTypes() {
-        return ZmartModbusBindingConstants.SUPPORTED_DEVICE_THING_TYPES_UIDS;
+        return SUPPORTED_SLAVE_THING_TYPES_UIDS;
     }
 
     @Override
-    protected void startScan() {
-        logger.info("Starting ModbusFunction Node inclusion scan for {}", controllerHandler.getThing().getUID());
-        // Start the search for new devices
-        controllerHandler.startDeviceDiscovery();
+    public void startScan() {
+        logger.debug("Start discovery scan for Modbus connected devices");
+        discoverModbus();
     }
 
+    /**
+     * Constructs the ThingUID based on unitAddress, channelId and elementId if available
+     *
+     * @param thingTypeUID
+     * @param unitAddress
+     * @param channelId
+     * @param elementId
+     * @return
+     */
     private ThingUID makeThingUID(ThingTypeUID thingTypeUID, int unitAddress, int channelId, int elementId) {
         String subAddress;
         if (channelId != ID_NOT_USED) {
@@ -76,9 +80,17 @@ public class ModbusThingDiscoveryService extends AbstractDiscoveryService implem
         } else {
             subAddress = String.format("adr%d", unitAddress);
         }
-        return new ThingUID(thingTypeUID, controllerHandler.getThing().getUID(), subAddress);
+        return new ThingUID(thingTypeUID, modbusHandler.getThing().getUID(), subAddress);
     }
 
+    /**
+     * Get called when a device is discovered
+     *
+     * @param thingTypeUID
+     * @param unitAddress
+     * @param channelId
+     * @param elementId
+     */
     public void deviceDiscovered(ThingTypeUID thingTypeUID, int unitAddress, int channelId, int elementId) {
         logger.info("DeviceDiscovered: {}", thingTypeUID);
 
@@ -101,7 +113,7 @@ public class ModbusThingDiscoveryService extends AbstractDiscoveryService implem
                         .withProperty(PROPERTY_UNITADDRESS, String.valueOf(unitAddress))
                         .withProperty(PROPERTY_CHANNELID, String.valueOf(channelId))
                         .withProperty(PROPERTY_ELEMENTID, String.valueOf(elementId)).withLabel(label)
-                        .withBridge(controllerHandler.getThing().getUID()).build();
+                        .withBridge(modbusHandler.getThing().getUID()).build();
                 thingDiscovered(discoveryResult);
             }
         } catch (Exception e) {
@@ -109,26 +121,47 @@ public class ModbusThingDiscoveryService extends AbstractDiscoveryService implem
         }
     }
 
-    public void deviceDiscovered(ThingTypeUID thingTypeUID, int unitAddress) {
-        deviceDiscovered(thingTypeUID, unitAddress, ID_NOT_USED, ID_NOT_USED);
+    /**
+     * Used when a slave has been discovered
+     *
+     * @param thingType
+     * @param unitAddress
+     */
+    public void slaveDiscovered(ThingTypeUID thingType, int unitAddress) {
+        deviceDiscovered(thingType, unitAddress, ID_NOT_USED, ID_NOT_USED);
+    }
+
+    private synchronized void discoverModbus() {
+        int unitAddress;
+
+        if (getController() == null) {
+            return;
+        }
+
+        for (String supportedSlave : SUPPORTED_SLAVES) {
+            unitAddress = modbusHandler.getConfigParamInt("slave_" + supportedSlave, SLAVE_UNAVAILABLE);
+            if (unitAddress != SLAVE_UNAVAILABLE) {
+                // If unitAddress is a valid number, we define the slave as discovered and will try to set it online
+                slaveDiscovered(new ThingTypeUID(BINDING_ID, supportedSlave), unitAddress);
+            }
+        }
+
+        // Initiate discovery for any subdevices on the node
+        getController().getNodes().forEach(node -> {
+            if (node.getNodeClass().supportDiscovery()) {
+                node.getModbusFunction().startSubDeviceDiscovery(node.getNodeId());
+            }
+        });
+    }
+
+    public void stopDeviceDiscovery() {
+        if (getController() == null) {
+            return;
+        }
     }
 
     @Override
-    protected void startBackgroundDiscovery() {
-    }
-
-    @Override
-    protected void stopBackgroundDiscovery() {
-    }
-
-    public void discoverSomething() {
-        ThingUID thingUID = null;
-
-        if (discoveryServiceCallback.getExistingDiscoveryResult(thingUID) != null) {
-        }
-
-        if (discoveryServiceCallback.getExistingThing(thingUID) != null) {
-        }
-
+    public void setDiscoveryServiceCallback(DiscoveryServiceCallback discoveryServiceCallback) {
+        this.discoveryServiceCallback = discoveryServiceCallback;
     }
 }

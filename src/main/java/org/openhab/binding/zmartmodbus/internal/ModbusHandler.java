@@ -31,6 +31,10 @@ import gnu.io.UnsupportedCommOperationException;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+/**
+ * @author Peter Kristensen
+ *
+ */
 public class ModbusHandler<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusHandler.class);

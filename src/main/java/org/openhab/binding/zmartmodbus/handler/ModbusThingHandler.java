@@ -30,7 +30,6 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.types.Command;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusDataSetClass;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusFeedRepeat;
@@ -38,6 +37,7 @@ import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusMessageClas
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusValueClass;
+import org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusChannel;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
@@ -56,6 +56,11 @@ import com.google.common.collect.Sets;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+/**
+ *
+ * @author Peter Kristensen
+ *
+ */
 public class ModbusThingHandler extends BaseThingHandler {
     public final static Set<ThingTypeUID> SUPPORTED_THING_TYPES = Sets.newHashSet();
 
@@ -150,6 +155,7 @@ public class ModbusThingHandler extends BaseThingHandler {
         initializeChannels();
 
         if (getNode(nodeId).getNodeClass().equals(ModbusNodeClass.JablotronAC116)) {
+            logger.debug("Registering JablotronAC116 to receive internal messages i.e. discovery information");
             getController().hotMessage.filter(modbusMessage -> modbusMessage.isInternal())
                     .subscribe(modbusMessage -> this.MessageListener().onNext(modbusMessage));
         }
@@ -361,7 +367,8 @@ public class ModbusThingHandler extends BaseThingHandler {
 
             @Override
             public void onError(Throwable arg0) {
-                // TODO Auto-generated method stub
+                logger.error("We have received an error :: {}", arg0.getMessage());
+
             }
 
             @Override
@@ -377,6 +384,7 @@ public class ModbusThingHandler extends BaseThingHandler {
         int nodeId = getController().getModbusFactory().getDataSet(dataSetId).getNodeId();
         int unitAddress = getController().getNode(nodeId).getUnitAddress();
         int elementAddress = Register.registersToIntSwap((byte[]) modbusMessage.getPayload(), 0);
+        logger.debug("SO far ok");
         if (elementAddress != 0) {
             BitVector assignmentMap = BitVector
                     .createBitVectorSwap(Arrays.copyOfRange(((byte[]) modbusMessage.getPayload()), 4, 8));
@@ -396,11 +404,12 @@ public class ModbusThingHandler extends BaseThingHandler {
                             lowestChannel = i;
                         }
                         logger.debug("We have discovered an actuator");
-                        bridgeHandler.deviceDiscovered(THING_JABLOTRON_ACTUATOR, unitAddress, i, ID_NOT_USED);
+                        bridgeHandler.getDiscoveryService().deviceDiscovered(THING_JABLOTRON_ACTUATOR, unitAddress, i,
+                                ID_NOT_USED);
                     }
                 }
 
-                bridgeHandler.deviceDiscovered(THING_JABLOTRON_TP150, unitAddress, lowestChannel,
+                bridgeHandler.getDiscoveryService().deviceDiscovered(THING_JABLOTRON_TP150, unitAddress, lowestChannel,
                         Jablotron.getPage(getController().getModbusFactory().getDataSet(dataSetId).getStart()));
             }
         }

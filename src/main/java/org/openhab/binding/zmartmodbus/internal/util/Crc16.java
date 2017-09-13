@@ -1,18 +1,17 @@
-/*******************************************************************************
- * Copyright (c) 2011, 2016 Eurotech and/or its affiliates
+/**
+ * Copyright (c) 2014-2016 by the respective copyright holders.
  *
  * All rights reserved. This program and the accompanying materials
  * are made available under the terms of the Eclipse Public License v1.0
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
- *
- * Contributors:
- *     Eurotech
- *******************************************************************************/
+ */
 package org.openhab.binding.zmartmodbus.internal.util;
 
 /**
- * Used to calculate the CRC-16 (cyclical redundancy check) for an array of bytes.
+ * @author Peter Kristensen
+ *
+ *         Used to calculate the CRC-16 (cyclical redundancy check) for an array of bytes.
  */
 public class Crc16 {
 
@@ -20,7 +19,7 @@ public class Crc16 {
     };
 
     /**
-     * calculate the crc for the passed buffer
+     * Calculate the crc for the passed buffer
      *
      * @param buff
      *            byte array to calculate CRC of

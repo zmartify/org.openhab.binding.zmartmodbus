@@ -36,6 +36,12 @@ import com.google.common.collect.ImmutableSet;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+/**
+ *
+ * @author Peter Kristensen
+ *
+ * @param <T>
+ */
 public class ModbusFactory<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusFactory.class);

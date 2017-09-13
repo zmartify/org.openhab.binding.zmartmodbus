@@ -33,50 +33,50 @@ public class ZmartModbusBindingConstants {
     public static final int MAX_NODE_COUNT = 232;
 
     // Meta data for transferring information to i.e. Watson
-    public final static String META_THERMOSTATID = "thermostatId";
-    public final static String META_HEATUNITID = "heatUnitId";
+    public static final String META_THERMOSTATID = "thermostatId";
+    public static final String META_HEATUNITID = "heatUnitId";
 
     // Controllers
-    public final static ThingTypeUID CONTROLLER_SERIAL = new ThingTypeUID(BINDING_ID, SERIAL_PORT);
-    public final static ThingTypeUID CONTROLLER_TCP = new ThingTypeUID(BINDING_ID, TCP_PORT);
-    public final static ThingTypeUID CONTROLLER_RTU = new ThingTypeUID(BINDING_ID, RTU_PORT);
+    public static final ThingTypeUID CONTROLLER_SERIAL = new ThingTypeUID(BINDING_ID, SERIAL_PORT);
+    public static final ThingTypeUID CONTROLLER_TCP = new ThingTypeUID(BINDING_ID, TCP_PORT);
+    public static final ThingTypeUID CONTROLLER_RTU = new ThingTypeUID(BINDING_ID, RTU_PORT);
 
-    public final static int CONTROLLER_NODE_ID = 0;
+    public static final int CONTROLLER_NODE_ID = 0;
 
     /**
      * CONFIGURATION PARAMETERS
      */
-    public final static String CONFIGURATION_PORT = "serialport"; // Serial port for RS 485
-    public final static String CONFIGURATION_TCPPORT = "tcpport"; // IP port or serial port
-    public final static String CONFIGURATION_HOST = "host"; // IP address of modbus transceiver
+    public static final String CONFIGURATION_PORT = "serialport"; // Serial port for RS 485
+    public static final String CONFIGURATION_TCPPORT = "tcpport"; // IP port or serial port
+    public static final String CONFIGURATION_HOST = "host"; // IP address of modbus transceiver
 
     // Serial port configuration parameters
-    public final static String CONFIGURATION_CONNTYPE = "conntype";
-    public final static String CONFIGURATION_BAUDRATE = "baudrate";
-    public final static String CONFIGURATION_DATABITS = "databits";
-    public final static String CONFIGURATION_STOPBITS = "stopbits";
-    public final static String CONFIGURATION_PARITY = "parity";
-    public final static String CONFIGURATION_TXMODE = "txmode";
-    public final static String CONFIGURATION_SLOWPOLL = "slowpoll";
-    public final static String CONFIGURATION_FASTPOLL = "fastpoll";
-    public final static String CONFIGURATION_RESPTOUT = "resptout";
+    public static final String CONFIGURATION_CONNTYPE = "conntype";
+    public static final String CONFIGURATION_BAUDRATE = "baudrate";
+    public static final String CONFIGURATION_DATABITS = "databits";
+    public static final String CONFIGURATION_STOPBITS = "stopbits";
+    public static final String CONFIGURATION_PARITY = "parity";
+    public static final String CONFIGURATION_TXMODE = "txmode";
+    public static final String CONFIGURATION_SLOWPOLL = "slowpoll";
+    public static final String CONFIGURATION_FASTPOLL = "fastpoll";
+    public static final String CONFIGURATION_RESPTOUT = "resptout";
 
-    public final static int RTU_MODE = 0;
-    public final static int BIN_MODE = 1;
-    public final static int ASCII_MODE = 2;
+    public static final int RTU_MODE = 0;
+    public static final int BIN_MODE = 1;
+    public static final int ASCII_MODE = 2;
 
-    public final static String DFAULT_CONNTYPE = SERIAL_PORT;
-    public final static String DEFAULT_PORT = "/dev/AMA0";
-    public final static int DEFAULT_TCPPORT = 12345;
-    public final static int DEFAULT_BAUDRATE = 38400;
-    public final static int DEFAULT_DATABITS = SerialPort.DATABITS_8;
-    public final static int DEFAULT_STOPBITS = SerialPort.STOPBITS_1;
-    public final static int DEFAULT_PARITY = 0; // 2 = even - 1 = odd
-    public final static int DEFAULT_TXMODE = RTU_MODE;
-    public final static int DEFAULT_POLLS = 10000;
-    public final static int DEFAULT_RESPTOUT = 400;
+    public static final String DFAULT_CONNTYPE = SERIAL_PORT;
+    public static final String DEFAULT_PORT = "/dev/AMA0";
+    public static final int DEFAULT_TCPPORT = 12345;
+    public static final int DEFAULT_BAUDRATE = 38400;
+    public static final int DEFAULT_DATABITS = SerialPort.DATABITS_8;
+    public static final int DEFAULT_STOPBITS = SerialPort.STOPBITS_1;
+    public static final int DEFAULT_PARITY = 0; // 2 = even - 1 = odd
+    public static final int DEFAULT_TXMODE = RTU_MODE;
+    public static final int DEFAULT_POLLS = 10000;
+    public static final int DEFAULT_RESPTOUT = 400;
 
-    public final static int DEFAULT_LENGTH = 1;
+    public static final int DEFAULT_LENGTH = 1;
 
     public static final String DEVICE_ID = "deviceId";
     public static final int ID_NOT_USED = 63;
@@ -90,21 +90,21 @@ public class ZmartModbusBindingConstants {
     public static final String BRIDGE_TYPE_RTU_BRIDGE = RTU_PORT;
     public static final String BRIDGE_TYPE_UNKNOWN = "unknown";
 
-    public final static String MODBUS_THING = BINDING_ID + ":device";
-    public final static ThingTypeUID MODBUS_THING_UID = new ThingTypeUID(MODBUS_THING);
+    public static final String MODBUS_THING = BINDING_ID + ":device";
+    public static final ThingTypeUID MODBUS_THING_UID = new ThingTypeUID(MODBUS_THING);
 
-    public final static ThingTypeUID BRIDGE_SERIAL = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_SERIAL_BRIDGE);
-    public final static ThingTypeUID BRIDGE_TCP = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_TCP_BRIDGE);
-    public final static ThingTypeUID BRIDGE_RTU = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_RTU_BRIDGE);
-    public final static ThingTypeUID BRIDGE_UNKNOWN = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_UNKNOWN);
+    public static final ThingTypeUID BRIDGE_SERIAL = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_SERIAL_BRIDGE);
+    public static final ThingTypeUID BRIDGE_TCP = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_TCP_BRIDGE);
+    public static final ThingTypeUID BRIDGE_RTU = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_RTU_BRIDGE);
+    public static final ThingTypeUID BRIDGE_UNKNOWN = new ThingTypeUID(BINDING_ID, BRIDGE_TYPE_UNKNOWN);
 
-    public final static String NODE_TITLE_FORMAT = "ModbusFunction Node %d";
+    public static final String NODE_TITLE_FORMAT = "ModbusFunction Node %d";
 
-    public final static String PROPERTY_NODEID = "modbus_nodeid";
-    public final static String PROPERTY_NODECLASS = "modbus_nodeclass";
-    public final static String PROPERTY_UNITADDRESS = "modbus_unitaddress";
-    public final static String PROPERTY_CHANNELID = "modbus_channelid";
-    public final static String PROPERTY_ELEMENTID = "modbus_elementid";
+    public static final String PROPERTY_NODEID = "modbus_nodeid";
+    public static final String PROPERTY_NODECLASS = "modbus_nodeclass";
+    public static final String PROPERTY_UNITADDRESS = "modbus_unitaddress";
+    public static final String PROPERTY_CHANNELID = "modbus_channelid";
+    public static final String PROPERTY_ELEMENTID = "modbus_elementid";
 
     // Indicated 'slave' set 'off' or does not exist in configuration
     public static final int SLAVE_UNAVAILABLE = 0;
@@ -134,28 +134,28 @@ public class ZmartModbusBindingConstants {
 
     /**
      *
-     * Presents all supported Slave types by ZmartifyMODBUS binding.
+     * Presents all supported Slave types by Zmartify MODBUS binding.
      *
      */
-    public final static Set<String> SUPPORTED_SLAVES = ImmutableSet.of(THING_TYPE_JABLOTRON_AC116,
+    public static final Set<String> SUPPORTED_SLAVES = ImmutableSet.of(THING_TYPE_JABLOTRON_AC116,
             THING_TYPE_NILAN_COMFORT_300, THING_TYPE_JABLOTRON_TP150, THING_TYPE_JABLOTRON_ACTUATOR);
-    public final static Set<ThingTypeUID> SUPPORTED_SLAVE_THING_TYPES_UIDS = ImmutableSet.of(THING_JABLOTRON_AC116,
+    public static final Set<ThingTypeUID> SUPPORTED_SLAVE_THING_TYPES_UIDS = ImmutableSet.of(THING_JABLOTRON_AC116,
             THING_NILAN_COMFORT_300, THING_JABLOTRON_TP150, THING_JABLOTRON_ACTUATOR);
-    public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(BRIDGE_SERIAL, BRIDGE_TCP,
+    public static final Set<ThingTypeUID> SUPPORTED_BRIDGE_THING_TYPES_UIDS = ImmutableSet.of(BRIDGE_SERIAL, BRIDGE_TCP,
             BRIDGE_RTU);
 
-    public final static String CHANNEL_MESSAGE_COUNT = "message_count";
-    public final static String CHANNEL_RESPTOUT_COUNT = "resptout_count";
+    public static final String CHANNEL_MESSAGE_COUNT = "message_count";
+    public static final String CHANNEL_RESPTOUT_COUNT = "resptout_count";
 
     /**
-     * Presents all supported Thing types by ZmartifyMODBUS binding.
+     * Presents all supported Thing types by Zmartify MODBUS binding.
      */
-    public final static Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = ImmutableSet.of(THING_JABLOTRON_AC116,
+    public static final Set<ThingTypeUID> SUPPORTED_DEVICE_THING_TYPES_UIDS = ImmutableSet.of(THING_JABLOTRON_AC116,
             THING_NILAN_COMFORT_300);
 
-    public final static Integer ACTION_CHECK_VALUE = new Integer(-232323);
+    public static final Integer ACTION_CHECK_VALUE = new Integer(-232323);
 
-    public final static Set<ThingTypeUID> SUPPORTED_BRIDGE_TYPES_UIDS = ImmutableSet.of(CONTROLLER_SERIAL,
+    public static final Set<ThingTypeUID> SUPPORTED_BRIDGE_TYPES_UIDS = ImmutableSet.of(CONTROLLER_SERIAL,
             CONTROLLER_TCP, CONTROLLER_RTU);
 
 }

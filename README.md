@@ -9,6 +9,7 @@ _If possible, provide some resources like pictures, a YouTube video, etc. to giv
 ## Supported Things
 
 Currently it supports
+
  * Wavin Hydronic floor heating controller
  
 _Please describe the different supported things / devices within this section._

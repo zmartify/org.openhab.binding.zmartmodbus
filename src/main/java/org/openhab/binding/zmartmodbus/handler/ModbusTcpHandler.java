@@ -54,11 +54,10 @@ public class ModbusTcpHandler extends ZmartModbusHandler {
     public String host = "";
     public int txMode = DEFAULT_TXMODE;
     public int polls = DEFAULT_POLLS;
-    public int respTout = 400; // TODO - needs to be defined
+    public int respTout = 400; // TODO: - needs to be defined
 
     public ModbusTcpHandler(Bridge bridge) {
         super(bridge);
-        // TODO Auto-generated constructor stub
     }
 
     @Override

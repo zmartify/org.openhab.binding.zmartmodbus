@@ -80,7 +80,6 @@ public class ModbusDataSet {
                 this.payload = null;
                 break;
         }
-
     }
 
     /**
@@ -118,7 +117,6 @@ public class ModbusDataSet {
                 this.payload = null;
                 break;
         }
-
     }
 
     /**

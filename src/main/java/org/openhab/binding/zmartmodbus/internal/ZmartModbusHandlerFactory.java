@@ -37,6 +37,7 @@ public class ZmartModbusHandlerFactory extends BaseThingHandlerFactory {
 
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
+        logger.debug("Z: {}", thingTypeUID);
         if (thingTypeUID.equals(ZmartModbusBindingConstants.MODBUS_THING_UID)) {
             return true;
         }
@@ -58,4 +59,5 @@ public class ZmartModbusHandlerFactory extends BaseThingHandlerFactory {
         // Everything else gets handled in a single handler
         return new ModbusThingHandler(thing);
     }
+
 }

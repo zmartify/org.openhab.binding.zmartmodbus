@@ -15,6 +15,11 @@ import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusDataType;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusValueClass;
 
+/**
+ *
+ * @author Peter Kristensen
+ *
+ */
 public class ModbusChannel {
 
     private int nodeId;
