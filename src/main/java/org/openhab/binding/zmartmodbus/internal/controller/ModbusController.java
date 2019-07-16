@@ -9,23 +9,23 @@
 
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants.CONTROLLER_NODE_ID;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.CONTROLLER_NODE_ID;
 
 import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusActionClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusFeedRepeat;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusMessageClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusNodeClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusReportOn;
-import org.openhab.binding.zmartmodbus.handler.ZmartModbusHandler;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
+import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.ModbusHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusInterfaceException;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusActionFeed;
-import org.openhab.binding.zmartmodbus.internal.factory.ModbusChannel;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusFactory;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.MessageListener;
@@ -49,11 +49,11 @@ import io.reactivex.flowables.ConnectableFlowable;
  */
 public class ModbusController {
 
-    private Logger logger = LoggerFactory.getLogger(ZmartModbusHandler.class);
+    private Logger logger = LoggerFactory.getLogger(ModbusController.class);
 
     private AtomicInteger countNodeId = new AtomicInteger(0);
 
-    private ZmartModbusHandler bridgeHandler;
+    private ModbusBridgeHandler bridgeHandler;
 
     /*
      * Configuration parameters
@@ -63,8 +63,6 @@ public class ModbusController {
     private boolean connected = false; // Connected to ModbusFunction
     private boolean listening = false; // Connected to ModbusFunction
 
-    protected int msgCounter = 0;
-
     /**
      * Constants for managing the ModbusFunction protocol
      */
@@ -72,9 +70,9 @@ public class ModbusController {
 
     private final ConcurrentHashMap<Integer, ModbusNode> modbusNodes = new ConcurrentHashMap<Integer, ModbusNode>();
 
-    private ModbusActionFeed<ModbusAction> actionFeed = new ModbusActionFeed<>();
-    private ModbusHandler<ModbusMessage> modbusHandler = new ModbusHandler<>();
-    private ModbusFactory<ModbusState> modbusFactory = new ModbusFactory<>();
+    private ModbusActionFeed<ModbusAction> actionFeed;
+    private ModbusHandler<ModbusMessage> modbusHandler;
+    private ModbusFactory<ModbusState> modbusFactory;
 
     public ConnectableFlowable<ModbusAction> hotAction;
     public ConnectableFlowable<ModbusMessage> hotMessage;
@@ -159,21 +157,28 @@ public class ModbusController {
      * Creates a new instance of the ModbusFunction controller class.
      *
      * @param handler the io handler to use for communication with the ModbusFunction controller interface
-     * @param config a map of configuration parametrs
+     * @param config a map of configuration parameters
      *
      * @throws ModbusInterfaceException
      *             when a connection error occurs
      *             Controller connection parameters (e.g. serial port name or IP
      *             address).
      */
-    public ModbusController(ZmartModbusHandler handler) {
+    public ModbusController(ModbusBridgeHandler handler) {
         ownNodeId = nextNodeId();
-        logger.info("Starting ModbusFunction controller {}", getOwnNodeId());
+        logger.info("Starting ModbusFunction controller {} - {}", getOwnNodeId(), handler);
+        
+        actionFeed = new ModbusActionFeed<>(handler.getBaseConfig().getSlowPoll(), handler.getBaseConfig().getFastPoll());
+        modbusHandler = new ModbusHandler<>();
+        modbusFactory = new ModbusFactory<>();
+
         setBridgeHandler(handler);
         initializeNode(ownNodeId, 0, ModbusNodeClass.Master);
     }
 
     public void initializeNode(int nodeId, int unitAddress, ModbusNodeClass nodeClass) {
+        logger.info("NODE {}: initializeNode id = {} - class = {}" , nodeId, unitAddress, nodeClass);
+
         ModbusNode node = new ModbusNode(nodeId, this);
         node.setUnitAddress(unitAddress);
         node.setNodeClass(nodeClass);
@@ -204,27 +209,17 @@ public class ModbusController {
     public void reinitialiseNode(int nodeId) {
         int unitAddress = getNode(nodeId).getUnitAddress();
         ModbusNodeClass nodeClass = getNode(nodeId).getNodeClass();
-        ThingTypeUID thingTypeUID = getNode(nodeId).getThingTypeUID();
+        // ThingTypeUID thingTypeUID = getNode(nodeId).getThingTypeUID();
         removeNode(nodeId);
 
-        // thing was already created,
+        //
+        /* thing was already created,
         if (thingTypeUID != null) {
             this.bridgeHandler.getDiscoveryService().deviceDiscovered(thingTypeUID, unitAddress, getChannelId(nodeId),
                     getElementId(nodeId));
         }
+        */
         initializeNode(nodeId, unitAddress, nodeClass);
-    }
-
-    public void requestSoftReset() {
-    }
-
-    public void requestHardReset() {
-    }
-
-    public void requestRemoveNodesStart() {
-    }
-
-    public void requestRequestNetworkUpdate() {
     }
 
     public int getOwnNodeId() {
@@ -247,8 +242,13 @@ public class ModbusController {
         return getNode(nodeId).getElementId();
     }
 
-    public ZmartModbusHandler getBridgeHandler() {
+    public ModbusBridgeHandler getBridgeHandler() {
         return bridgeHandler;
+    }
+
+    public void setBridgeHandler(ModbusBridgeHandler bridgeHandler) {
+        this.bridgeHandler = bridgeHandler;
+        modbusHandler.setBridgeHandler(bridgeHandler);
     }
 
     public boolean isConnected() {
@@ -268,25 +268,27 @@ public class ModbusController {
     }
 
     public void startListening() {
+        logger.debug("Controller start listening");
+        
         if (!this.listening) {
 
-            logger.info("ModbusActionQueue");
+            logger.debug("Start listening ModbusActionQueue");
             hotAction = modbusActionQueue.publish();
             hotAction.connect();
             hotAction.subscribe(modbusAction -> getModbusHandler().ModbusCommunicator().onNext(modbusAction));
 
-            logger.info("ModbusStateFromModbusQueue");
+            logger.debug("Start listening ModbusMessageQueue");
             hotMessage = modbusMessageQueue.publish();
             hotMessage.connect();
             hotMessage.filter(modbusMessage -> !modbusMessage.isInternal())
                     .subscribe(modbusMessage -> getModbusFactory().messageListener().onNext(modbusMessage));
 
-            logger.info("ModbusStateFromModbusQueue");
+            logger.debug("Start listening ModbusStateFromModbusQueue");
             hotStateFromModbus = modbusStateFromModbusQueue.publish();
             hotStateFromModbus.connect();
             hotStateFromModbus.subscribe(modbusState -> bridgeHandler.handleUpdate(modbusState));
 
-            logger.info("ModbusStateToModbusQueue");
+            logger.debug("Start listening ModbusStateToModbusQueue");
             hotStateToModbus = modbusStateToModbusQueue.publish();
             hotStateToModbus.connect();
             hotStateToModbus.subscribe(modbusState -> getModbusFactory().stateListener().onNext(modbusState));
@@ -295,7 +297,7 @@ public class ModbusController {
         }
     }
 
-    public void updateChannelFromModbus(ModbusChannel channel) {
+    public void updateChannelFromModbus(ModbusThingChannel channel) {
         logger.debug("Controller received update Channel {} {} {}", channel.getUID(), channel.getDataSetKey(),
                 channel.getState());
         bridgeHandler.handleUpdate(channel.getUID(), channel.getState());
@@ -305,13 +307,34 @@ public class ModbusController {
         return countNodeId.getAndIncrement();
     }
 
-    public void setBridgeHandler(ZmartModbusHandler bridgeHandler) {
-        this.bridgeHandler = bridgeHandler;
-        modbusHandler.setBridgeHandler(bridgeHandler);
+    /**
+     * Puts the controller into inclusion mode to add new nodes
+     *
+     * @param inclusionMode the mode to use for inclusion.
+     *                          <br>
+     *                          0=Low Power Inclusion
+     *                          <br>
+     *                          1=High Power Inclusion
+     *                          <br>
+     *                          2=Network Wide Inclusion
+     *
+     */
+    public void requestAddNodesStart(int inclusionMode) {
+    }
+
+    /**
+     * Puts the controller into exclusion mode to remove new nodes
+     *
+     */
+    public void requestRemoveNodesStart() {
+    }
+
+    public void requestInclusionStop() {
     }
 
     public void stopListening() {
         // Signal to listener to stop
+        logger.debug("Stop listening for actions");
 
         hotAction.connect().dispose();
         hotAction.subscribe().dispose();

@@ -20,9 +20,9 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusValueClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.WeekDayClass;
-import org.openhab.binding.zmartmodbus.internal.factory.ModbusChannel;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.WeekDayClass;
+import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
 import com.google.gson.JsonObject;
@@ -121,7 +121,7 @@ public class ModbusBaseConverter {
         return state;
     }
 
-    public static Object fromStateToModbus(ChannelUID uid, State state, ModbusChannel channel) {
+    public static Object fromStateToModbus(ChannelUID uid, State state, ModbusThingChannel channel) {
         Object payload = null;
         switch (channel.getValueClass()) {
             case Bit:

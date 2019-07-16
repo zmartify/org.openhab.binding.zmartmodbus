@@ -8,16 +8,17 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants.CUSTOMCODE_JABLOTRON;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.CUSTOMCODE_JABLOTRON;
 import static org.openhab.binding.zmartmodbus.internal.util.Register.*;
 
 import java.util.Arrays;
 
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusActionClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusFeedRepeat;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusMessageClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
@@ -88,8 +89,8 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
     private Logger logger = LoggerFactory.getLogger(ModbusFunctionJablotron.class);
 
-    public ModbusFunctionJablotron(ModbusIoHandler bridgeHandler) {
-        super(bridgeHandler);
+    public ModbusFunctionJablotron(ModbusBridgeHandler modbusBridgeHandler) {
+        super(modbusBridgeHandler);
     }
 
     @Override
@@ -161,7 +162,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
     private byte[] jablotronReadRegisterFromIndex(int unitAddr, int dataAddress, int count)
             throws ModbusProtocolException {
 
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -172,7 +173,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
          */
         byte[] cmd = new byte[6];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = (byte) (ZmartModbusBindingClass.READ_REGISTER_FROM_INDEX & 0xFF); // Strip Jablotron special function
+        cmd[1] = (byte) (ModbusBindingClass.READ_REGISTER_FROM_INDEX & 0xFF); // Strip Jablotron special function
         // high
         // byte
         cmd[2] = Jablotron.getCategory(dataAddress);
@@ -183,7 +184,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         /*
          * send the message and get the response
          */
-        resp = bridgeHandler.msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
+        resp = msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
 
         /*
          * process the response (address & CRC already confirmed)
@@ -200,7 +201,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
     private void jablotronWriteRegisterToIndex(int unitAddr, int dataAddress, byte[] data)
             throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -212,7 +213,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
          */
         byte[] cmd = new byte[dataLength + 6];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = (byte) ZmartModbusBindingClass.WRITE_REGISTER_TO_INDEX & 0xFF;
+        cmd[1] = (byte) ModbusBindingClass.WRITE_REGISTER_TO_INDEX & 0xFF;
         cmd[2] = Jablotron.getCategory(dataAddress);
         cmd[3] = Jablotron.getIndex(dataAddress);
         cmd[4] = Jablotron.getPage(dataAddress);
@@ -226,7 +227,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         /*
          * send the message and get the response
          */
-        byte[] resp = bridgeHandler.msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
+        byte[] resp = msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
 
         /*
          * process the response
@@ -245,7 +246,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
     private void jablotronWriteRegisterMaskedToIndex(int unitAddr, int dataAddress, BitVector data, BitVector mask)
             throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
         if (data.size() != mask.size()) {
@@ -264,7 +265,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
         byte[] cmd = new byte[data.byteSize() * 2 + 6];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = (byte) ZmartModbusBindingClass.WRITE_REGISTER_MASKED_TO_INDEX & 0x00FF;
+        cmd[1] = (byte) ModbusBindingClass.WRITE_REGISTER_MASKED_TO_INDEX & 0x00FF;
         cmd[2] = Jablotron.getCategory(dataAddress);
         cmd[3] = Jablotron.getIndex(dataAddress);
         cmd[4] = Jablotron.getPage(dataAddress);
@@ -281,7 +282,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         /*
          * send the message and get the response
          */
-        byte[] resp = bridgeHandler.msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
+        byte[] resp = msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
 
         /*
          * process the response
@@ -331,13 +332,13 @@ public class ModbusFunctionJablotron extends ModbusFunction {
                     Jablotron.getAddress(0x01, 0, elementId), 0x0C, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
             dataSet.setInternal(true);
             String dataSetKey = String.format("%d-%d-discovery1", nodeId, elementId);
-            bridgeHandler.getController().getModbusFactory().addDataSet(dataSetKey, dataSet);
+            bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
             bridgeHandler.getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
         }
     }
 
     private byte[] enumeration(int unitAddr, byte[] physicalAddress) throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -347,7 +348,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
         byte[] cmd = new byte[7];
         cmd[0] = (byte) 0x01;
-        cmd[1] = (byte) ZmartModbusBindingClass.ENUMERATION & 0x00FF;
+        cmd[1] = (byte) ModbusBindingClass.ENUMERATION & 0x00FF;
 
         // Physical Address
         cmd[2] = physicalAddress[0];
@@ -362,7 +363,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         /*
          * send the message and get the response
          */
-        byte[] resp = bridgeHandler.msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
+        byte[] resp = msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
 
         logger.debug("We received {}", toHex(resp));
 
@@ -438,7 +439,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
     @Override
     public boolean controllerOnline(int unitAddr) {
 
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             return false;
         }
 

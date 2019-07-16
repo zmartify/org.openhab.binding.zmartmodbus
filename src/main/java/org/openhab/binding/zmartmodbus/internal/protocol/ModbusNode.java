@@ -8,10 +8,10 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants.ID_NOT_USED;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED;
 
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusNodeClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -164,10 +164,6 @@ public class ModbusNode {
 
     public ModbusNodeClass getNodeClass() {
         return nodeClass;
-    }
-
-    public void setNodeClass(String nodeClassKey) {
-        setNodeClass(ModbusNodeClass.fromString(nodeClassKey));
     }
 
     public void setNodeClass(ModbusNodeClass nodeClass) {

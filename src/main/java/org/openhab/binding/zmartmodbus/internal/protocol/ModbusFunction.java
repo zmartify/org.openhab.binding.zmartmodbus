@@ -12,7 +12,9 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 import java.util.Arrays;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
+import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
@@ -77,15 +79,15 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
 public class ModbusFunction {
 
-    ModbusIoHandler bridgeHandler;
+    ModbusBridgeHandler bridgeHandler;
 
-    public ModbusFunction(ModbusIoHandler bridgeHandler) {
-        this.bridgeHandler = bridgeHandler;
+    public ModbusFunction(ModbusBridgeHandler modbusBridgeHandler) {
+        this.bridgeHandler = modbusBridgeHandler;
     }
 
     private BitVector readBitVector(byte functionCode, int unitAddr, int dataAddress, int offset, int count)
             throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -106,7 +108,7 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        resp = bridgeHandler.msgTransaction(cmd);
+        resp = msgTransaction(cmd);
 
         /*
          * process the response (address & CRC already confirmed)
@@ -144,7 +146,7 @@ public class ModbusFunction {
      *             the cause of the exception
      */
     public BitVector readCoils(int unitAddr, int dataAddress, int offset, int count) throws ModbusProtocolException {
-        return readBitVector((byte) ZmartModbusBindingClass.READ_COIL_STATUS, unitAddr, dataAddress, offset, count);
+        return readBitVector((byte) ModbusBindingClass.READ_COIL_STATUS, unitAddr, dataAddress, offset, count);
     }
 
     /**
@@ -171,7 +173,7 @@ public class ModbusFunction {
      */
     public BitVector readDiscreteInputs(int unitAddr, int dataAddress, int offset, int count)
             throws ModbusProtocolException {
-        return readBitVector((byte) ZmartModbusBindingClass.READ_INPUT_STATUS, unitAddr, dataAddress, offset, count);
+        return readBitVector((byte) ModbusBindingClass.READ_INPUT_STATUS, unitAddr, dataAddress, offset, count);
     }
 
     /**
@@ -188,7 +190,7 @@ public class ModbusFunction {
      *             the cause of the exception
      */
     public BitVector readExceptionStatus(int unitAddr) throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -198,12 +200,12 @@ public class ModbusFunction {
          */
         byte[] cmd = new byte[2];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = (byte) ZmartModbusBindingClass.READ_EXCEPTION_STATUS;
+        cmd[1] = (byte) ModbusBindingClass.READ_EXCEPTION_STATUS;
 
         /*
          * send the message and get the response
          */
-        resp = bridgeHandler.msgTransaction(cmd);
+        resp = msgTransaction(cmd);
 
         /*
          * process the response (address & CRC already confirmed)
@@ -216,7 +218,7 @@ public class ModbusFunction {
 
     private byte[] readRegisters(byte functionCode, int unitAddr, int dataAddress, int count)
             throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -236,7 +238,7 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        resp = bridgeHandler.msgTransaction(cmd);
+        resp = msgTransaction(cmd);
 
         /*
          * process the response (address & CRC already confirmed)
@@ -271,7 +273,7 @@ public class ModbusFunction {
      *             the cause of the exception
      */
     public byte[] readHoldingRegisters(int unitAddr, int dataAddress, int count) throws ModbusProtocolException {
-        return readRegisters((byte) ZmartModbusBindingClass.READ_HOLDING_REGS, unitAddr, dataAddress, count);
+        return readRegisters((byte) ModbusBindingClass.READ_HOLDING_REGS, unitAddr, dataAddress, count);
     }
 
     /**
@@ -293,7 +295,7 @@ public class ModbusFunction {
      *             the cause of the exception
      */
     public byte[] readInputRegisters(int unitAddr, int dataAddress, int count) throws ModbusProtocolException {
-        return readRegisters((byte) ZmartModbusBindingClass.READ_INPUT_REGS, unitAddr, dataAddress, count);
+        return readRegisters((byte) ModbusBindingClass.READ_INPUT_REGS, unitAddr, dataAddress, count);
     }
 
     /**
@@ -317,7 +319,7 @@ public class ModbusFunction {
      */
     public void writeMultipleCoils(int unitAddr, int dataAddress, int offset, BitVector data)
             throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -334,7 +336,7 @@ public class ModbusFunction {
         int dataLength = (localCnt + 7) / 8;
         byte[] cmd = new byte[dataLength + 7];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = ZmartModbusBindingClass.FORCE_MULTIPLE_COILS;
+        cmd[1] = ModbusBindingClass.FORCE_MULTIPLE_COILS;
         cmd[2] = (byte) (dataAddress / 256);
         cmd[3] = (byte) (dataAddress % 256);
         cmd[4] = (byte) (localCnt / 256);
@@ -347,7 +349,7 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        resp = bridgeHandler.msgTransaction(ArrayUtils.addAll(cmd, data.getBytes()));
+        resp = msgTransaction(ArrayUtils.addAll(cmd, data.getBytes()));
 
         /*
          * process the response
@@ -380,7 +382,7 @@ public class ModbusFunction {
      *             the cause of the exception
      */
     public void writeMultipleRegisters(int unitAddr, int dataAddress, byte[] data) throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -392,7 +394,7 @@ public class ModbusFunction {
         int dataLength = localCnt * 2;
         byte[] cmd = new byte[dataLength + 7];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = ZmartModbusBindingClass.PRESET_MULTIPLE_REGS;
+        cmd[1] = ModbusBindingClass.PRESET_MULTIPLE_REGS;
         cmd[2] = (byte) (dataAddress / 256);
         cmd[3] = (byte) (dataAddress % 256);
         cmd[4] = (byte) (localCnt / 256);
@@ -408,7 +410,7 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        byte[] resp = bridgeHandler.msgTransaction(cmd);
+        byte[] resp = msgTransaction(cmd);
 
         /*
          * process the response
@@ -444,7 +446,7 @@ public class ModbusFunction {
      */
     public void writeSingleCoil(int unitAddr, int dataAddress, int offset, boolean state)
             throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -454,7 +456,7 @@ public class ModbusFunction {
 
         byte[] cmd = new byte[6];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = ZmartModbusBindingClass.FORCE_SINGLE_COIL;
+        cmd[1] = ModbusBindingClass.FORCE_SINGLE_COIL;
         cmd[2] = (byte) (dataAddress / 256);
         cmd[3] = (byte) (dataAddress % 256);
         cmd[4] = state == true ? (byte) 0xff : (byte) 0;
@@ -463,7 +465,7 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        resp = bridgeHandler.msgTransaction(cmd);
+        resp = msgTransaction(cmd);
 
         /*
          * process the response
@@ -496,7 +498,7 @@ public class ModbusFunction {
      */
     public ModbusCommEvent getCommEventCounter(int unitAddr) throws ModbusProtocolException {
         ModbusCommEvent mce = new ModbusCommEvent();
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -505,13 +507,13 @@ public class ModbusFunction {
          */
         byte[] cmd = new byte[2];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = (byte) ZmartModbusBindingClass.GET_COMM_EVENT_COUNTER;
+        cmd[1] = (byte) ModbusBindingClass.GET_COMM_EVENT_COUNTER;
 
         /*
          * send the message and get the response
          */
         byte[] resp;
-        resp = bridgeHandler.msgTransaction(cmd);
+        resp = msgTransaction(cmd);
 
         /*
          * process the response (address & CRC already confirmed)
@@ -549,7 +551,7 @@ public class ModbusFunction {
      */
     public ModbusCommEvent getCommEventLog(int unitAddr) throws ModbusProtocolException {
         ModbusCommEvent mce = new ModbusCommEvent();
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
@@ -558,13 +560,13 @@ public class ModbusFunction {
          */
         byte[] cmd = new byte[2];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = (byte) ZmartModbusBindingClass.GET_COMM_EVENT_LOG;
+        cmd[1] = (byte) ModbusBindingClass.GET_COMM_EVENT_LOG;
 
         /*
          * send the message and get the response
          */
         byte[] resp;
-        resp = bridgeHandler.msgTransaction(cmd);
+        resp = msgTransaction(cmd);
 
         /*
          * process the response (address & CRC already confirmed)
@@ -616,13 +618,13 @@ public class ModbusFunction {
      *             the cause of the exception
      */
     public void writeSingleRegister(int unitAddr, int dataAddress, byte[] data) throws ModbusProtocolException {
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
 
         byte[] cmd = new byte[6];
         cmd[0] = (byte) unitAddr;
-        cmd[1] = ZmartModbusBindingClass.PRESET_SINGLE_REG;
+        cmd[1] = ModbusBindingClass.PRESET_SINGLE_REG;
         cmd[2] = (byte) (dataAddress / 256);
         cmd[3] = (byte) (dataAddress % 256);
         cmd[4] = data[0];
@@ -631,7 +633,7 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        byte[] resp = bridgeHandler.msgTransaction(cmd);
+        byte[] resp = msgTransaction(cmd);
 
         /*
          * process the response
@@ -652,7 +654,7 @@ public class ModbusFunction {
 
     public boolean controllerOnline(int unitAddr) {
 
-        if (!bridgeHandler.isConnected()) {
+        if (!isConnected()) {
             return false;
         }
 
@@ -674,5 +676,20 @@ public class ModbusFunction {
 
     public ModbusDeviceInfo getDeviceInfo(int unitAddr) {
         return new ModbusDeviceInfo("serialno", "hwVersion", "swVersion", "deviceName");
+    }
+
+        /**
+    *
+    */
+    public byte[] msgTransaction(byte[] msg) throws ModbusProtocolException {
+        return bridgeHandler.getTransceiver().msgTransaction(msg, ModbusBindingConstants.CUSTOMCODE_STANDARD);
+    }
+
+    public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
+        return bridgeHandler.getTransceiver().msgTransaction(msg, customCode);
+    }
+
+    public boolean isConnected() {
+        return bridgeHandler.getTransceiver().isConnected();
     }
 }

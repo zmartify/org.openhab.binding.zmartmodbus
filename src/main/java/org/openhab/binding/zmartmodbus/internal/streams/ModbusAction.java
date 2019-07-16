@@ -8,14 +8,14 @@
  */
 package org.openhab.binding.zmartmodbus.internal.streams;
 
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.DEFAULT_RETRIES;
+import static org.openhab.binding.zmartmodbus.ModbusBindingClass.DEFAULT_RETRIES;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusActionClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusFeedRepeat;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusMessageClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,11 +38,11 @@ public class ModbusAction {
     private int nodeId;
     private int dataSetId;
     private ModbusMessageClass messageClass;
-    private ModbusActionClass actionClass; // (read or write)
-    private ModbusFeedRepeat feedRepeat;
-    private int start;
-    private int length = 0;
-    private Object payload = null; // Object used for writing to Modbus
+    private ModbusActionClass actionClass;  // (read or write)
+    private ModbusFeedRepeat feedRepeat;    // One time or repeated modbus message
+    private int start;                      // Start address
+    private int length = 0;                 // Address length in words or coils
+    private Object payload = null;          // Object used for writing to Modbus
 
     // Offset to be used with custom addressing of coils
     // - start = register address, offset = bit
@@ -57,6 +57,8 @@ public class ModbusAction {
      * Constructor. Creates a new instance of the ModbusMessage class.
      */
     public ModbusAction() {
+        this.retryCount.set(0);
+        this.payload = null;
     }
 
     public ModbusAction(int nodeId, int dataSetId, ModbusMessageClass messageClass, ModbusActionClass actionClass,
@@ -72,12 +74,10 @@ public class ModbusAction {
         this.length = length;
         this.offset = offset;
         this.reportOn = reportOn;
-        this.payload = null;
     }
 
     public ModbusAction(ModbusDataSet dataSet, ModbusActionClass actionClass) {
         super();
-        this.retryCount.set(0);
         this.nodeId = dataSet.getNodeId();
         this.dataSetId = dataSet.getDataSetId();
         this.messageClass = dataSet.getMessageClass();
@@ -87,43 +87,27 @@ public class ModbusAction {
         this.length = dataSet.getLength();
         this.offset = dataSet.getOffset();
         this.reportOn = dataSet.getReportOn();
-        this.payload = null;
         this.internal = dataSet.isInternal();
     }
 
     public ModbusAction(ModbusDataSet dataSet, ModbusActionClass actionClass, ModbusFeedRepeat feedRepeat) {
-        super();
-        this.retryCount.set(0);
-        this.nodeId = dataSet.getNodeId();
-        this.dataSetId = dataSet.getDataSetId();
-        this.messageClass = dataSet.getMessageClass();
-        this.actionClass = actionClass;
+        this(dataSet, actionClass);
         this.feedRepeat = feedRepeat;
-        this.start = dataSet.getStart();
-        this.length = dataSet.getLength();
-        this.offset = dataSet.getOffset();
-        this.reportOn = dataSet.getReportOn();
-        this.payload = null;
-        this.internal = dataSet.isInternal();
     }
 
     public ModbusAction(ModbusDataSet dataSet, int index, ModbusActionClass actionClass, ModbusFeedRepeat feedRepeat,
             Object payload) {
         // Used for creating ModbusMessage of Action write
-        super();
-        this.retryCount.set(0);
-        this.nodeId = dataSet.getNodeId();
-        this.dataSetId = dataSet.getDataSetId();
-        this.messageClass = dataSet.getMessageClass();
-        this.actionClass = actionClass;
-        this.feedRepeat = feedRepeat;
-        this.start = dataSet.getStart(); // Advance to the first bit / register
-        this.length = dataSet.getLength();
+        this(dataSet, actionClass, feedRepeat);
         this.offset = dataSet.getOffset() + index;
-        this.reportOn = dataSet.getReportOn();
         this.payload = payload;
     }
 
+    /**
+     * Get the node id - internal reference
+     * 
+     * @return
+     */
     public int getNodeId() {
         return nodeId;
     }
@@ -132,6 +116,11 @@ public class ModbusAction {
         return dataSetId;
     }
 
+    /**
+     * Get start address of dataset
+     * 
+     * @return the address
+     */
     public int getStart() {
         return start;
     }
@@ -140,6 +129,11 @@ public class ModbusAction {
         return offset;
     }
 
+    /**
+     * Get length of dataset (in words or coils)
+     * 
+     * @return the length
+     */
     public int getLength() {
         return length;
     }

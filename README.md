@@ -1,6 +1,6 @@
 # Zmartify Modbus Binding
 
-This is a general purpose binding for communicating with Modbus controlled devices.
+This is a custom built binding for communicating with pre-defined Modbus controlled devices.
 
 _Give some details about what this binding is meant for - a protocol, system, specific device._
 
@@ -11,6 +11,7 @@ _If possible, provide some resources like pictures, a YouTube video, etc. to giv
 Currently it supports
 
  * Wavin Hydronic floor heating controller
+ * Nilan Comfort 300 Air Ventilation controller
  
 _Please describe the different supported things / devices within this section._
 _Which different types are supported, which models were tested etc.?_

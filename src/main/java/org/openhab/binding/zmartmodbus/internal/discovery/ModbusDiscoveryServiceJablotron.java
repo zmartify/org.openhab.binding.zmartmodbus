@@ -40,14 +40,14 @@ import org.slf4j.LoggerFactory;
  */
 // @Component(service = { ModbusSlaveDiscoveryService.class }, immediate = true, configurationPid = "discovery.modbusslavediscoveryservice")
 @NonNullByDefault
-public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
+public class ModbusDiscoveryServiceJablotron extends AbstractDiscoveryService {
 
-    private final Logger logger = LoggerFactory.getLogger(ModbusSlaveDiscoveryService.class);
+    private final Logger logger = LoggerFactory.getLogger(ModbusDiscoveryServiceJablotron.class);
     private static final int searchTime = 5;
 
     private ModbusBridgeHandler controllerHandler;
 
-    public ModbusSlaveDiscoveryService(ModbusBridgeHandler  controllerHandler) {
+    public ModbusDiscoveryServiceJablotron(ModbusBridgeHandler controllerHandler) {
         super(ModbusBindingConstants.SUPPORTED_SLAVES_THING_TYPES_UIDS, searchTime);
         this.controllerHandler = controllerHandler;
         logger.debug("Creating ZmartModbus discovery service for {} with scan time of {}",
@@ -141,7 +141,7 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * @param elementId (ID_NOT_USED if not Jablotron)
      */
     public void deviceDiscovered(ThingTypeUID thingTypeUID, int unitAddress, int channelId, int elementId) {
-        logger.debug("DeviceDiscovered: {}", thingTypeUID);
+        logger.info("DeviceDiscovered: {}", thingTypeUID);
 
         try {
             String nodeClassLabel = thingTypeUID.getId();
@@ -181,6 +181,18 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
             logger.error("no controller");
             return;
         }
+
+        /*
+        for (String supportedSlave : SUPPORTED_SLAVES) {
+            logger.info("Checking supportedSlave {}", supportedSlave);
+            int unitAddress = controllerHandler.getConfigParamInt("slave_" + supportedSlave, SLAVE_UNAVAILABLE);
+            if (unitAddress != SLAVE_UNAVAILABLE) {
+                // If unitAddress is a valid number, we define the slave as discovered and will try to set it online
+                logger.info("Slave discovered unit address = {}", unitAddress);
+                deviceDiscovered(new ThingTypeUID(BINDING_ID, supportedSlave), unitAddress);
+            }
+        }
+        */
         
         // Initiate discovery for any subdevices on the node
         getController().getNodes().forEach(node -> {
@@ -189,6 +201,7 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
                 node.getModbusFunction().startSubDeviceDiscovery(node.getNodeId());
             }
         });
+
     }
 
     public void stopDeviceDiscovery() {

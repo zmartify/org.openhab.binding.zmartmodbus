@@ -8,13 +8,17 @@
  */
 package org.openhab.binding.zmartmodbus.internal;
 
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusActionClass.*;
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusFeedRepeat.Once;
+import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Read;
+import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Status;
+import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Write;
+import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat.Once;
 
 import java.io.IOException;
 import java.util.TooManyListenersException;
 
-import org.openhab.binding.zmartmodbus.handler.ZmartModbusHandler;
+import org.eclipse.smarthome.io.transport.serial.PortInUseException;
+import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationException;
+import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.MessageListener;
@@ -25,9 +29,6 @@ import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.UnsupportedCommOperationException;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
@@ -39,7 +40,7 @@ public class ModbusHandler<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusHandler.class);
 
-    private ZmartModbusHandler bridgeHandler = null;
+    private ModbusBridgeHandler bridgeHandler = null;
 
     private ActionListener actionSubscriber;
     private MessageListener messageSubscriber;
@@ -51,30 +52,12 @@ public class ModbusHandler<T> {
             @Override
             public void onSubscribe(Disposable d) {
                 logger.info(" onSubscribe : {}", d.isDisposed());
-                try {
-                    bridgeHandler.connect();
-                } catch (NoSuchPortException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (PortInUseException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (UnsupportedCommOperationException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (TooManyListenersException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
             }
 
             @Override
             public void onNext(ModbusAction modbusAction) {
                 if (bridgeHandler == null) {
-                    logger.info("BridgeHandler not set");
+                    logger.error("BridgeHandler not set");
                     return;
                 }
                 Object payload = null;
@@ -87,11 +70,9 @@ public class ModbusHandler<T> {
                 try {
 
                     if (!bridgeHandler.isConnected()) {
-                        bridgeHandler.connect();
-                    }
-
-                    if (bridgeHandler.isConnected()) {
-
+                        logger.error("We are not CONNECTED");
+                        // bridgeHandler.getTransceiver().connect();
+                    } else {
                         if (modbusAction.getActionClass().equals(Read)) {
                             switch (modbusAction.getMessageClass()) {
                                 case Coil:
@@ -180,7 +161,7 @@ public class ModbusHandler<T> {
                             break;
                         case CONNECTION_FAILURE:
                             logger.error("Connection failure: {} {}", e.getCause(), e.getMessage());
-                            bridgeHandler.disconnect();
+                            bridgeHandler.getTransceiver().disconnect();
                             break;
                         default:
                             logger.error("We got an exception in ModbusCommunicator {}  {}", e.getCause(),
@@ -190,8 +171,7 @@ public class ModbusHandler<T> {
 
                 } catch (Exception e) {
                     logger.info("We got an exception in ModbusCommunicator {}  {}", e.getCause(), e.getMessage());
-                    e.printStackTrace();
-                    bridgeHandler.disconnect();
+                    // bridgeHandler.getTransceiver().disconnect();
                 }
             }
 
@@ -202,7 +182,7 @@ public class ModbusHandler<T> {
 
             @Override
             public void onComplete() {
-                bridgeHandler.disconnect();
+                bridgeHandler.getTransceiver().disconnect();
                 logger.info("onComplete");
             }
         };
@@ -213,16 +193,14 @@ public class ModbusHandler<T> {
      *
      */
     public void register(MessageListener listener) {
-        logger.info("register Message listener");
         messageSubscriber = listener;
     }
 
     public void register(ActionListener listener) {
-        logger.info("register Action listener");
         actionSubscriber = listener;
     }
 
-    public void setBridgeHandler(ZmartModbusHandler bridgeHandler) {
+    public void setBridgeHandler(ModbusBridgeHandler bridgeHandler) {
         this.bridgeHandler = bridgeHandler;
     }
 

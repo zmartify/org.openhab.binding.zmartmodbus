@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<features name="org.openhab.binding.zmartmodbus-${project.version}" xmlns="http://karaf.apache.org/xmlns/features/v1.4.0">
+   <repository>mvn:org.openhab.core.features.karaf/org.openhab.core.features.karaf.openhab-core/${project.version}/xml/features</repository>
+ 
+    <feature name="openhab-binding-zmartmodbus" description="Zmartify Modbus Binding" version="${project.version}">
+        <feature>openhab-runtime-base</feature>
+        <feature>openhab-transport-serial</feature>
+        <feature prerequisite="true">wrap</feature>
+        <bundle dependency="true">wrap:mvn:io.reactivex.rxjava2/rxjava/2.2.9$Bundle-Name=JAVA%20ZmartModbus&amp;Bundle-SymbolicName=io.reactivex&amp;Bundle-Version=2.2.9</bundle>
+        <bundle dependency="true">wrap:mvn:org.reactivestreams/reactive-streams/1.0.2$Bundle-Name=JAVA%20ZmartModbus&amp;Bundle-SymbolicName=org.reactivestreams.reactive-streams&amp;Bundle-Version=1.0.2</bundle>
+        <bundle start-level="80">mvn:org.openhab.addons.bundles/org.openhab.binding.zmartmodbus/${project.version}</bundle>
+    </feature>
+
+</features>

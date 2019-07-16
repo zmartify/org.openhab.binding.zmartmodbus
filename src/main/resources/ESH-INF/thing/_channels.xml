@@ -1,0 +1,620 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<thing:thing-descriptions bindingId="zmartmodbus"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
+    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 org.eclipse.smarthome.thing-description.xsd">
+    
+   <!-- Battery Alarm Channel -->
+    <channel-type id="alarm_battery">
+        <item-type>Switch</item-type>
+        <label>Low battery alarm</label>
+        <description>Indicates if the low battery alarm is triggered
+        </description>
+        <category>batteryAlarm</category>
+        <state readOnly="true">
+            <options>
+                <option value="OFF">Ok</option>
+                <option value="ON">Alarm</option>
+            </options>
+        </state>
+    </channel-type>
+
+
+    <!-- General Alarm Channel -->
+    <channel-type id="alarm_general">
+        <item-type>Switch</item-type>
+        <label>General alarm</label>
+        <description>Indicates if an alarm is triggered
+        </description>
+        <category>Alarm</category>
+        <state readOnly="true">
+            <options>
+                <option value="OFF">Ok</option>
+                <option value="ON">Alarm</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Heat Alarm Channel -->
+    <channel-type id="alarm_heat">
+        <item-type>Switch</item-type>
+        <label>Heat alarm</label>
+        <description>Indicates if a heat alarm is triggered
+        </description>
+        <category>Alarm</category>
+        <state readOnly="true">
+            <options>
+                <option value="OFF">Ok</option>
+                <option value="ON">Alarm</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Power Alarm Channel -->
+    <channel-type id="alarm_power">
+        <item-type>Switch</item-type>
+        <label>Power alarm</label>
+        <description>Indicates if a power alarm is triggered
+        </description>
+        <category>Alarm</category>
+        <state readOnly="true">
+            <options>
+                <option value="OFF">Ok</option>
+                <option value="ON">Alarm</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Configuration Command Class Channel - Decimal Conversion -->
+    <channel-type id="config_decimal">
+        <item-type>Decimal</item-type>
+        <label>Parameter</label>
+        <description>Generic class for configuration parameter</description>
+        <category></category>
+    </channel-type>
+
+    <!-- Energy - Current Consumption -->
+    <channel-type id="meter_current">
+        <item-type>Number</item-type>
+        <label>Electric Current Consumption</label>
+        <description>Indicates the instantaneous current consumption</description>
+        <category>energyMeter</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    
+    <!-- Energy - Energy Consumption (kVAh) -->
+    <channel-type id="meter_kvah">
+        <item-type>Number</item-type>
+        <label>Energy Consumption</label>
+        <description>Indicates the energy consumption (kVAh)</description>
+        <category>energyMeterKVAH</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <!-- Energy - Energy Consumption (kWh) -->
+    <channel-type id="meter_kwh">
+        <item-type>Number</item-type>
+        <label>Energy Consumption</label>
+        <description>Indicates the energy consumption (kWh)</description>
+        <category>energyMeterKWH</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <!-- Energy - Power Factor -->
+    <channel-type id="meter_powerfactor">
+        <item-type>Number</item-type>
+        <label>Power Factor</label>
+        <description>Indicates the instantaneous power factor</description>
+        <category>energyMeterAmp</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+    
+    <!-- Energy - Power Factor -->
+    <channel-type id="meter_pulse">
+        <item-type>Number</item-type>
+        <label>Pulse Count</label>
+        <description>Indicates the pulse count</description>
+        <category>Energy</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+    
+    <!-- Meter Reset -->
+    <channel-type id="meter_reset">
+        <item-type>Switch</item-type>
+        <label>Meter Reset</label>
+        <description>Reset the meter</description>
+        <category>Energy</category>
+    </channel-type>
+
+    <!-- Energy - Voltage -->
+    <channel-type id="meter_voltage">
+        <item-type>Number</item-type>
+        <label>Voltage</label>
+        <description>Indicates the instantaneous voltage</description>
+        <category>energyMeterVolt</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+    
+    <!-- Energy - Power Consumption -->
+    <channel-type id="meter_watts">
+        <item-type>Number</item-type>
+        <label>Electric Power Consumption</label>
+        <description>Indicates the instantaneous power consumption</description>
+        <category>energyMeterWatt</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+
+    <!-- Channel definition for zwave notification type=0x04/Heat Alarm -->
+    <channel-type id="notification_heat_alarm" advanced="true">
+        <item-type>Number</item-type>
+        <label>Heat Alarm</label>
+        <description>Heat Alarm</description>
+        <state readOnly="true">
+            <options>
+                <option value="0">Previous Events cleared</option>
+                <option value="1">Overheat detected</option>
+                <option value="2">Overheat detected, Unknown Location</option>
+                <option value="3">Rapid Temperature Rise</option>
+                <option value="4">Rapid Temperature Rise, Unknown Location</option>
+                <option value="5">Under heat detected</option>
+                <option value="6">Under heat detected, Unknown Location</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Channel definition for zwave notification type=0x08/Power Management -->
+    <channel-type id="notification_power_management" advanced="true">
+        <item-type>Number</item-type>
+        <label>Power Management</label>
+        <description>Power Management</description>
+        <state readOnly="true">
+            <options>
+                <option value="0">Previous events cleared</option>
+                <option value="1">Power has been applied</option>
+                <option value="2">AC mains disconnected</option>
+                <option value="3">AC mains re-connected</option>
+                <option value="4">Surge detected</option>
+                <option value="5">Voltage Drop/Drift</option>
+                <option value="6">Over-current detected</option>
+                <option value="7">Over-voltage detected</option>
+                <option value="8">Over-load detected</option>
+                <option value="9">Load error</option>
+                <option value="10">Replace battery soon</option>
+                <option value="11">Replace battery now</option>
+                <option value="12">Battery is charging</option>
+                <option value="13">Battery is fully charged</option>
+                <option value="14">Charge battery soon</option>
+                <option value="15">Charge battery now!</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Channel definition for zwave notification type=0x09/System -->
+    <channel-type id="notification_system" advanced="true">
+        <item-type>Number</item-type>
+        <label>System</label>
+        <description>System</description>
+        <state readOnly="true">
+            <options>
+                <option value="0">Previous Events cleared</option>
+                <option value="1">System hardware failure</option>
+                <option value="2">System software failure</option>
+                <option value="3">System hardware failure with manufacturer proprietary failure code</option>
+                <option value="4">System software failure with manufacturer proprietary failure code</option>
+            </options>
+        </state>
+    </channel-type>
+
+
+    <!-- Channel definition for zwave notification type=0x0C/Appliance -->
+    <channel-type id="notification_appliance" advanced="true">
+        <item-type>Number</item-type>
+        <label>Appliance</label>
+        <description>Appliance</description>
+        <state readOnly="true">
+            <options>
+                <option value="0">Previous Events cleared</option>
+                <option value="1">Program started</option>
+                <option value="2">Program in progress</option>
+                <option value="3">Program completed</option>
+                <option value="4">Replace main filter</option>
+                <option value="5">Failure to set target temperature</option>
+                <option value="6">Supplying water</option>
+                <option value="7">Water supply failure</option>
+                <option value="8">Boiling</option>
+                <option value="9">Boiling failure</option>
+                <option value="10">Washing</option>
+                <option value="11">Washing failure</option>
+                <option value="12">Rinsing</option>
+                <option value="13">Rinsing failure</option>
+                <option value="14">Draining</option>
+                <option value="15">Draining failure</option>
+                <option value="16">Spinning</option>
+                <option value="17">Spinning failure</option>
+                <option value="18">Drying</option>
+                <option value="19">Drying failure</option>
+                <option value="20">Fan failure</option>
+                <option value="21">Compressor failure</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Channel to send a notification -->
+    <channel-type id="notification_send" advanced="true">
+        <item-type>Number</item-type>
+        <label>Send Notification</label>
+        <description>Sends a notification</description>
+    </channel-type>
+
+    <!-- RF Protection Channel -->
+    <channel-type id="protection_rf" advanced="true">
+        <item-type>Number</item-type>
+        <label>Rf Protection Mode</label>
+        <description>Sets the rf protection mode
+        </description>
+        <state>
+            <options>
+                <option value="0">Unprotected</option>
+                <option value="1">No RF control</option>
+                <option value="2">No RF response at all</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Scene - Number -->
+    <channel-type id="scene_number">
+        <item-type>Number</item-type>
+        <label>Scene Number</label>
+        <description>Triggers when a scene button is pressed</description>
+        <category></category>
+    </channel-type>
+
+    <!-- Scene - Number -->
+    <channel-type id="counter">
+        <item-type>Number</item-type>
+        <label>Number counter number</label>
+        <description>Used for simple counters</description>
+        <category>counter</category>
+    </channel-type>
+
+    <!-- Binary Sensor -->
+    <channel-type id="sensor_binary">
+        <item-type>Switch</item-type>
+        <label>Binary Sensor</label>
+        <description>Indicates if a sensor has triggered</description>
+        <category>button</category>
+        <state readOnly="true">
+            <options>
+                <option value="ON">ON</option>
+                <option value="OFF">OFF</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Dewpoint Channel -->
+    <channel-type id="sensor_dewpoint">
+        <item-type>Number</item-type>
+        <label>Dewpoint</label>
+        <description>Indicates the dewpoint</description>
+        <category>dewpointtemperature</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <!-- Direction Channel -->
+    <channel-type id="sensor_direction">
+        <item-type>Number</item-type>
+        <label>Direction</label>
+        <description>Indicates the direction</description>
+        <category></category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <!-- Activate learning mode -->
+    <channel-type id="switch_learning">
+        <item-type>Switch</item-type>
+        <label>Activate learning</label>
+        <description>Enables learning mode on the specified channel</description>
+        <category>Switch</category>
+        <state>
+            <options>
+                <option value="ON">Learning</option>
+                <option value="OFF">Off</option>
+            </options>
+        </state>
+    </channel-type>
+
+
+    <!-- General Sensor -->
+    <channel-type id="sensor_general">
+        <item-type>Number</item-type>
+        <label>Sensor</label>
+        <description></description>
+        <category>counter</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <!-- Sensor - Power -->
+    <channel-type id="sensor_power">
+        <item-type>Number</item-type>
+        <label>Energy Consumption</label>
+        <description>Indicates the energy consumption (kWh)</description>
+        <category>Energy</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <!-- Humidity Channel -->
+    <channel-type id="sensor_relhumidity">
+        <item-type>Number</item-type>
+        <label>Humidity</label>
+        <description>Indicates the current relative humidity</description>
+        <category>relativehumiditymeasurement</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+
+    <!-- Temperature Channel -->
+    <channel-type id="sensor_temperature">
+        <item-type>Number</item-type>
+        <label>Temperature</label>
+        <description>Indicates the current temperature</description>
+        <category>Temperature</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+        <config-description>
+            <parameter name="config_scale" type="text">
+                <label>Scale</label>
+                <description>Select the scale for temperature readings</description>
+                <default>0</default>
+                <options>
+                    <option value="0">Celsius</option>
+                    <option value="1">Fahrenheit</option>
+                </options>
+            </parameter>
+        </config-description>
+    </channel-type>
+
+    <channel-type id="sensor_airtemperature">
+        <item-type>Number</item-type>
+        <label>Air temperature</label>
+        <description>Indicates the current air temperature</description>
+        <category>airtemperature</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+    <channel-type id="sensor_floortemperature">
+        <item-type>Number</item-type>
+        <label>Floor temperature</label>
+        <description>Indicates the current floor temperature</description>
+        <category>floortemperature</category>
+        <state pattern="%.1f" readOnly="true">
+        </state>
+    </channel-type>
+
+
+    <!-- Switch Channel -->
+    <channel-type id="time_interval">
+        <item-type>Number</item-type>
+        <label>Timer Interval</label>
+        <description>Time interval in seconds or minutes</description>
+        <category>counter</category>
+    </channel-type>
+
+
+    <!-- Switch Channel -->
+    <channel-type id="jablotron_syncgroup">
+        <item-type>Number</item-type>
+        <label>SyncGroup</label>
+        <description>Synchronization Group</description>
+        <category>Config</category>
+    </channel-type>
+
+    <!-- Switch Channel -->
+    <channel-type id="jablotron_timerevent">
+        <item-type>Number</item-type>
+        <label>Timer Event</label>
+        <description>Channels current timer event</description>
+        <state>
+            <options>
+                <option value="0">No event</option>
+                <option value="1">Idle timer</option>
+                <option value="2">Cut off</option>
+                <option value="3">Control bypass</option>
+                <option value="4">Start delay timer</option>
+                <option value="5">Output overcurrent</option>
+                <option value="6">Override output Off</option>
+                <option value="7">Output On</option>
+                <option value="8">Freezing</option>
+                <option value="9">DHW output on</option>
+                <option value="10">Stop delay timer</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Switch Channel -->
+    <channel-type id="jablotron_element">
+        <item-type>Number</item-type>
+        <label>Element (0-47)</label>
+        <description>Element</description>
+    </channel-type>
+
+
+    <!-- Switch Channel -->
+    <channel-type id="switch_binary">
+        <item-type>Switch</item-type>
+        <label>Switch</label>
+        <description>Switch the power on and off</description>
+        <category>Switch</category>
+    </channel-type>
+
+
+    <!-- Heating Setpoint Channel -->
+    <channel-type id="thermostat_setpoint">
+        <item-type>Number</item-type>
+        <label>Setpoint</label>
+        <description>Sets the thermostate setpoint</description>
+        <category>thermostatsetpoint</category>
+        <state pattern="%.1f"></state>
+        <config-description>
+            <parameter name="config_scale" type="text">
+                <label>Scale</label>
+                <description>Select the scale to use for setpoints.</description>
+                <default>0</default>
+                <options>
+                    <option value="0">Celsius</option>
+                    <option value="1">Fahrenheit</option>
+                </options>
+            </parameter>
+        </config-description>
+    </channel-type>
+
+    <!-- Heating Setpoint Channel -->
+    <channel-type id="thermostat_heatingsetpoint">
+        <item-type>Number</item-type>
+        <label>Heating Setpoint</label>
+        <description>Sets the thermostat heating setpoint</description>
+        <category>thermostatheatingsetpoint</category>
+        <state pattern="%.1f"></state>
+        <config-description>
+            <parameter name="config_scale" type="text">
+                <label>Scale</label>
+                <description>Select the scale to use for setpoints.</description>
+                <default>0</default>
+                <options>
+                    <option value="0">Celsius</option>
+                    <option value="1">Fahrenheit</option>
+                </options>
+            </parameter>
+        </config-description>
+    </channel-type>
+
+    <!-- Heating Setpoint Channel -->
+    <channel-type id="thermostat_coolingsetpoint">
+        <item-type>Number</item-type>
+        <label>Cooling Setpoint</label>
+        <description>Sets the thermostate setpoint</description>
+        <category>thermostatcoolingsetpoint</category>
+        <state pattern="%.1f"></state>
+        <config-description>
+            <parameter name="config_scale" type="text">
+                <label>Scale</label>
+                <description>Select the scale to use for setpoints.</description>
+                <default>0</default>
+                <options>
+                    <option value="0">Celsius</option>
+                    <option value="1">Fahrenheit</option>
+                </options>
+            </parameter>
+        </config-description>
+    </channel-type>
+
+    <!-- Thermostat Fan Mode Channel -->
+    <channel-type id="thermostat_fan_mode">
+        <item-type>Number</item-type>
+        <label>Fan Mode</label>
+        <description>Sets the fan mode</description>
+        <category>thermostatfanmode</category>
+        <state>
+            <options>
+                <option value="0">Auto</option>
+                <option value="1">On</option>
+                <option value="2">Auto High</option>
+                <option value="3">On High</option>
+                <option value="4">Unknown(4)</option>
+                <option value="5">Unknown(5)</option>
+                <option value="6">Circulate</option>
+            </options>
+        </state>
+    </channel-type>
+
+
+    <!-- Thermostat Operating State Channel -->
+    <channel-type id="thermostat_operating_state">
+        <item-type>Number</item-type>
+        <label>Operating state</label>
+        <description>Sets thermostat operating state</description>
+        <category>thermostatoperatingstate</category>
+        <state>
+            <options>
+                <option value="0">Idle</option>
+                <option value="1">Heating</option>
+                <option value="2">Cooling</option>
+                <option value="3">Fan Only</option>
+                <option value="4">Pending Heat</option>
+                <option value="5">Pending Cool</option>
+                <option value="6">Vent / Economiser</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Thermostat Mode Channel -->
+    <channel-type id="thermostat_mode">
+        <item-type>Number</item-type>
+        <label>Thermostat Mode</label>
+        <description>Sets the thermostat
+        </description>
+        <category>thermostatmode</category>
+        <state>
+            <options>
+                <option value="0">Manual</option>
+                <option value="1">Permanent standby</option>
+                <option value="2">Permanent Eco</option>
+                <option value="3">Permanent Comfort</option>
+                <option value="4">Party on manual mode</option>
+                <option value="5">Holiday on manual mode</option>
+                <option value="8">Week schedule</option>
+                <option value="9">Temporary standby (do not use)</option>
+                <option value="10">Temporary Eco</option>
+                <option value="11">Temporary comfort</option>
+                <option value="12">Party with week schedule</option>
+                <option value="13">Holiday with week schedule</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <!-- Time Offset Channel -->
+    <channel-type id="time_offset">
+        <item-type>Number</item-type>
+        <label>Time Offset</label>
+        <description>Provides the current time difference for the devices time
+        </description>
+        <category>Counter</category>
+        <config-description>
+            <parameter name="config_offset" type="integer" min="10" max="600">
+                <label>Automatic Update Offset</label>
+                <description><![CDATA[The number of seconds difference in the time before it is reset<br/>
+                Setting this will automatically update the devices clock when the time difference between
+                the device, and the computer exceeds this number of seconds.]]></description>
+                <default>60</default>
+                <options>
+                    <option value="0">Disable Auto Update</option>
+                </options>
+                <limitToOptions>false</limitToOptions>
+            </parameter>
+        </config-description>
+    </channel-type>
+
+    <!-- Weekly schedules -->
+    <channel-type id="schedule">
+        <item-type>String</item-type>
+        <label>Schedule</label>
+        <description>Weekly schedule as a json string</description>
+        <category>Schedule</category>
+    </channel-type>
+
+
+</thing:thing-descriptions>

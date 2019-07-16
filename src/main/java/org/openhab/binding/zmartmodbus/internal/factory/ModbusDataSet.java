@@ -8,23 +8,21 @@
  */
 package org.openhab.binding.zmartmodbus.internal.factory;
 
-import static org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants.ID_NOT_USED;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED;
 
 import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusDataSetClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusFeedRepeat;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusMessageClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusNodeClass;
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingClass.ModbusReportOn;
+import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataSetClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
 /**
- * @author peter
- *
- */
-/**
- * @author peter
+ * @author Peter Kristensen
  *
  */
 public class ModbusDataSet {
@@ -36,17 +34,20 @@ public class ModbusDataSet {
     private int elementId = ID_NOT_USED;
     private int channelId = ID_NOT_USED;
 
-    private ModbusDataSetClass dataSetClass;
-    private ModbusMessageClass messageClass;
-    private ModbusNodeClass nodeClass;
+    private ModbusDataSetClass dataSetClass = ModbusDataSetClass.Unknown;
+    private ModbusMessageClass messageClass = ModbusMessageClass.Unknown;
+    private ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
     private int start;
     private int length = 0;
     private int offset = 0; // Offset to be used with custom addressing of coils
-    private ModbusReportOn reportOn; // Only report on change
-    private ModbusFeedRepeat feedRepeat;
+    private ModbusReportOn reportOn = ModbusReportOn.Unknown; // Only report on change
+    private ModbusFeedRepeat feedRepeat = ModbusFeedRepeat.Fast;
     private boolean internal = false;
 
+    private CopyOnWriteArrayList<ChannelUID> channels = new CopyOnWriteArrayList<>();
+
     public ModbusDataSet() {
+        super();
     }
 
     public ModbusDataSet(int nodeId, ModbusMessageClass messageClass, int start, int length, int offset, int channelId,
@@ -67,18 +68,18 @@ public class ModbusDataSet {
 
         // Define and initialize payload
         switch (messageClass) {
-            case Coil:
-            case Discrete:
-                this.payload = new BitVector(length);
-                break;
-            case Holding:
-            case Input:
-                this.payload = new byte[length * 2];
-                Arrays.fill((byte[]) this.payload, (byte) 0);
-                break;
-            default:
-                this.payload = null;
-                break;
+        case Coil:
+        case Discrete:
+            this.payload = new BitVector(length);
+            break;
+        case Holding:
+        case Input:
+            this.payload = new byte[length * 2];
+            Arrays.fill((byte[]) this.payload, (byte) 0);
+            break;
+        default:
+            this.payload = null;
+            break;
         }
     }
 
@@ -104,18 +105,18 @@ public class ModbusDataSet {
 
         // Define and initialize payload
         switch (messageClass) {
-            case Coil:
-            case Discrete:
-                this.payload = new BitVector(length);
-                break;
-            case Holding:
-            case Input:
-                this.payload = new byte[length * 2];
-                Arrays.fill((byte[]) this.payload, (byte) 0);
-                break;
-            default:
-                this.payload = null;
-                break;
+        case Coil:
+        case Discrete:
+            this.payload = new BitVector(length);
+            break;
+        case Holding:
+        case Input:
+            this.payload = new byte[length * 2];
+            Arrays.fill((byte[]) this.payload, (byte) 0);
+            break;
+        default:
+            this.payload = null;
+            break;
         }
     }
 
@@ -159,6 +160,36 @@ public class ModbusDataSet {
 
     public void setChannelId(int channelId) {
         this.channelId = channelId;
+    }
+
+
+    /**
+     * Add a channel to the list of channels serviced by this dataset
+     * 
+     * @param uid
+     * @return true on channelUID added successfully
+     */
+    public boolean addChannel(ChannelUID uid) {
+        return this.channels.add(uid);
+    }
+
+    /**
+     * Remove a channel from the list of channels serviced by this dataset
+     * 
+     * @param uid
+     * @return true on channelUID removed successfully
+     */
+    public boolean removeChannel(ChannelUID uid) {
+        return this.channels.remove(uid);
+    }
+
+    /**
+     * Get the list of channels
+     * 
+     * @return
+     */
+    public CopyOnWriteArrayList<ChannelUID> getChannels() {
+        return channels;
     }
 
     /**

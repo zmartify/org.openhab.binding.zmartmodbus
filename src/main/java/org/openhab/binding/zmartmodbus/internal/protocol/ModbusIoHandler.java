@@ -8,15 +8,8 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
-import java.io.IOException;
-import java.util.TooManyListenersException;
-
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
-import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
-
-import gnu.io.NoSuchPortException;
-import gnu.io.PortInUseException;
-import gnu.io.UnsupportedCommOperationException;
+import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
 
 /**
  *
@@ -24,18 +17,11 @@ import gnu.io.UnsupportedCommOperationException;
  *
  */
 public interface ModbusIoHandler {
-    byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException;
 
-    byte[] msgTransaction(byte[] msg) throws ModbusProtocolException;
-
-    public void connect() throws NoSuchPortException, PortInUseException, UnsupportedCommOperationException,
-            TooManyListenersException, IOException;
+    public ModbusTransceiver getTransceiver();
 
     public ModbusNode getNode(int nodeId);
 
     public ModbusController getController();
-
-    public void disconnect();
-
-    boolean isConnected();
+ 
 }

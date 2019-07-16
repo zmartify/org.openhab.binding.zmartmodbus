@@ -11,7 +11,6 @@ package org.openhab.binding.zmartmodbus.internal.factory;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.openhab.binding.zmartmodbus.ZmartModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.slf4j.Logger;
@@ -32,10 +31,17 @@ public class ModbusActionFeed<T> {
 
     private ActionListener subscriber = null;
 
-    private int slowPoll = ZmartModbusBindingConstants.DEFAULT_POLLS * 10;
-    private int fastPoll = ZmartModbusBindingConstants.DEFAULT_POLLS;
+    private int slowPoll = 0;
+    private int fastPoll = 0;
 
     private transient boolean running = false;
+
+    public ModbusActionFeed(int slowPoll, int fastPoll) {
+        super();
+        setSlowPoll(slowPoll);
+        setFastPoll(fastPoll);
+        launchPublisher();
+    }
 
     public void addAction(ModbusAction action) {
         switch (action.getFeedRepeat()) {
@@ -66,10 +72,6 @@ public class ModbusActionFeed<T> {
         synchronized (fastActions) {
             fastActions.removeIf(action -> action.getNodeId() == nodeId);
         }
-    }
-
-    public ModbusActionFeed() {
-        launchPublisher();
     }
 
     private class ActionThread extends Thread {
@@ -104,12 +106,12 @@ public class ModbusActionFeed<T> {
                 // TODO: Auto-generated catch block
                 e.printStackTrace();
             }
-            logger.info("Leaving THREAD");
+            logger.debug("Leaving THREAD");
         }
     }
 
     void launchPublisher() {
-        logger.info("LaunchPublisher");
+        logger.debug("LaunchPublisher");
         running = true;
         Thread actionThread = new ActionThread();
         actionThread.start();
@@ -128,7 +130,14 @@ public class ModbusActionFeed<T> {
     }
 
     public void register(ActionListener listener) {
-        logger.info("register actionListener");
         subscriber = listener;
+    }
+
+    public int getSlowPoll() {
+        return slowPoll;
+    }
+
+    public int getFastPoll() {
+        return fastPoll;
     }
 }
