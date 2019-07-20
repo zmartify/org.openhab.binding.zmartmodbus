@@ -12,11 +12,10 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_CHANNELID;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_ELEMENTID;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_NODECLASS;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_UNITADDRESS;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_PARENTNODEID;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_SLAVES_THING_TYPES_UIDS;
 
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
@@ -27,7 +26,6 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusNode;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,20 +76,6 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
 
         // Start the search for new devices
         discoverModbus();
-
-        Runnable pollingRunnable = new Runnable() {
-            @Override
-            public void run() {
-                // Add all existing devices
-                for (ModbusNode node : controllerHandler.getNodes()) {
-                    logger.info("NODE {} deviceAdded {}", node.getNodeId(), node.getThingTypeUID());
-                    // deviceAdded(node);
-                }
-
-            }
-        };
-
-        scheduler.schedule(pollingRunnable, 2, TimeUnit.SECONDS);
     }
 
     @Override
@@ -140,21 +124,21 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * @param channelId (ID_NOT_USED if not Jablotron)
      * @param elementId (ID_NOT_USED if not Jablotron)
      */
-    public void deviceDiscovered(ThingTypeUID thingTypeUID, int unitAddress, int channelId, int elementId) {
-        logger.debug("DeviceDiscovered: {}", thingTypeUID);
+    public void deviceDiscovered(ThingTypeUID thingTypeUID, int parentNodeId, int channelId, int elementId) {
+        logger.debug("DeviceDiscovered: {} - parentNodeId {}", thingTypeUID, parentNodeId);
 
         try {
             String nodeClassLabel = thingTypeUID.getId();
 
             // Initialize it (create if absent)
-            ThingUID thingUID = makeThingUID(thingTypeUID, unitAddress, channelId, elementId);
+            ThingUID thingUID = makeThingUID(thingTypeUID, parentNodeId, channelId, elementId);
             String label = thingUID.getId().toString();
 
             if (thingUID != null) {
                 logger.trace("Adding new Modbus Slave Thing {} to smarthome inbox", thingUID);
                 DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID)
                         .withProperty(PROPERTY_NODECLASS, nodeClassLabel)
-                        .withProperty(PROPERTY_UNITADDRESS, String.valueOf(unitAddress))
+                        .withProperty(PROPERTY_PARENTNODEID, String.valueOf(parentNodeId))
                         .withProperty(PROPERTY_CHANNELID, String.valueOf(channelId))
                         .withProperty(PROPERTY_ELEMENTID, String.valueOf(elementId)).withLabel(label)
                         .withBridge(controllerHandler.getThing().getUID()).build();
@@ -171,8 +155,8 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * @param thingType
      * @param unitAddress
      */
-    public void deviceDiscovered(ThingTypeUID thingType, int unitAddress) {
-        deviceDiscovered(thingType, unitAddress, ID_NOT_USED, ID_NOT_USED);
+    public void deviceDiscovered(ThingTypeUID thingType, int parentNodeId) {
+        deviceDiscovered(thingType, parentNodeId, ID_NOT_USED, ID_NOT_USED);
     }
 
     private synchronized void discoverModbus() {

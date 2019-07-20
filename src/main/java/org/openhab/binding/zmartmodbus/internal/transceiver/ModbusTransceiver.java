@@ -20,16 +20,12 @@ import java.util.TooManyListenersException;
 import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationException;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Peter Kristensen - Initial contribution
  */
 public abstract class ModbusTransceiver {
-
-    private Logger logger = LoggerFactory.getLogger(ModbusTransceiver.class);
 
     // Input and output streams, must be created by transceiver implementations
     protected InputStream inputStream;

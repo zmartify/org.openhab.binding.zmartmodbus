@@ -13,11 +13,6 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionCla
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Write;
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat.Once;
 
-import java.io.IOException;
-import java.util.TooManyListenersException;
-
-import org.eclipse.smarthome.io.transport.serial.PortInUseException;
-import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationException;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
@@ -115,7 +110,7 @@ public class ModbusHandler<T> {
                                     modbusFunction.setLogicalAddress(unitAddress);
                                     break;
                                 default:
-                                    logger.debug("NODE {}: Wrong messageClass for writing {} ({})",
+                                    logger.warn("NODE {}: Wrong messageClass for writing {} ({})",
                                             modbusAction.getNodeId(), modbusAction.getMessageClass(),
                                             modbusAction.getDataSetId());
                                     break;

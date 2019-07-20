@@ -86,17 +86,17 @@ public class ModbusFactory<T> {
 
             @Override
             public void onSubscribe(Disposable d) {
-                logger.info(" onSubscribe : {}", d.isDisposed());
+                logger.debug("StateListener onSubscribe : {}", d.isDisposed());
             }
 
             @Override
             public void onComplete() {
-                // TODO Auto-generated method stub
+                logger.debug("StateListener completed");
             }
 
             @Override
             public void onError(Throwable arg0) {
-                // TODO Auto-generated method stub
+                logger.error("StateListener caught an error : {}", arg0.getMessage());
             }
 
             @Override
@@ -126,19 +126,17 @@ public class ModbusFactory<T> {
 
             @Override
             public void onSubscribe(Disposable d) {
-                logger.info(" onSubscribe : {}", d.isDisposed());
+                logger.info("MessageListener onSubscribe : {}", d.isDisposed());
             }
 
             @Override
             public void onComplete() {
-                // TODO Auto-generated method stub
-
+                logger.debug("MessageListener completed");
             }
 
             @Override
             public void onError(Throwable arg0) {
-                // TODO Auto-generated method stub
-
+                logger.debug("MessageListener caught an error : {}", arg0.getMessage());
             }
 
             @Override
@@ -150,7 +148,7 @@ public class ModbusFactory<T> {
                         updateDataSet(modbusMessage);
                     }
                 } else {
-                    // Allways update
+                    // Always update
                     updateDataSet(modbusMessage);
                 }
             }
@@ -235,12 +233,12 @@ public class ModbusFactory<T> {
      *
      */
     public void register(StateListener listener) {
-        logger.info("Factory register State listener");
+        logger.debug("Factory register State listener registered");
         stateSubscriber = listener;
     }
 
     public void register(ActionListener listener) {
-        logger.info("Factory register Action listener");
+        logger.debug("Factory register Action listener registered");
         actionSubscriber = listener;
     }
 

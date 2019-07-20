@@ -14,18 +14,10 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.BRIDGE_TYPE
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_BRIDGE_TYPES_UIDS;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_THING_TYPES_UIDS;
 
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
-
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandler;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
@@ -34,8 +26,6 @@ import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusSerialHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusTcpHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
-import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
-import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;

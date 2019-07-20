@@ -94,7 +94,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
         // Get slave id from thing configuration
         config = getConfigAs(ModbusSlaveConfiguration.class);
-        logger.info("Modbus slave id = {}", config.getId());
 
         // We need to set the status to OFFLINE so that the framework calls our
         // notification handlers
@@ -152,8 +151,9 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         getController().initializeNode(nodeId, config.getId(),
                 ModbusNodeClass.fromString(getThing().getThingTypeUID().getId()));
 
-        getController().getNode(nodeId).setChannelId(getChannelId());
-        getController().getNode(nodeId).setElementId(getElementId());
+                getController().getNode(nodeId).setParentNodeId(getParentNodeId());
+                getController().getNode(nodeId).setChannelId(getChannelId());
+                getController().getNode(nodeId).setElementId(getElementId());
 
         initializeDataSets();
         initializeChannels();
@@ -401,7 +401,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             @Override
             public void onError(Throwable arg0) {
                 logger.error("We have received an error :: {}", arg0.getMessage());
-
             }
 
             @Override
@@ -411,10 +410,12 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         };
     }
 
-    public void receivedDiscovery(ModbusMessage modbusMessage) {
-        logger.debug("Received discovery message from Message Listener ThingHandler");
+    /**
+     * Received discovery message from Message Listener ThingHandler
+     * 
+     * @param modbusMessage
+     */public void receivedDiscovery(ModbusMessage modbusMessage) {
         int dataSetId = modbusMessage.getDataSetId();
-        int unitAddress = config.getId();
         int elementAddress = Register.registersToIntSwap((byte[]) modbusMessage.getPayload(), 0);
 
         if (elementAddress != 0) {
@@ -427,7 +428,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             // status.setMSBAccess();
             if (!status.getBit(9)) {
                 // We assume it is a Thermostat as it is not a magnetic contact
-                logger.debug("We have discovered a Thermostat");
+                logger.debug("NODE {} : We have discovered a Thermostat", nodeId);
                 int lowestChannel = 16;
                 for (int i = 0; i < 16; i++) {
                     if (assignmentMap.getBit(i)) {
@@ -435,13 +436,22 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                         if (lowestChannel == 16) {
                             lowestChannel = i;
                         }
-                        logger.debug("We have discovered an actuator");
-                        discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, unitAddress, i, ID_NOT_USED);
+                        logger.debug("NODE {} : We have discovered an actuator", nodeId);
+                        discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, nodeId, i, ID_NOT_USED);
                     }
                 }
-                discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, unitAddress, lowestChannel, Jablotron
+                discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, nodeId, lowestChannel, Jablotron
                         .getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId).getStart()));
             }
+        }
+    }
+
+    private int getParentNodeId() {
+        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_PARENTNODEID);
+        if (idStr == null) {
+            return 0;
+        } else {
+            return Integer.decode(idStr);
         }
     }
 

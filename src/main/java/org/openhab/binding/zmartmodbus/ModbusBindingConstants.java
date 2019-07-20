@@ -143,7 +143,7 @@ public class ModbusBindingConstants {
 
         public static final String PROPERTY_NODEID = "modbus_nodeid";
         public static final String PROPERTY_NODECLASS = "modbus_nodeclass";
-        public static final String PROPERTY_UNITADDRESS = "modbus_unitaddress";
+        public static final String PROPERTY_PARENTNODEID = "modbus_parentnodeid";
         public static final String PROPERTY_CHANNELID = "modbus_channelid";
         public static final String PROPERTY_ELEMENTID = "modbus_elementid";
 

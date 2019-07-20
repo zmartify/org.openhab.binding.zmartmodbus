@@ -100,7 +100,7 @@
             <label>Power Consumption</label>
             <description>Current consumption in watts of an actuator connected to the channel</description>
                 <properties>
-                    <property name="">channel</property>
+                    <property name="dataset">channel</property>
                     <property name="index">0x01</property>
                     <property name="valuetype">custom16_power</property>
                 </properties>

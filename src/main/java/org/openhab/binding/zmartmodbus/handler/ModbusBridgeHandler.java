@@ -258,7 +258,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
         if (controller == null) {
             return;
         }
-        controller.requestInclusionStop();
     }
 
     public ModbusBaseConfiguration getBaseConfig() {

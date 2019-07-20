@@ -186,7 +186,7 @@ public class ModbusController {
         // Place nodes in the local ModbusFunction Controller (create if it doesn't exist)
         modbusNodes.putIfAbsent(nodeId, node);
 
-        // If were are not the controller, then get device information populated
+        // If we are not the controller, then get device information populated
         if (nodeId != CONTROLLER_NODE_ID) {
             ModbusAction action = new ModbusAction(nodeId, 0, ModbusMessageClass.GetDeviceInfo, ModbusActionClass.Read,
                     ModbusFeedRepeat.Once, 0, 0, 0, ModbusReportOn.Allways);
@@ -209,16 +209,14 @@ public class ModbusController {
     public void reinitialiseNode(int nodeId) {
         int unitAddress = getNode(nodeId).getUnitAddress();
         ModbusNodeClass nodeClass = getNode(nodeId).getNodeClass();
-        // ThingTypeUID thingTypeUID = getNode(nodeId).getThingTypeUID();
+        ThingTypeUID thingTypeUID = getNode(nodeId).getThingTypeUID();
         removeNode(nodeId);
 
-        //
-        /* thing was already created,
+        //thing was already created,
         if (thingTypeUID != null) {
             this.bridgeHandler.getDiscoveryService().deviceDiscovered(thingTypeUID, unitAddress, getChannelId(nodeId),
                     getElementId(nodeId));
         }
-        */
         initializeNode(nodeId, unitAddress, nodeClass);
     }
 
@@ -305,31 +303,6 @@ public class ModbusController {
 
     public int nextNodeId() {
         return countNodeId.getAndIncrement();
-    }
-
-    /**
-     * Puts the controller into inclusion mode to add new nodes
-     *
-     * @param inclusionMode the mode to use for inclusion.
-     *                          <br>
-     *                          0=Low Power Inclusion
-     *                          <br>
-     *                          1=High Power Inclusion
-     *                          <br>
-     *                          2=Network Wide Inclusion
-     *
-     */
-    public void requestAddNodesStart(int inclusionMode) {
-    }
-
-    /**
-     * Puts the controller into exclusion mode to remove new nodes
-     *
-     */
-    public void requestRemoveNodesStart() {
-    }
-
-    public void requestInclusionStop() {
     }
 
     public void stopListening() {

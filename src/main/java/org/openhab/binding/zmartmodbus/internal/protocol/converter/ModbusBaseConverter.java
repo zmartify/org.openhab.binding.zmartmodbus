@@ -24,6 +24,8 @@ import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.WeekDayClass;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -33,6 +35,8 @@ import com.google.gson.JsonParser;
  *
  */
 public class ModbusBaseConverter {
+
+    private final static Logger logger = LoggerFactory.getLogger(ModbusBaseConverter.class);
 
     public static State fromModbusToState(ModbusValueClass valueClass, Object payload, int channelIndex) {
         int index = channelIndex * valueClass.size();
@@ -158,7 +162,7 @@ public class ModbusBaseConverter {
                 payload = floatToRegistersSwap(((DecimalType) state).floatValue());
                 break;
             case Custom16_power:
-                // Not supported, read-only channel
+                logger.warn("'Custom16_power' - write not supported, read-only channel");
                 return null;
             case Custom8_4bit:
                 payload = ((DecimalType) state).byteValue() & 0x0F;
@@ -179,7 +183,7 @@ public class ModbusBaseConverter {
                 }
                 break;
             default:
-                // Valueclass not found - return null
+                logger.error("ValueClass not found - return null");
                 return null;
         }
         if (channel.getValueClass() != ModbusValueClass.Bit) {

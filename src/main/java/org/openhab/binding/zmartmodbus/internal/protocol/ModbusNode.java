@@ -11,6 +11,7 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED;
 
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.slf4j.Logger;
@@ -31,6 +32,7 @@ public class ModbusNode {
     private boolean listening = false; // i.e. sleeping
 
     private int nodeId = 0;
+    private int parentNodeId;
     private int unitAddress = 0;
     private int channelId = 0; // Used for Jablotron special addressing
     private int elementId = 0; // Used for Jablotron special addressing
@@ -42,12 +44,13 @@ public class ModbusNode {
     /**
      * Constructor. Creates a new instance of the ModbusNode class.
      *
-     * @param nodeId the node ID to use.
+     * @param nodeId     the node ID to use.
      * @param controller the modbus controller instance
      */
     public ModbusNode(int nodeId, ModbusController controller) {
         logger.info("NODE {}: Creating a new modbus node", nodeId);
         this.nodeId = nodeId;
+        this.parentNodeId = ModbusBindingConstants.CONTROLLER_NODE_ID; // Sets it to point at the Bridge
         this.nodeClass = ModbusNodeClass.Unknown;
         this.channelId = ID_NOT_USED;
         this.elementId = ID_NOT_USED;
@@ -94,10 +97,19 @@ public class ModbusNode {
     }
 
     /**
+     * Returns then ModbusUnitAddress
+     * If parentNodeId not equal Bridge, use the unitAddress from the parent node,
+     * assuming this node is a virtual slave of a real slave
+     * 
      * @return the unitAddress
      */
     public int getUnitAddress() {
-        return unitAddress;
+
+        if ((parentNodeId != 0) && (nodeId != ModbusBindingConstants.CONTROLLER_NODE_ID)) {
+            return controller.getNode(parentNodeId).getUnitAddress();
+        } else {
+            return unitAddress;
+        }
     }
 
     /**
@@ -168,14 +180,14 @@ public class ModbusNode {
 
     public void setNodeClass(ModbusNodeClass nodeClass) {
         switch (nodeClass) {
-            case JablotronAC116:
-            case JablotronActuator:
-            case JablotronTP150:
-                modbusFunction = new ModbusFunctionJablotron(controller.getBridgeHandler());
-                break;
-            default:
-                modbusFunction = new ModbusFunction(controller.getBridgeHandler());
-                break;
+        case JablotronAC116:
+        case JablotronActuator:
+        case JablotronTP150:
+            modbusFunction = new ModbusFunctionJablotron(controller.getBridgeHandler());
+            break;
+        default:
+            modbusFunction = new ModbusFunction(controller.getBridgeHandler());
+            break;
         }
         logger.debug("New slave created {}", modbusFunction.getClass());
 
@@ -200,7 +212,7 @@ public class ModbusNode {
     }
 
     public boolean getApplicationUpdateReceived() {
-        // TODO Auto-generated method stub
+        logger.warn("getApplicationUpdateReceived - unimplemented");
         return false;
     }
 
@@ -211,4 +223,13 @@ public class ModbusNode {
     public void setConfigured(boolean state) {
         configured = state;
     }
+
+    public int getParentNodeId() {
+        return parentNodeId;
+    }
+
+    public void setParentNodeId(int parentNodeId) {
+        this.parentNodeId = parentNodeId;
+    }
+
 }
