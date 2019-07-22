@@ -16,26 +16,9 @@ import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
  * @author Peter Kristensen
  *
  */
-public class ModbusIOHandler implements IModbusIOHandler {
- 
-    private ModbusTransceiver transceiver = null;
-    private ModbusController controller;
+public interface IModbusIOHandler {
 
-    public ModbusIOHandler(ModbusController controller) {
-        super();
-        this.controller = controller;
-    }
+    public ModbusTransceiver getTransceiver();
 
-    public ModbusTransceiver getTransceiver() {
-        return transceiver;
-    }
-
-    public void setTransceiver(ModbusTransceiver transceiver) {
-        this.transceiver = transceiver;
-    }
-
-    public ModbusController getController() {
-        return controller;
-    }
-
+    public ModbusController getController();
 }

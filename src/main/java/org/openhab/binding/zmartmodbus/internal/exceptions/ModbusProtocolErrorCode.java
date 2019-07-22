@@ -6,15 +6,14 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.zmartmodbus.internal.protocol;
+package org.openhab.binding.zmartmodbus.internal.exceptions;
 
 /**
  *
  * @author Peter Kristensen
  *
  *         ProtocolErrorCode holds the enumeration of valid error codes for the exception message. For each defined enum
- *         value,
- *         a corresponding message should be defined in the properties bundle named:
+ *         value, a corresponding message should be defined in the properties bundle named:
  *         ProtocolExceptionMessagesBundle.properties.
  *
  *
@@ -27,8 +26,9 @@ public enum ModbusProtocolErrorCode {
     METHOD_NOT_SUPPORTED,
     NOT_AVAILABLE,
     NOT_CONNECTED,
+    SERIAL_INUSE,
+    SERIAL_UNSUPPORTED,
     CONNECTION_FAILURE,
     TRANSACTION_FAILURE,
     RESPONSE_TIMEOUT;
-
 }

@@ -14,11 +14,13 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionCla
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat.Once;
 
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
+import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.MessageListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCommEvent;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusThing;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
 import org.slf4j.Logger;
@@ -58,15 +60,14 @@ public class ModbusHandler<T> {
                 Object payload = null;
                 @SuppressWarnings("unused")
                 ModbusCommEvent commEvent = null;
-                int unitAddress = bridgeHandler.getController().getUnitAddress(modbusAction.getNodeId());
-                ModbusFunction modbusFunction = bridgeHandler.getController().getNode(modbusAction.getNodeId())
-                        .getModbusFunction();
+                ModbusThing modbusThing = ((ModbusThingHandler) bridgeHandler.getThingByUID(modbusAction.getThingUID()).getHandler()).getModbusThing();
+                int unitAddress = modbusThing.getId();
+                ModbusFunction modbusFunction = modbusThing.getModbusFunction();
 
                 try {
 
                     if (!bridgeHandler.isConnected()) {
-                        logger.error("We are not CONNECTED");
-                        // bridgeHandler.getTransceiver().connect();
+                        logger.error("Not CONNECTED - ModbusAction discarded");
                     } else {
                         if (modbusAction.getActionClass().equals(Read)) {
                             switch (modbusAction.getMessageClass()) {
@@ -84,8 +85,7 @@ public class ModbusHandler<T> {
                                             modbusAction.getLength());
                                     break;
                                 case GetDeviceInfo:
-                                    bridgeHandler.getController().getNode(modbusAction.getNodeId())
-                                            .setDeviceInfo(modbusFunction.getDeviceInfo(unitAddress));
+                                modbusThing.setDeviceInfo(modbusFunction.getDeviceInfo(unitAddress));
                                     // Set no further action
                                     payload = null;
                                 default:
@@ -111,7 +111,7 @@ public class ModbusHandler<T> {
                                     break;
                                 default:
                                     logger.warn("NODE {}: Wrong messageClass for writing {} ({})",
-                                            modbusAction.getNodeId(), modbusAction.getMessageClass(),
+                                            modbusAction.getThingUID(), modbusAction.getMessageClass(),
                                             modbusAction.getDataSetId());
                                     break;
                             }
@@ -156,17 +156,12 @@ public class ModbusHandler<T> {
                             break;
                         case CONNECTION_FAILURE:
                             logger.error("Connection failure: {} {}", e.getCause(), e.getMessage());
-                            bridgeHandler.getTransceiver().disconnect();
+                            bridgeHandler.getModbusIO().getTransceiver().disconnect();
                             break;
                         default:
-                            logger.error("We got an exception in ModbusCommunicator {}  {}", e.getCause(),
-                                    e.getMessage());
+                            logger.error("We got an exception in ModbusCommunicator ({}) {}", e.getCode(), e.getCode().name());
                             break;
                     }
-
-                } catch (Exception e) {
-                    logger.info("We got an exception in ModbusCommunicator {}  {}", e.getCause(), e.getMessage());
-                    // bridgeHandler.getTransceiver().disconnect();
                 }
             }
 
@@ -177,7 +172,7 @@ public class ModbusHandler<T> {
 
             @Override
             public void onComplete() {
-                bridgeHandler.getTransceiver().disconnect();
+                bridgeHandler.getModbusIO().getTransceiver().disconnect();
                 logger.info("onComplete");
             }
         };

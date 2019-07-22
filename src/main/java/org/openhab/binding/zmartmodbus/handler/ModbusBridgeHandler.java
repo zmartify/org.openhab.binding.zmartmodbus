@@ -8,67 +8,64 @@
  */
 package org.openhab.binding.zmartmodbus.handler;
 
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.NODE_NOT_CONFIGURED;
-
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
+import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.UID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
-import org.openhab.binding.zmartmodbus.internal.config.ModbusBaseConfiguration;
+import org.openhab.binding.zmartmodbus.internal.config.ModbusBridgeConfiguration;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusIoHandler;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusNode;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusIOHandler;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
-import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * The {@link ModbusBridgeHandler} is responsible for handling commands,
- * which are sent to one of the channels.
+ * The {@link ModbusBridgeHandler} is responsible for handling commands, which
+ * are sent to one of the channels.
  *
  * @author Peter Kristensen
  */
-public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHandler {
+public class ModbusBridgeHandler extends BaseBridgeHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusBridgeHandler.class);
 
-    protected ModbusBaseConfiguration baseConfig;
-    protected ModbusTransceiver transceiver = null;
+    protected ModbusBridgeConfiguration modbusBridgeConfig;
+    protected ModbusIOHandler modbusIO;
+    protected ModbusCounters counters = new ModbusCounters();
 
     private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
-    private int nodeId = NODE_NOT_CONFIGURED;
     int searchTime = 30;
     int transactionIndex = 0;
 
     ThingTypeUID thingTypeUID = null;
 
-    // Checks if msgCounter should update to smarthome - can be set from UI
+    // Checks if msgCounter should update to SmartHome - can be set from UI
     boolean updateCounter = false;
 
     StateListener stateSubscriber = null;
-
-    ModbusController controller = null;
 
     public ModbusBridgeHandler(Bridge bridge) {
         super(bridge);
@@ -76,20 +73,23 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
 
     @Override
     public void initialize() {
-        logger.debug("Initializing Zmartify ModbusFunction Controller.");
+        logger.debug("Initializing Modbus BridgeHandler : {}", thing.getBridgeUID());
+        modbusBridgeConfig = getConfigAs(ModbusBridgeConfiguration.class);
 
-        baseConfig = getConfigAs(ModbusBaseConfiguration.class);
+        // Create a new IOController for this Bridge
+        modbusIO = new ModbusIOHandler(new ModbusController(this));
 
         // We must set the state
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE, ModbusBindingConstants.OFFLINE_CTLR_OFFLINE);
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE,
+                ModbusBindingConstants.OFFLINE_CTLR_OFFLINE);
     }
 
-     @Override
+    @Override
     public void dispose() {
-        logger.info("Node {} : Dispose Bridge called", nodeId);
+        logger.info("Dispose Bridge called : {}", thing.getBridgeUID());
 
         if (isConnected()) {
-            transceiver.disconnect();
+            getModbusIO().getTransceiver().disconnect();
         }
 
         // Remove the discovery service
@@ -99,66 +99,36 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
             });
         }
 
-          if (controller != null) {
-            controller.stopListening();
+        if (getController() != null) {
+            getController().stopListening();
         }
+    }
+
+    /**
+     * Common initialization point for all ModbusFunction controllers. Called by
+     * bridges after they have initialized their interfaces.
+     *
+     * @throws ModbusProtocolException
+     *
+     */
+    public void initializeNetwork() {
+        logger.info("Initializing ModbusBridge");
+
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Starting action feeds");
+
+        getController().getActionFeed().setSlowPoll(modbusBridgeConfig.getSlowPoll());
+        getController().getActionFeed().setFastPoll(modbusBridgeConfig.getFastPoll());
+        getController().startListening();
+
+        updateStatus(ThingStatus.ONLINE, ThingStatusDetail.BRIDGE_OFFLINE, ModbusBindingConstants.OFFLINE_CTLR_ONLINE);
     }
 
     public boolean isConnected() {
-        return transceiver != null ? transceiver.isConnected() : false;
+        return getModbusIO().getTransceiver() != null ? getModbusIO().getTransceiver().isConnected() : false;
     }
 
     public boolean getListening() {
-        return controller.getListening();
-    }
-
-    @Override
-    public ModbusController getController() {
-        return controller;
-    }
-
-    @Override
-    public ModbusNode getNode(int nodeId) {
-        if (controller == null) {
-            return null;
-        }
-        return controller.getNode(nodeId);
-    }
-
-    /**
-     * @return the nodeId
-     */
-    public int getNodeId() {
-        return nodeId;
-    }
-
-    /**
-     * @param nodeId the nodeId to set
-     */
-    public void setNodeId(int nodeId) {
-        this.nodeId = nodeId;
-    }
-
-    public Collection<ModbusNode> getNodes() {
-        if (controller == null) {
-            return null;
-        }
-        return controller.getNodes();
-    }
-
-    public int getOwnNodeId() {
-        if (controller == null) {
-            return 0;
-        }
-        return controller.getOwnNodeId();
-    }
-
-    public String getProtocolName() {
-        return "modbus";
-    }
-
-    public UID getUID() {
-        return thing.getUID();
+        return getController().getListening();
     }
 
     @Override
@@ -170,7 +140,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
         } else {
             switch (channelUID.getIdWithoutGroup()) {
             case "update_counter":
-                // setUpdateCounter(command == OnOffType.ON);
+                updateCounter = (command == OnOffType.ON);
                 break;
             default:
                 stateSubscriber.modbusState(new ModbusState(channelUID, (State) command));
@@ -196,29 +166,26 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
     }
 
     protected void incomingMessage() {
-        if (controller == null) {
+        if (getController() == null) {
             return;
         }
     }
 
-     /**
-     * Common initialization point for all ModbusFunction controllers. Called by
-     * bridges after they have initialized their interfaces.
-     *
-     * @throws ModbusProtocolException
-     *
+    /**
+     * Based on nodeClass the corresponding set of ModbusFunction calls are selected
+     * 
+     * @param nodeClass
+     * @return
      */
-    public void initializeNetwork() {
-        logger.info("Initializing Network Zmartify ModbusFunction controller {}", getUID());
-
-        controller = new ModbusController(this);
-        setNodeId(getOwnNodeId());
-        controller.getActionFeed().setSlowPoll(baseConfig.getSlowPoll());
-        controller.getActionFeed().setFastPoll(baseConfig.getFastPoll());
-        controller.startListening();
-
-        updateStatus(ThingStatus.ONLINE, ThingStatusDetail.BRIDGE_OFFLINE, ModbusBindingConstants.OFFLINE_CTLR_ONLINE);
-
+    public ModbusFunction newModbusFunction(ModbusNodeClass nodeClass) {
+        switch (nodeClass) {
+        case JablotronAC116:
+        case JablotronActuator:
+        case JablotronTP150:
+            return new ModbusFunctionJablotron((ModbusBridgeHandler) getBridgeHandler());
+        default:
+            return new ModbusFunction((ModbusBridgeHandler) getBridgeHandler());
+        }
     }
 
     /**
@@ -230,11 +197,11 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
     }
 
     public void setConnected(boolean state) {
-        controller.setConnected(state);
+        getController().setConnected(state);
     }
 
     public void setListening(boolean listening) {
-        controller.setListening(listening);
+        getController().setListening(listening);
     }
 
     protected void removeDeviceDiscoveryService(ThingUID uid) {
@@ -246,26 +213,50 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements ModbusIoHa
             }
         }
     }
+
     public void registerDeviceDiscoveryService(ModbusSlaveDiscoveryService discoveryService, ThingUID uid) {
         logger.debug("Registering DiscoveryService for {}", uid);
 
         discoveryService.activate();
-        this.discoveryServiceRegs.put(uid, bundleContext
-                .registerService(DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
+        this.discoveryServiceRegs.put(uid, bundleContext.registerService(DiscoveryService.class.getName(),
+                discoveryService, new Hashtable<String, Object>()));
     }
 
     public void stopDeviceDiscovery() {
-        if (controller == null) {
+        if (getController() == null) {
             return;
         }
     }
 
-    public ModbusBaseConfiguration getBaseConfig() {
-        return baseConfig;
+    public ModbusBridgeConfiguration getModbusBridgeConfig() {
+        return modbusBridgeConfig;
     }
 
-    @Override
-    public ModbusTransceiver getTransceiver() {
-        return transceiver;
+    public ModbusIOHandler getModbusIO() {
+        return modbusIO;
+    }
+
+    public ModbusController getController() {
+        return modbusIO.getController();
+    }
+
+    protected ModbusBridgeHandler getBridgeHandler() {
+        Bridge bridge = getBridge();
+        return bridge != null ? (ModbusBridgeHandler) bridge.getHandler() : null;
+    }
+
+    public ModbusCounters getCounters() {
+        return counters;
+    }
+
+    public ModbusThingHandler getThingHandlerByUID(ThingUID thingUID) {
+        return (ModbusThingHandler) getBridge().getThing(thingUID).getHandler();
+    }
+
+    protected void onSuccessfulOperation() {
+        // update without error -> we're back online
+        if (getThing().getStatus() == ThingStatus.OFFLINE) {
+            updateStatus(ThingStatus.ONLINE);
+        }
     }
 }

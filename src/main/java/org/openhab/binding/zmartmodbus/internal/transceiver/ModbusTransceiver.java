@@ -20,6 +20,7 @@ import java.util.TooManyListenersException;
 import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationException;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
 
 /**
  *
@@ -31,10 +32,16 @@ public abstract class ModbusTransceiver {
     protected InputStream inputStream;
     protected OutputStream outputStream;
 
+    protected ModbusCounters counters;
+
     private boolean connected = false;
 
+    public ModbusTransceiver(ModbusCounters counters) {
+        this.counters = counters;
+    }
+
     public void connect()
-            throws UnsupportedCommOperationException, PortInUseException, IOException, TooManyListenersException {
+            throws  ModbusProtocolException  {
                 setConnected(true);
     }
 

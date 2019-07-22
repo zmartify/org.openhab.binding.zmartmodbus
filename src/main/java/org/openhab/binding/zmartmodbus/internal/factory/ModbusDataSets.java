@@ -15,9 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
-import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
+import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -49,7 +50,7 @@ public class ModbusDataSets {
         int dataSetId = getDataSetId(channel.getDataSetKey());
         // If the dataSet is not created discard and return
         if (dataSetId == -1) {
-            logger.error("NODE {}: DataSet {} not found", channel.getNodeId(), channel.getDataSetKey());
+            logger.error("NODE {}: DataSet {} not found", channel.getThingUID(), channel.getDataSetKey());
             return;
         }
         // Avoid duplication
@@ -58,14 +59,14 @@ public class ModbusDataSets {
                 if (channel.getValueClass().equals(ModbusValueClass.Bit)) {
                     if ((channel.getValueClass().size() > getDataSet(dataSetId).getLength())
                             || (channel.getValueClass().size() <= 0)) {
-                        logger.error("NODE {}: Channel coil index out-of-bound {}", channel.getNodeId(),
+                        logger.error("NODE {}: Channel coil index out-of-bound {}", channel.getThingUID(),
                                 channel.getDataSetKey());
                         return;
                     }
                 } else {
                     if ((channel.getValueClass().size() * channel.getIndex()) > (getDataSet(dataSetId).getLength()
                             * 2)) {
-                        logger.error("NODE {}: Channel index out-of-bound {}", channel.getNodeId(),
+                        logger.error("Thing {}: Channel index out-of-bound {}", channel.getThingUID(),
                                 channel.getDataSetKey());
                         return;
                     }
@@ -100,9 +101,9 @@ public class ModbusDataSets {
         }
     }
 
-    public void removeChannels(int nodeId) {
+    public void removeChannels(ThingUID thingUID) {
         channels.values().forEach(channel -> {
-            if (channel.getNodeId() == nodeId) {
+            if (channel.getThingUID().equals(thingUID)) {
                 channels.remove(channel.getUID());
             }
         });
@@ -176,10 +177,10 @@ public class ModbusDataSets {
      *
      * @param nodeId
      */
-    public void removeDataSets(int nodeId) {
+    public void removeDataSets(ThingUID thingUID) {
         synchronized (dataSets) {
             dataSets.values().forEach(dataSet -> {
-                if (dataSet.getNodeId() == nodeId) {
+                if (dataSet.getThingUID().equals(thingUID)) {
                     for (Entry<String, Integer> dataSetListEntry : dataSetList.entrySet()) {
                         if (dataSetListEntry.getValue() == dataSet.getDataSetId()) {
                             dataSetList.remove(dataSetListEntry.getKey());

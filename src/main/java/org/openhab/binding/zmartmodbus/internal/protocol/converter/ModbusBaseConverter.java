@@ -22,7 +22,7 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.WeekDayClass;
-import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
+import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

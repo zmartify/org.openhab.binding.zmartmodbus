@@ -15,7 +15,7 @@ package org.openhab.binding.zmartmodbus.internal.config;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * The {@link ModbusSlaveConfiguration} is the base class for configuration
+ * The {@link ModbusBaseConfiguration} is the base class for configuration
  * information held by the device
  *
  * @author Sami Salonen - Initial contribution
@@ -23,19 +23,25 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  *
  */
 @NonNullByDefault
-public class ModbusSlaveConfiguration {
-    private int id;
-    private boolean enableDiscovery;
-    
-    public int getId() {
-        return id;
+public class ModbusBridgeConfiguration extends ModbusBaseConfiguration {
+    private int slowPoll = 40000;
+    private int fastPoll = 4000;
+
+    public int getSlowPoll() {
+        return slowPoll;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setSlowPoll(int slowPoll) {
+        this.slowPoll = slowPoll;
     }
 
-    public boolean discoveryEnabled() {
-        return enableDiscovery;
+    public int getFastPoll() {
+        return fastPoll;
     }
+
+    public void setFastPoll(int fastPoll) {
+        this.fastPoll = fastPoll;
+    }
+
+
 }

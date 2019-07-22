@@ -14,6 +14,7 @@ import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataSetClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
@@ -28,7 +29,7 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 public class ModbusDataSet {
 
     private Object payload;
-    private int nodeId;
+    private ThingUID thingUID;
     private int dataSetId;
 
     private int elementId = ID_NOT_USED;
@@ -46,14 +47,11 @@ public class ModbusDataSet {
 
     private CopyOnWriteArrayList<ChannelUID> channels = new CopyOnWriteArrayList<>();
 
-    public ModbusDataSet() {
-        super();
-    }
-
-    public ModbusDataSet(int nodeId, ModbusMessageClass messageClass, int start, int length, int offset, int channelId,
+    public ModbusDataSet(ThingUID thingUID, ModbusMessageClass messageClass, int start, int length, int offset, int channelId,
             int elementId, ModbusReportOn reportOn, ModbusFeedRepeat feedRepeat, ModbusDataSetClass dataSetClass,
             ModbusNodeClass nodeClass) {
-        this.nodeId = nodeId;
+        super();
+        this.thingUID = thingUID;
         this.dataSetId = -1; // Must be set late and before dataSet is used
         this.dataSetClass = dataSetClass;
         this.messageClass = messageClass;
@@ -90,34 +88,11 @@ public class ModbusDataSet {
      * @param offset
      * @param reportOn
      */
-    public ModbusDataSet(int nodeId, ModbusMessageClass messageClass, int start, int length, int offset,
+    public ModbusDataSet(ThingUID thingUID, ModbusMessageClass messageClass, int start, int length, int offset,
             ModbusReportOn reportOn, ModbusFeedRepeat feedRepeat) {
-        this.nodeId = nodeId;
-        this.dataSetId = -1; // Must be set late and before dataSet is used
-        this.dataSetClass = ModbusDataSetClass.SmartHome;
-        this.messageClass = messageClass;
-        this.nodeClass = ModbusNodeClass.Unknown;
-        this.start = start;
-        this.length = length;
-        this.offset = offset;
-        this.reportOn = reportOn;
-        this.feedRepeat = feedRepeat;
-
-        // Define and initialize payload
-        switch (messageClass) {
-        case Coil:
-        case Discrete:
-            this.payload = new BitVector(length);
-            break;
-        case Holding:
-        case Input:
-            this.payload = new byte[length * 2];
-            Arrays.fill((byte[]) this.payload, (byte) 0);
-            break;
-        default:
-            this.payload = null;
-            break;
-        }
+        this(thingUID, messageClass, start, length, offset, ID_NOT_USED,
+        ID_NOT_USED, reportOn, feedRepeat, ModbusDataSetClass.SmartHome,
+       ModbusNodeClass.Unknown);
     }
 
     /**
@@ -134,8 +109,8 @@ public class ModbusDataSet {
         this.payload = payload;
     }
 
-    public int getNodeId() {
-        return nodeId;
+    public ThingUID getThingUID() {
+        return thingUID;
     }
 
     public int getDataSetId() {

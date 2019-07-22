@@ -13,7 +13,6 @@
 package org.openhab.binding.zmartmodbus.internal.transceiver;
 
 import java.io.IOException;
-import java.util.TooManyListenersException;
 
 import javax.xml.bind.DatatypeConverter;
 
@@ -26,9 +25,9 @@ import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationExcepti
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
+import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.util.Crc16;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -49,40 +48,58 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
 
     private SerialPort serialPort;
 
-    public ModbusSerialTransceiver(SerialPortManager serialPortManager, ModbusSerialConfiguration serialConfig) {
+    public ModbusSerialTransceiver(SerialPortManager serialPortManager, ModbusSerialConfiguration serialConfig,
+            ModbusCounters counters) {
+        super(counters);
+        this.serialPort = null;
         this.serialPortManager = serialPortManager;
         this.serialConfig = serialConfig;
     }
 
     @Override
-    public void connect()
-            throws UnsupportedCommOperationException, PortInUseException, IOException, TooManyListenersException {
+    public void connect() throws ModbusProtocolException {
+        // Call disconnect to ensure we are not connected
+        disconnect();
 
-        String port = serialConfig.getPort();
-        logger.debug("Connecting to serial port '{}'", port);
+        try {
+            String port = serialConfig.getPort();
+            logger.debug("Connecting to serial port '{}'", port);
 
-         SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(port);
-        if (portIdentifier == null) {
+            SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(port);
+
             if (portIdentifier == null) {
-                throw new IOException("Could not find a gateway on given path '" + port + "', "
-                        + serialPortManager.getIdentifiers().count() + " ports available.");
+                if (portIdentifier == null) {
+                    throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_AVAILABLE, "Could not find a gateway on given path '" + port + "', "
+                            + serialPortManager.getIdentifiers().count() + " ports available.");
+                }
             }
+
+            SerialPort commPort = portIdentifier.open(ModbusBindingConstants.BINDING_ID, 2000);
+            serialPort = commPort;
+
+            logger.debug("SetSerial");
+            serialPort.setSerialPortParams(serialConfig.getBaud(), serialConfig.getDataBits(),
+                    serialConfig.getStopBits(), serialConfig.getParity());
+
+            serialPort.enableReceiveThreshold(1);
+
+            // In ms. small values mean faster shutdown but more CPU usage.
+            serialPort.enableReceiveTimeout(serialConfig.getReceiveTimeoutMillis());
+
+            inputStream = serialPort.getInputStream();
+            outputStream = serialPort.getOutputStream();
+
+            setConnected(true);
+        } catch (PortInUseException e) {
+            logger.error("PortInUse");
+            throw new ModbusProtocolException(ModbusProtocolErrorCode.SERIAL_INUSE);
+        } catch (UnsupportedCommOperationException e) {
+            logger.error("Unsupported");
+            throw new ModbusProtocolException(ModbusProtocolErrorCode.SERIAL_UNSUPPORTED);
+        } catch (IOException e) {
+            logger.error("IOException {}", e.getMessage());
+            throw new ModbusProtocolException(ModbusProtocolErrorCode.CONNECTION_FAILURE, e.getCause(), e.getMessage());
         }
-
-        SerialPort commPort = portIdentifier.open(ModbusBindingConstants.BINDING_ID, 2000);
-        serialPort = commPort;
-        serialPort.setSerialPortParams( serialConfig.getBaud(), 
-                                        serialConfig.getDataBits(),
-                                        serialConfig.getStopBits(), 
-                                        serialConfig.getParity());
-
-        serialPort.enableReceiveThreshold(1);
-        serialPort.enableReceiveTimeout(ModbusBindingConstants.SERIAL_RECEIVE_TIMEOUT); // In ms. Small values mean faster shutdown but more cpu usage.
-
-        inputStream = serialPort.getInputStream();
-        outputStream = serialPort.getOutputStream();
-
-        setConnected(true);
 
         logger.info("ModbusSerialTransceiver initialized");
     }
@@ -126,7 +143,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
         byte[] cmd = null;
 
         // Update message counter
-        ModbusCounters.incrementMessageCounter();
+        counters.incrementMessageCounter();
 
         if (serialConfig.getTxMode() == ModbusBindingConstants.RTU_MODE) {
             cmd = new byte[msg.length + 2];
@@ -141,7 +158,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
             cmd = convertCommandToAscii(msg);
         }
 
-        logger.debug("MODBUS send ({}): {}", ModbusCounters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
+        logger.debug("MODBUS send ({}): {}", counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
         // Send the message
         try {
             //
@@ -192,7 +209,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                             minimumLength, respIndex);
 
                                     // Increase Response Time Out counter
-                                    ModbusCounters.incrementTimeOutCounter();
+                                    counters.incrementTimeOutCounter();
                                     throw new ModbusProtocolException(ModbusProtocolErrorCode.RESPONSE_TIMEOUT,
                                             failMsg);
                                 }

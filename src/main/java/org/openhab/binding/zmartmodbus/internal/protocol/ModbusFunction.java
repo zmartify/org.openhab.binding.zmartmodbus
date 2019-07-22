@@ -6,14 +6,17 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
+
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
 import java.util.Arrays;
 
 import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
+import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
@@ -30,7 +33,7 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 
 public class ModbusFunction {
 
-    ModbusBridgeHandler bridgeHandler;
+    protected ModbusBridgeHandler bridgeHandler;
 
     public ModbusFunction(ModbusBridgeHandler modbusBridgeHandler) {
         this.bridgeHandler = modbusBridgeHandler;
@@ -599,7 +602,7 @@ public class ModbusFunction {
         }
     }
 
-    public void startSubDeviceDiscovery(int nodeId) {
+    public void startSubDeviceDiscovery(ThingUID thingUID) {
         // Initiate auto discovery process
     }
 
@@ -633,14 +636,18 @@ public class ModbusFunction {
     *
     */
     public byte[] msgTransaction(byte[] msg) throws ModbusProtocolException {
-        return bridgeHandler.getTransceiver().msgTransaction(msg, ModbusBindingConstants.CUSTOMCODE_STANDARD);
+        return bridgeHandler.getModbusIO().getTransceiver().msgTransaction(msg, ModbusBindingConstants.CUSTOMCODE_STANDARD);
     }
 
     public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
-        return bridgeHandler.getTransceiver().msgTransaction(msg, customCode);
+        return bridgeHandler.getModbusIO().getTransceiver().msgTransaction(msg, customCode);
     }
 
     public boolean isConnected() {
-        return bridgeHandler.getTransceiver().isConnected();
+        return bridgeHandler.getModbusIO().getTransceiver().isConnected();
+    }
+
+    public ModbusCounters getCounters() {
+        return bridgeHandler.getCounters();
     }
 }

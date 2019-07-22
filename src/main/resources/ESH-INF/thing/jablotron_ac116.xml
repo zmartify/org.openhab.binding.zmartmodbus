@@ -285,7 +285,7 @@
             <parameter name="id" type="integer">
                 <label>AC-116 Unit Address</label>
                 <description>Jablotron AC-116 / Wavin hydronic floor heating - modbus unit address</description>
-                <default>5</default>
+                <default>1</default>
                 <limitToOptions>true</limitToOptions>
                 <options>
                     <option value="1">1 (default)</option>

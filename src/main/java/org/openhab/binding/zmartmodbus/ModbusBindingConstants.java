@@ -86,8 +86,8 @@ public class ModbusBindingConstants {
         public static final String CHANNEL_STRING = "string";
         public static final String CHANNEL_ROLLERSHUTTER = "rollershutter";
 
-        public static final String CHANNEL_MESSAGE_COUNT = "messageCnt";
-        public static final String CHANNEL_RESPTOUT_COUNT = "respTimeOutCnt";
+        public static final String CHANNEL_MESSAGE_COUNT = "message_count";
+        public static final String CHANNEL_RESPTOUT_COUNT = "resptout_count";
 
         public static final String CHANNEL_LAST_READ_SUCCESS = "lastReadSuccess";
         public static final String CHANNEL_LAST_READ_ERROR = "lastReadError";
@@ -104,24 +104,14 @@ public class ModbusBindingConstants {
         public static final String META_THERMOSTATID = "thermostatId";
         public static final String META_HEATUNITID = "heatUnitId";
 
-        public static final int CONTROLLER_NODE_ID = 0;
-
         /**
          * CONFIGURATION PARAMETERS
          * 
          */
         public final static String CONFIGURATION_MASTER = "controller_master";
 
-        public static final String CONFIGURATION_NODEID = "nodeid";
-        public static final String CONFIGURATION_NODENAME = "nodename_name";
-        public static final String CONFIGURATION_NODELOCATION = "nodename_location";
-
-        public static final String CONFIGURATION_PORT = "serialport"; // Serial port for RS 485
         public static final String CONFIGURATION_TCPPORT = "tcpport"; // IP port or serial port
         public static final String CONFIGURATION_HOST = "host"; // IP address of modbus transceiver
-
-        public static final String CONFIGURATION_TXMODE = "txmode";
-        public static final String CONFIGURATION_RESPTOUT = "resptout";
 
         public static final int RTU_MODE = 0;
         public static final int BIN_MODE = 1;
@@ -135,15 +125,11 @@ public class ModbusBindingConstants {
 
         public static final String DEVICE_ID = "deviceId";
         public static final int ID_NOT_USED = 63;
-        public static final int NODE_NOT_CONFIGURED = -1;
 
         public static final String SUB_TYPE = "subType";
 
-        public static final String NODE_TITLE_FORMAT = "ModbusFunction Node %d";
-
-        public static final String PROPERTY_NODEID = "modbus_nodeid";
         public static final String PROPERTY_NODECLASS = "modbus_nodeclass";
-        public static final String PROPERTY_PARENTNODEID = "modbus_parentnodeid";
+        public static final String PROPERTY_PARENTTHINGUID = "modbus_parentthinguid";
         public static final String PROPERTY_CHANNELID = "modbus_channelid";
         public static final String PROPERTY_ELEMENTID = "modbus_elementid";
 

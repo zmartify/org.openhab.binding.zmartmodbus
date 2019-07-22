@@ -13,12 +13,14 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.*;
 
 import java.util.Arrays;
 
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
+import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
@@ -30,59 +32,6 @@ import org.slf4j.LoggerFactory;
 /**
  * @author Peter Kristensen
  *
- *         OSGI service providing a connection to a device via Serial link (RS232/RS485) or Ethernet using
- *         ModbusFunction
- *         protocol.
- *         This service implements a subset of ModbusFunction Application Protocol as defined by ModbusFunction
- *         Organization :
- *         http://www.modbus.org/specs.php.<br>
- *         For the moment in Ethernet mode, only RTU over TCP/IP is supported
- *         <p>
- *         Function codes implemented are :
- *         <ul>
- *         <li>01 (0x01) readCoils(int dataAddress, int count) : Read 1 to 2000 max contiguous status of coils from the
- *         attached
- *         field device.
- *         It returns an array of booleans representing the requested data points.
- *         <li>02 (0x02) readDiscreteInputs(int dataAddress, int count) : Read 1 to 2000 max contiguous status of
- *         discrete
- *         inputs
- *         from the attached field device. It returns an array of booleans representing the requested data points.
- *         <li>03 (0x03) readHoldingRegisters(int dataAddress, int count) : Read contents of 1 to 125 max contiguous
- *         block of
- *         holding
- *         registers from the attached field device. It returns an array of int representing the requested data points
- *         (data registers on 2 bytes).
- *         <li>04 (0x04) readInputRegisters(int dataAddress, int count) : Read contents of 1 to 125 max contiguous block
- *         of
- *         input registers
- *         from the attached field device. It returns an array of int representing the requested data points (data
- *         registers on
- *         2 bytes).
- *         <li>05 (0x05) writeSingleCoil(int dataAddress, boolean data) : Write a single output to either ON or OFF in
- *         the
- *         attached field
- *         device.
- *         <li>06 (0x06) writeSingleRegister(int dataAddress, int data) : write a single holding register in the
- *         attached field
- *         device.
- *         <li>07 (0x07) readExceptionStatus() : read the content of 8 Exception Status outputs in the field
- *         device.
- *         <li>11 (0x0B) getCommEventCounter() : Get a status word and an event count from the field
- *         device.
- *         <li>12 (0x0C) getCommEventLog() : Get a status word, an event count, a message count and a list of event
- *         bytes from
- *         the field
- *         device.
- *         <li>15 (0x0F) writeMultipleCoils(int dataAddress, boolean[] data) : Write multiple coils in a sequence of
- *         coils to
- *         either
- *         ON or OFF in the attached field device.
- *         <li>16 (0x10) writeMultipleRegister(int dataAddress, int[] data) : write a block of contiguous registers (1
- *         to 123)
- *         in the attached
- *         field device.
- *         </ul>
  */
 
 public class ModbusFunctionJablotron extends ModbusFunction {
@@ -325,15 +274,15 @@ public class ModbusFunctionJablotron extends ModbusFunction {
     }
 
     @Override
-    public void startSubDeviceDiscovery(int nodeId) {
+    public void startSubDeviceDiscovery(ThingUID thingUID) {
         for (int elementId = 0; elementId < 48; elementId++) {
             // Add channel for the element index
-            ModbusDataSet dataSet = new ModbusDataSet(nodeId, ModbusMessageClass.Holding,
+            ModbusDataSet dataSet = new ModbusDataSet(thingUID, ModbusMessageClass.Holding,
                     Jablotron.getAddress(0x01, 0, elementId), 0x0C, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
             dataSet.setInternal(true);
-            String dataSetKey = String.format("%d-%d-discovery1", nodeId, elementId);
-            bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
-            bridgeHandler.getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
+            String dataSetKey = String.format("%s-%d-discovery1", thingUID.getAsString(), elementId);
+            bridgeHandler.getModbusIO().getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
+            bridgeHandler.getModbusIO().getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
         }
     }
 

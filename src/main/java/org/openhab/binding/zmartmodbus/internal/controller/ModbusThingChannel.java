@@ -6,9 +6,10 @@
  * which accompanies this distribution, and is available at
  * http://www.eclipse.org/legal/epl-v10.html
  */
-package org.openhab.binding.zmartmodbus.handler;
+package org.openhab.binding.zmartmodbus.internal.controller;
 
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataType;
@@ -22,7 +23,7 @@ import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
  */
 public class ModbusThingChannel {
 
-    private int nodeId;
+    private ThingUID thingUID;
     private ChannelUID uid;
     private String dataSetKey;
     private int index;
@@ -33,9 +34,9 @@ public class ModbusThingChannel {
     private ModbusReportOn reportOn;
     private boolean internal = false; // True if channel is only used internally by controller
 
-    public ModbusThingChannel(int nodeId, ChannelUID uid, String dataSetKey, ModbusValueClass valueClass, int index,
+    public ModbusThingChannel(ThingUID thingUID, ChannelUID uid, String dataSetKey, ModbusValueClass valueClass, int index,
             ModbusReportOn reportOn) {
-        this.nodeId = nodeId;
+        this.thingUID = thingUID;
         this.uid = uid;
         this.dataSetKey = dataSetKey;
         this.valueClass = valueClass;
@@ -47,10 +48,10 @@ public class ModbusThingChannel {
     }
 
     /**
-     * @return the nodeId
+     * @return the ThingUID
      */
-    public int getNodeId() {
-        return nodeId;
+    public ThingUID getThingUID() {
+        return thingUID;
     }
 
     /**

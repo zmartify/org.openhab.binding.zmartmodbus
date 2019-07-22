@@ -9,20 +9,9 @@
 
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.CONTROLLER_NODE_ID;
-
-import java.util.Collection;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
-import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.ModbusHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusInterfaceException;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusActionFeed;
@@ -30,7 +19,6 @@ import org.openhab.binding.zmartmodbus.internal.factory.ModbusFactory;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.MessageListener;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusNode;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
@@ -51,14 +39,7 @@ public class ModbusController {
 
     private Logger logger = LoggerFactory.getLogger(ModbusController.class);
 
-    private AtomicInteger countNodeId = new AtomicInteger(0);
-
     private ModbusBridgeHandler bridgeHandler;
-
-    /*
-     * Configuration parameters
-     */
-    private int ownNodeId = CONTROLLER_NODE_ID; // MasterController always registered as 0
 
     private boolean connected = false; // Connected to ModbusFunction
     private boolean listening = false; // Connected to ModbusFunction
@@ -67,8 +48,6 @@ public class ModbusController {
      * Constants for managing the ModbusFunction protocol
      */
     static final String PROTOCOL_NAME = "modbusFunction";
-
-    private final ConcurrentHashMap<Integer, ModbusNode> modbusNodes = new ConcurrentHashMap<Integer, ModbusNode>();
 
     private ModbusActionFeed<ModbusAction> actionFeed;
     private ModbusHandler<ModbusMessage> modbusHandler;
@@ -165,79 +144,22 @@ public class ModbusController {
      *             address).
      */
     public ModbusController(ModbusBridgeHandler handler) {
-        ownNodeId = nextNodeId();
-        logger.info("Starting ModbusFunction controller {} - {}", getOwnNodeId(), handler);
+        logger.info("Starting ModbusFunction controller {} - {}", handler);
         
-        actionFeed = new ModbusActionFeed<>(handler.getBaseConfig().getSlowPoll(), handler.getBaseConfig().getFastPoll());
+        actionFeed = new ModbusActionFeed<>(handler.getModbusBridgeConfig().getSlowPoll(), handler.getModbusBridgeConfig().getFastPoll());
         modbusHandler = new ModbusHandler<>();
         modbusFactory = new ModbusFactory<>();
 
         setBridgeHandler(handler);
-        initializeNode(ownNodeId, 0, ModbusNodeClass.Master);
-    }
-
-    public void initializeNode(int nodeId, int unitAddress, ModbusNodeClass nodeClass) {
-        logger.info("NODE {}: initializeNode id = {} - class = {}" , nodeId, unitAddress, nodeClass);
-
-        ModbusNode node = new ModbusNode(nodeId, this);
-        node.setUnitAddress(unitAddress);
-        node.setNodeClass(nodeClass);
-
-        // Place nodes in the local ModbusFunction Controller (create if it doesn't exist)
-        modbusNodes.putIfAbsent(nodeId, node);
-
         // If we are not the controller, then get device information populated
+        /*
         if (nodeId != CONTROLLER_NODE_ID) {
             ModbusAction action = new ModbusAction(nodeId, 0, ModbusMessageClass.GetDeviceInfo, ModbusActionClass.Read,
                     ModbusFeedRepeat.Once, 0, 0, 0, ModbusReportOn.Allways);
             getActionFeed().addAction(action);
         }
-    }
+        */
 
-    public ModbusNode getNode(int nodeId) {
-        return this.modbusNodes.get(nodeId);
-    }
-
-    public void removeNode(int nodeId) {
-        this.modbusNodes.remove(nodeId);
-    }
-
-    public Collection<ModbusNode> getNodes() {
-        return this.modbusNodes.values();
-    }
-
-    public void reinitialiseNode(int nodeId) {
-        int unitAddress = getNode(nodeId).getUnitAddress();
-        ModbusNodeClass nodeClass = getNode(nodeId).getNodeClass();
-        ThingTypeUID thingTypeUID = getNode(nodeId).getThingTypeUID();
-        removeNode(nodeId);
-
-        //thing was already created,
-        if (thingTypeUID != null) {
-            this.bridgeHandler.getDiscoveryService().deviceDiscovered(thingTypeUID, unitAddress, getChannelId(nodeId),
-                    getElementId(nodeId));
-        }
-        initializeNode(nodeId, unitAddress, nodeClass);
-    }
-
-    public int getOwnNodeId() {
-        return ownNodeId;
-    }
-
-    public void setOwnNodeId(int ownNodeId) {
-        this.ownNodeId = ownNodeId;
-    }
-
-    public int getUnitAddress(int nodeId) {
-        return getNode(nodeId).getUnitAddress();
-    }
-
-    public int getChannelId(int nodeId) {
-        return getNode(nodeId).getChannelId();
-    }
-
-    public int getElementId(int nodeId) {
-        return getNode(nodeId).getElementId();
     }
 
     public ModbusBridgeHandler getBridgeHandler() {
@@ -299,10 +221,6 @@ public class ModbusController {
         logger.debug("Controller received update Channel {} {} {}", channel.getUID(), channel.getDataSetKey(),
                 channel.getState());
         bridgeHandler.handleUpdate(channel.getUID(), channel.getState());
-    }
-
-    public int nextNodeId() {
-        return countNodeId.getAndIncrement();
     }
 
     public void stopListening() {

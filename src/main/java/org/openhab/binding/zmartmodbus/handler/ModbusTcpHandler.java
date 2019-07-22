@@ -17,7 +17,6 @@ import java.net.Socket;
 import org.apache.commons.io.IOUtils;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -60,7 +59,6 @@ public class ModbusTcpHandler extends ModbusBridgeHandler {
         // Ethernet TCP/IP port
         logger.info("Setting up TCP/IP port");
 
-        controller = new ModbusController(this);
 /*
         host = getConfigParamStr(CONFIGURATION_HOST, "");
         tcpport = getConfigParamInt(CONFIGURATION_TCPPORT, DEFAULT_TCPPORT);

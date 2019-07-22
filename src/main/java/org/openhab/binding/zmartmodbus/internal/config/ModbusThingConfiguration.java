@@ -10,24 +10,18 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.zmartmodbus.internal;
+package org.openhab.binding.zmartmodbus.internal.config;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
- * Exception for binding configuration exceptions
+ * The {@link ModbusBaseConfiguration} is the base class for configuration
+ * information held by the device
  *
- * @author Sami Salonen - Initial contribution
- * @author Peter Kristensen - Modified for ZmartModbus
+ * @author Peter Kristensen
  *
  */
 @NonNullByDefault
-public class ModbusConfigurationException extends Exception {
-
-    public ModbusConfigurationException(String errmsg) {
-        super(errmsg);
-    }
-
-    private static final long serialVersionUID = -466597103876477780L;
+public class ModbusThingConfiguration extends ModbusBaseConfiguration {
 
 }

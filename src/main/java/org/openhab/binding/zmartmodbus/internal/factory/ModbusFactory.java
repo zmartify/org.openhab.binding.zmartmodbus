@@ -13,7 +13,7 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
-import org.openhab.binding.zmartmodbus.handler.ModbusThingChannel;
+import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.converter.ModbusBaseConverter;

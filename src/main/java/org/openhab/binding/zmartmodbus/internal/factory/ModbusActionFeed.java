@@ -11,6 +11,7 @@ package org.openhab.binding.zmartmodbus.internal.factory;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.slf4j.Logger;
@@ -65,12 +66,12 @@ public class ModbusActionFeed<T> {
         }
     }
 
-    public void removeActions(int nodeId) {
+    public void removeActions(ThingUID thingUID) {
         synchronized (slowActions) {
-            slowActions.removeIf(action -> action.getNodeId() == nodeId);
+            slowActions.removeIf(action -> action.getThingUID().equals(thingUID));
         }
         synchronized (fastActions) {
-            fastActions.removeIf(action -> action.getNodeId() == nodeId);
+            fastActions.removeIf(action -> action.getThingUID().equals(thingUID));
         }
     }
 

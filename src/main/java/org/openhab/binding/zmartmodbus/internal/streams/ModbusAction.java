@@ -12,6 +12,7 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.DEFAULT_RETRIES
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
@@ -35,7 +36,7 @@ public class ModbusAction {
 
     private Logger logger = LoggerFactory.getLogger(ModbusAction.class);
 
-    private int nodeId;
+    private ThingUID thingUID;
     private int dataSetId;
     private ModbusMessageClass messageClass;
     private ModbusActionClass actionClass;  // (read or write)
@@ -61,11 +62,11 @@ public class ModbusAction {
         this.payload = null;
     }
 
-    public ModbusAction(int nodeId, int dataSetId, ModbusMessageClass messageClass, ModbusActionClass actionClass,
+    public ModbusAction(ThingUID thingUID, int dataSetId, ModbusMessageClass messageClass, ModbusActionClass actionClass,
             ModbusFeedRepeat feedRepeat, int start, int length, int offset, ModbusReportOn reportOn) {
         super();
         this.retryCount.set(0);
-        this.nodeId = nodeId;
+        this.thingUID = thingUID;
         this.dataSetId = dataSetId;
         this.messageClass = messageClass;
         this.actionClass = actionClass;
@@ -77,17 +78,8 @@ public class ModbusAction {
     }
 
     public ModbusAction(ModbusDataSet dataSet, ModbusActionClass actionClass) {
-        super();
-        this.nodeId = dataSet.getNodeId();
-        this.dataSetId = dataSet.getDataSetId();
-        this.messageClass = dataSet.getMessageClass();
-        this.actionClass = actionClass;
-        this.feedRepeat = dataSet.getFeedRepeat();
-        this.start = dataSet.getStart();
-        this.length = dataSet.getLength();
-        this.offset = dataSet.getOffset();
-        this.reportOn = dataSet.getReportOn();
-        this.internal = dataSet.isInternal();
+        this(dataSet.getThingUID(),dataSet.getDataSetId(), dataSet.getMessageClass(), actionClass, dataSet.getFeedRepeat(),
+        dataSet.getStart(), dataSet.getLength(), dataSet.getOffset(), dataSet.getReportOn());
     }
 
     public ModbusAction(ModbusDataSet dataSet, ModbusActionClass actionClass, ModbusFeedRepeat feedRepeat) {
@@ -108,8 +100,8 @@ public class ModbusAction {
      * 
      * @return
      */
-    public int getNodeId() {
-        return nodeId;
+    public ThingUID getThingUID() {
+        return thingUID;
     }
 
     public int getDataSetId() {
@@ -181,7 +173,7 @@ public class ModbusAction {
 
     public boolean retry() {
         if (retryCount.getAndIncrement() < DEFAULT_RETRIES) {
-            logger.debug("NODE {}: Retry message {} {} {}", nodeId, dataSetId, messageClass, actionClass);
+            logger.debug("Thing {}: Retry message {} {} {}", thingUID, dataSetId, messageClass, actionClass);
             return true;
         } else {
             return false;

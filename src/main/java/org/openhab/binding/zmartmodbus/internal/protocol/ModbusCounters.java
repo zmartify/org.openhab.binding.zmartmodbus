@@ -18,33 +18,33 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class ModbusCounters {
 
-    private static AtomicInteger MessageCounter = new AtomicInteger(0);
-    private static AtomicInteger TimeOutCounter = new AtomicInteger(0);
+    private AtomicInteger MessageCounter = new AtomicInteger(0);
+    private AtomicInteger TimeOutCounter = new AtomicInteger(0);
 
     /**
      *
      */
-    private ModbusCounters() {
+    public ModbusCounters() {
     }
 
-    public static void clearCounters() {
+    public void clearCounters() {
         MessageCounter = new AtomicInteger(0);
         TimeOutCounter = new AtomicInteger(0);
     }
 
-    public static int incrementMessageCounter() {
+    public int incrementMessageCounter() {
         return MessageCounter.incrementAndGet();
     }
 
-    public static int incrementTimeOutCounter() {
+    public int incrementTimeOutCounter() {
         return TimeOutCounter.incrementAndGet();
     }
 
-    public static int getMessageCounter() {
+    public int getMessageCounter() {
         return MessageCounter.get();
     }
 
-    public static int getTimeOutCounter() {
+    public int getTimeOutCounter() {
         return TimeOutCounter.get();
     }
 }

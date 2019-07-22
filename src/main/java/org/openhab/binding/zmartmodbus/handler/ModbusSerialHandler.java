@@ -14,8 +14,8 @@ package org.openhab.binding.zmartmodbus.handler;
 
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.BRIDGE_TYPE_SERIAL;
 
-import java.io.IOException;
-import java.util.TooManyListenersException;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -23,11 +23,9 @@ import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
-import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationException;
-import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
+import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusSerialTransceiver;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,9 +50,13 @@ public class ModbusSerialHandler extends ModbusBridgeHandler {
      */
     static final String PROTOCOL_NAME = "serial";
 
+    ModbusSerialConfiguration modbusSerialConfig;
+
     ThingTypeUID thingTypeUID = BRIDGE_TYPE_SERIAL;
 
     private SerialPortManager serialPortManager;
+
+    private ScheduledFuture<?> initializationFuture;
 
     public ModbusSerialHandler(Bridge thing, SerialPortManager serialPortManager) {
         super(thing);
@@ -64,39 +66,48 @@ public class ModbusSerialHandler extends ModbusBridgeHandler {
     @Override
     public void initialize() {
         super.initialize();
-        logger.debug("Initializing ZmartModbus serial controller.");
+        logger.debug("Initializing Modbus Serial controller.");
 
-        transceiver = new ModbusSerialTransceiver(serialPortManager, getConfigAs(ModbusSerialConfiguration.class));
+        modbusSerialConfig = getConfigAs(ModbusSerialConfiguration.class);
 
-        try {
-            transceiver.connect();
-        } catch (PortInUseException e) {
-            logger.error("PortInUse");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
-                    ModbusBindingConstants.OFFLINE_SERIAL_INUSE);
-        } catch (UnsupportedCommOperationException e) {
-            logger.error("Unsupported");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
-                    ModbusBindingConstants.OFFLINE_SERIAL_UNSUPPORTED);
-        } catch (IOException e) {
-            logger.error("IOException {}", e.getMessage());
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR, e.getMessage());
-        } catch (TooManyListenersException e) {
-            logger.error("TooManyListenersException");
-            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR,
-                    ModbusBindingConstants.OFFLINE_SERIAL_LISTENERS);
+        if (getModbusIO().getTransceiver() == null) {
+            getModbusIO().setTransceiver(new ModbusSerialTransceiver(serialPortManager, modbusSerialConfig, counters));
+        } else {
+            logger.error("Trying to set up IO controller twice");
         }
 
-        initializeNetwork();
+        if (this.initializationFuture == null || this.initializationFuture.isDone()) {
+            initializationFuture = scheduler.scheduleWithFixedDelay(this::initializeBridgeStatusAndPropertiesIfOffline,
+                    0, 300, TimeUnit.SECONDS);
+        }
+
     }
+    private void initializeBridgeStatusAndPropertiesIfOffline() {
+        Bridge bridge = getBridge();
+        if (bridge != null && bridge.getStatus() == ThingStatus.ONLINE) {
+            return;
+        }
+        updateStatus(ThingStatus.OFFLINE,ThingStatusDetail.CONFIGURATION_PENDING,"Opening serial port");
+        try {
+            logger.debug("We wil not connect and then initialize the Network");
+            getModbusIO().getTransceiver().connect();
+            initializeNetwork();
+            updateStatus(ThingStatus.ONLINE);
+        } catch (ModbusProtocolException e) {
+            logger.error("IOException {}", e.getMessage());
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR, e.getMessage());
+            return;
+        }
+
+        updateStatus(ThingStatus.ONLINE);
+    }
+
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
     }
 
-    @Override
-    public String getProtocolName() {
-        return PROTOCOL_NAME;
-    }
-
+    public ModbusSerialConfiguration getModbusSerialConfig() {
+        return modbusSerialConfig;
+    } 
 }

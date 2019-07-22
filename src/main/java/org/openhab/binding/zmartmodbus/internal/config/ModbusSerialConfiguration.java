@@ -29,7 +29,6 @@ import gnu.io.SerialPort;
 public class ModbusSerialConfiguration {
     @Nullable
     private String port;
-    private int id;
     private int baud;
     @Nullable
     private String stopBits;
@@ -50,7 +49,6 @@ public class ModbusSerialConfiguration {
     private int timeBetweenTransactionsMillis;
     private int connectMaxTries;
     private int connectTimeoutMillis;
-    private boolean enableDiscovery;
 
     public @Nullable String getPort() {
         return port;
@@ -58,14 +56,6 @@ public class ModbusSerialConfiguration {
 
     public void setPort(String port) {
         this.port = port;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
     }
 
     public int getBaud() {
@@ -174,14 +164,6 @@ public class ModbusSerialConfiguration {
 
     public void setConnectTimeoutMillis(int connectTimeoutMillis) {
         this.connectTimeoutMillis = connectTimeoutMillis;
-    }
-
-    public boolean isDiscoveryEnabled() {
-        return enableDiscovery;
-    }
-
-    public void setDiscoveryEnabled(boolean enableDiscovery) {
-        this.enableDiscovery = enableDiscovery;
     }
 
     public boolean isValid() {
