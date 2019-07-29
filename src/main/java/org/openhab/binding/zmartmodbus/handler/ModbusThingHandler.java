@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2014-2016 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.zmartmodbus.handler;
 
@@ -55,7 +59,7 @@ import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusDeviceInfo;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusThing;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
@@ -76,13 +80,19 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusThingHandler.class);
 
-    private ModbusThing modbusThing;
-
     protected ModbusThingConfiguration modbusThingConfig;
 
     private ModbusSlaveDiscoveryService discoveryService;
+    private ModbusNodeClass nodeClass;
+    private ModbusFunction modbusFunction = null;
 
-    private boolean configured;
+    // Special configuration parameters needed for jablotron
+    private int channelId = ID_NOT_USED; // Used for Jablotron special addressing
+    private int elementId = ID_NOT_USED; // Used for Jablotron special addressing
+
+    private boolean configured = false;
+
+    private ModbusDeviceInfo deviceInfo = new ModbusDeviceInfo("", "", "", "");
 
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
@@ -103,10 +113,10 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 ModbusBindingConstants.OFFLINE_CTLR_OFFLINE);
 
         // Make sure the thingType is set correctly from the database
-        //if (updateThingType() == true) {
-            // The thing will have been disposed of so let's exit!
-          //  return;
-        //b }
+        // if (updateThingType() == true) {
+        // The thing will have been disposed of so let's exit!
+        // return;
+        // b }
 
         initializeBridge((getBridge() == null) ? null : getBridge().getHandler(),
                 (getBridge() == null) ? null : getBridge().getStatus());
@@ -135,13 +145,13 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                     Thread configThread = new Thread(new Runnable() {
                         @Override
                         public void run() {
-                             initializeThing();
-                             updateStatus(ThingStatus.ONLINE);
+                            initializeThing();
+                            updateStatus(ThingStatus.ONLINE);
                         }
-               });
-               configThread.start();
-                } else {
-
+                    });
+                    // Set configured to avoid double configuring
+                    configured = true;
+                    configThread.start();
                 }
             } else {
                 updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE);
@@ -154,25 +164,34 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     public void initializeThing() {
         logger.debug("initializeThing {}", getThing().getUID());
 
-        ModbusNodeClass nodeClass = ModbusNodeClass.fromString(getThing().getThingTypeUID().getId());
+        nodeClass = ModbusNodeClass.fromString(getThing().getThingTypeUID().getId());
+        modbusFunction = getBridgeHandler().newModbusFunction(nodeClass);
 
-        modbusThing = new ModbusThing(nodeClass,
-                getBridgeHandler().newModbusFunction(nodeClass), getId(), getChannelId(), getElementId());
+        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_CHANNELID);
+        if (idStr == null) {
+            channelId = ID_NOT_USED;
+        } else {
+            channelId = Integer.decode(idStr);
+        }
+
+        idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_ELEMENTID);
+        if (idStr == null) {
+            elementId = ID_NOT_USED;
+        } else {
+            elementId = Integer.decode(idStr);
+        }
 
         initializeDataSets();
         initializeChannels();
 
         if (nodeClass.equals(ModbusNodeClass.JablotronAC116)) {
             logger.debug("Registering JablotronAC116 to receive internal messages i.e. discovery information");
-            getBridgeHandler().getModbusIO().getController().hotMessage.filter(modbusMessage -> modbusMessage.isInternal())
+            getBridgeHandler().getController().hotMessage
+                    .filter(modbusMessage -> modbusMessage.isInternal())
                     .subscribe(modbusMessage -> this.MessageListener().onNext(modbusMessage));
         }
 
         logger.debug("Initialized the modbusId {} {}", modbusThingConfig.getId(), this.getThing().getUID());
-
-        // Set configured to avoid double configuring
-        configured = true;
-
     }
 
     private int addressWizard(String property, int channelId, int elementId) {
@@ -192,8 +211,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private void initializeDataSets() {
         String dataSetKey;
-        int channelId = getModbusThing().getChannelId();
-        int elementId = getModbusThing().getElementId();
 
         Map<String, String> properties = getThing().getProperties();
         // logger.debug("NODE {}: Initializing {} with {} DataSets", nodeId,
@@ -227,7 +244,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 // Standard Modbus
                 case 6:
                 case 5:
-                    offset = addressWizard(cfg[cfg.length - 1 ], channelId, elementId);
+                    offset = addressWizard(cfg[cfg.length - 1], channelId, elementId);
                     break;
                 default:
                     logger.warn("Thing {}: Illegal number of property parameters", thing.getUID());
@@ -238,14 +255,15 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 } else {
                     ModbusDataSet dataSet = new ModbusDataSet(thing.getUID(), messageClass, start, length, offset,
                             channelId, elementId, reportOn, feedRepeat, ModbusDataSetClass.SmartHome,
-                            getModbusThing().getNodeClass());
+                            nodeClass);
 
-                            getBridgeHandler().getModbusIO().getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
+                    getBridgeHandler().getController().getModbusFactory().getDataSets()
+                            .addDataSet(dataSetKey, dataSet);
 
-                            getBridgeHandler().getModbusIO().getController().getActionFeed()
+                    getBridgeHandler().getController().getActionFeed()
                             .addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
 
-                            logger.debug("Thing {}: DataSet {} added", thing.getUID(), dataSetKey);
+                    logger.debug("Thing {}: DataSet {} added", thing.getUID(), dataSetKey);
                 }
             }
         }
@@ -254,9 +272,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     private void initializeChannels() {
         logger.debug("Thing {}: Initializing channels", thing.getUID());
         Map<String, String> properties = new HashMap<String, String>();
-
-        int channelId = getModbusThing().getChannelId();
-        int elementId = getModbusThing().getElementId();
 
         for (Channel channel : getThing().getChannels()) {
             properties = channel.getProperties();
@@ -272,16 +287,15 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 channel.getConfiguration().put(META_HEATUNITID, channelId);
             }
 
-            logger.debug("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:", thing.getUID(),
-                    elementId, channelId, channel.getUID().getId());
+            logger.debug("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:",
+                    thing.getUID(), elementId, channelId, channel.getUID().getId());
 
             if (properties.containsKey(PROPERTY_CHANNELCFG_INDEX)) {
-                getBridgeHandler().getModbusIO().getController().getModbusFactory().getDataSets()
+                getBridgeHandler().getController().getModbusFactory().getDataSets()
                         .addChannel(new ModbusThingChannel(thing.getUID(), channel.getUID(),
                                 makeDataSetKey(properties.get(PROPERTY_CHANNELCFG_DATASET), thing.getUID()),
                                 ModbusValueClass.fromString(properties.get(PROPERTY_CHANNELCFG_VALUETYPE)),
-                                addressWizard(properties.get(PROPERTY_CHANNELCFG_INDEX), channelId,
-                                        elementId),
+                                addressWizard(properties.get(PROPERTY_CHANNELCFG_INDEX), channelId, elementId),
                                 ModbusReportOn.fromString(properties.get(PROPERTY_CHANNELCFG_REPORTON))));
             }
         }
@@ -289,14 +303,16 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     @Override
     public void dispose() {
-            logger.debug("Disposing node {}", getThing().getUID());
-            if (getBridgeHandler() != null) {
-                getBridgeHandler().getModbusIO().getController().getActionFeed().removeActions(thing.getUID());
-                getBridgeHandler().getModbusIO().getController().getModbusFactory().getDataSets().removeChannels(thing.getUID());
-                getBridgeHandler().getModbusIO().getController().getModbusFactory().getDataSets().removeDataSets(thing.getUID());
-         
+        logger.debug("Disposing node {}", getThing().getUID());
+        if (getBridgeHandler() != null) {
+            getBridgeHandler().getController().getActionFeed().removeActions(thing.getUID());
+            getBridgeHandler().getController().getModbusFactory().getDataSets()
+                    .removeChannels(thing.getUID());
+            getBridgeHandler().getController().getModbusFactory().getDataSets()
+                    .removeDataSets(thing.getUID());
+
             getBridgeHandler().removeDeviceDiscoveryService(thing.getUID());
-            }
+        }
         logger.debug("Handler disposed. Listeners unregistered.");
     }
 
@@ -316,25 +332,20 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         updateStatus(ThingStatus.REMOVED);
     }
 
-
     protected synchronized ModbusBridgeHandler getBridgeHandler() {
-            Bridge bridge = getBridge();
-            if (bridge != null) {
-                ThingHandler handler = bridge.getHandler();
-                if (handler instanceof ModbusBridgeHandler) {
-                    return (ModbusBridgeHandler) handler;
-                } else {
-                    logger.error("This Bridge is not a ModbusBridge - {}", handler.getThing().getUID());
-                    return null;
-                }
+        Bridge bridge = getBridge();
+        if (bridge != null) {
+            ThingHandler handler = bridge.getHandler();
+            if (handler instanceof ModbusBridgeHandler) {
+                return (ModbusBridgeHandler) handler;
             } else {
-                logger.warn("Bridge not found...");
+                logger.error("This Bridge is not a ModbusBridge - {}", handler.getThing().getUID());
                 return null;
             }
-    }
-
-    public ModbusDeviceInfo getDeviceInfo() {
-        return getModbusThing().getDeviceInfo();
+        } else {
+            logger.warn("Bridge not found...");
+            return null;
+        }
     }
 
     /**
@@ -364,12 +375,12 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
             @Override
             public void onSubscribe(Disposable d) {
-                logger.info(" onSubscribe : {}", d.isDisposed());
+                logger.debug(" onSubscribe : {}", d.isDisposed());
             }
 
             @Override
             public void onComplete() {
-                // TODO Auto-generated method stub
+                logger.debug("MessageListener completed");
             }
 
             @Override
@@ -412,7 +423,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                             lowestChannel = i;
                         }
                         logger.debug("NODE {} : We have discovered an actuator", thing.getUID());
-                        discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i, ID_NOT_USED);
+                        discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
+                                ID_NOT_USED);
                     }
                 }
                 discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel, Jablotron
@@ -422,13 +434,14 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     }
 
     public ModbusController getController() {
-        return getBridgeHandler().getModbusIO().getController();
+        return getBridgeHandler().getController();
     }
 
     public int getId() {
         ThingUID parentThingUID = getParentThingUID();
         if (parentThingUID != null) {
-            // if parentThingUID defined return the Id of the parent (this is only relevant for subslave things)
+            // if parentThingUID defined return the Id of the parent (this is only relevant
+            // for subslave things)
             return ((ModbusThingHandler) getBridgeHandler().getThingByUID(parentThingUID).getHandler()).getId();
         } else
             return modbusThingConfig.getId();
@@ -443,30 +456,39 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         }
     }
 
-    private int getChannelId() {
-        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_CHANNELID);
-        if (idStr == null) {
-            return ID_NOT_USED;
-        } else {
-            return Integer.decode(idStr);
-        }
+    public int getChannelId() {
+        return channelId;
     }
 
-    private int getElementId() {
-        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_ELEMENTID);
-        if (idStr == null) {
-            return ID_NOT_USED;
-        } else {
-            return Integer.decode(idStr);
-        }
+    public int getElementId() {
+        return elementId;
     }
 
-    public ModbusThing getModbusThing() {
-        return modbusThing;
+    public ModbusFunction getModbusFunction() {
+        return modbusFunction;
+    }
+
+    public ModbusNodeClass getNodeClass() {
+        return nodeClass;
     }
 
     public ModbusThingConfiguration getModbusThingConfig() {
         return modbusThingConfig;
+    }
+    public void setDeviceInfo(ModbusDeviceInfo deviceInfo) {
+        this.deviceInfo = deviceInfo;
+    }
+
+    public ModbusDeviceInfo getDeviceInfo() {
+        return deviceInfo;
+    }
+
+    public boolean isConfigured() {
+        return configured;
+    }
+
+    public void setConfigured(boolean state) {
+        configured = state;
     }
 
     @Override

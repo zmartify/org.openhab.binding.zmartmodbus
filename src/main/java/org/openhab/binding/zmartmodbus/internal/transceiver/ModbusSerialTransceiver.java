@@ -59,7 +59,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
     @Override
     public void connect() throws ModbusProtocolException {
         // Call disconnect to ensure we are not connected
-        disconnect();
+        if (serialPort == null) disconnect();
 
         try {
             String port = serialConfig.getPort();
@@ -74,8 +74,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                 }
             }
 
-            SerialPort commPort = portIdentifier.open(ModbusBindingConstants.BINDING_ID, 2000);
-            serialPort = commPort;
+            serialPort = portIdentifier.open(ModbusBindingConstants.BINDING_ID, 2000);
 
             logger.debug("SetSerial");
             serialPort.setSerialPortParams(serialConfig.getBaud(), serialConfig.getDataBits(),
@@ -92,6 +91,10 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
             setConnected(true);
         } catch (PortInUseException e) {
             logger.error("PortInUse");
+            if (serialPort != null) {
+                logger.debug("Trying to close the port");
+                serialPort.close();
+            }
             throw new ModbusProtocolException(ModbusProtocolErrorCode.SERIAL_INUSE);
         } catch (UnsupportedCommOperationException e) {
             logger.error("Unsupported");

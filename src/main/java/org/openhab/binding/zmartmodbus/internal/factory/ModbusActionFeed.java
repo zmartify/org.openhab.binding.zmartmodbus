@@ -104,8 +104,7 @@ public class ModbusActionFeed<T> {
                     }
                 }
             } catch (InterruptedException e) {
-                // TODO: Auto-generated catch block
-                e.printStackTrace();
+                logger.error("ModbusActionFeed interrupted: {}", e.getMessage());
             }
             logger.debug("Leaving THREAD");
         }

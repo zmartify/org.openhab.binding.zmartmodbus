@@ -636,15 +636,15 @@ public class ModbusFunction {
     *
     */
     public byte[] msgTransaction(byte[] msg) throws ModbusProtocolException {
-        return bridgeHandler.getModbusIO().getTransceiver().msgTransaction(msg, ModbusBindingConstants.CUSTOMCODE_STANDARD);
+        return bridgeHandler.getTransceiver().msgTransaction(msg, ModbusBindingConstants.CUSTOMCODE_STANDARD);
     }
 
     public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
-        return bridgeHandler.getModbusIO().getTransceiver().msgTransaction(msg, customCode);
+        return bridgeHandler.getTransceiver().msgTransaction(msg, customCode);
     }
 
     public boolean isConnected() {
-        return bridgeHandler.getModbusIO().getTransceiver().isConnected();
+        return bridgeHandler.isConnected();
     }
 
     public ModbusCounters getCounters() {

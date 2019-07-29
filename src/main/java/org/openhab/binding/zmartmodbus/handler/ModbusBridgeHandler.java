@@ -1,45 +1,58 @@
 /**
- * Copyright (c) 2014-2016 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.zmartmodbus.handler;
 
 import java.util.HashMap;
 import java.util.Hashtable;
 import java.util.Map;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.discovery.DiscoveryService;
-import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.DecimalType;
+
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
+import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusBridgeConfiguration;
+import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
+import org.openhab.binding.zmartmodbus.internal.protocol.IModbusIOHandler;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusIOHandler;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
+import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusSerialTransceiver;
+import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
 import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import io.reactivex.Observable;
+import io.reactivex.disposables.Disposable;
 
 /**
  * The {@link ModbusBridgeHandler} is responsible for handling commands, which
@@ -47,49 +60,95 @@ import org.slf4j.LoggerFactory;
  *
  * @author Peter Kristensen
  */
-public class ModbusBridgeHandler extends BaseBridgeHandler {
+public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusBridgeHandler.class);
 
     protected ModbusBridgeConfiguration modbusBridgeConfig;
-    protected ModbusIOHandler modbusIO;
+    protected ModbusTransceiver transceiver = null;
+    protected ModbusController controller;
     protected ModbusCounters counters = new ModbusCounters();
 
     private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
-    int searchTime = 30;
-    int transactionIndex = 0;
-
-    ThingTypeUID thingTypeUID = null;
-
     // Checks if msgCounter should update to SmartHome - can be set from UI
-    boolean updateCounter = false;
+    private Disposable updateCounterDisposable = null;
 
-    StateListener stateSubscriber = null;
+    private StateListener stateSubscriber = null;
 
-    public ModbusBridgeHandler(Bridge bridge) {
-        super(bridge);
+    private ScheduledFuture<?> connectorTask;
+
+    private ModbusSerialConfiguration modbusSerialConfig;
+
+    private SerialPortManager serialPortManager;
+
+    public ModbusBridgeHandler(Bridge thing, SerialPortManager serialPortManager) {
+        super(thing);
+        this.serialPortManager = serialPortManager;
     }
 
     @Override
     public void initialize() {
-        logger.debug("Initializing Modbus BridgeHandler : {}", thing.getBridgeUID());
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "trying to connect to gateway...");
+
+        logger.debug("Initializing Modbus BridgeHandler : {}", thing.getUID());
         modbusBridgeConfig = getConfigAs(ModbusBridgeConfiguration.class);
+        modbusSerialConfig = getConfigAs(ModbusSerialConfiguration.class);
 
         // Create a new IOController for this Bridge
-        modbusIO = new ModbusIOHandler(new ModbusController(this));
+        controller = new ModbusController(this);
 
-        // We must set the state
-        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE,
-                ModbusBindingConstants.OFFLINE_CTLR_OFFLINE);
+        if (connectorTask == null || connectorTask.isDone()) {
+            connectorTask = scheduler.scheduleWithFixedDelay(new Runnable() {
+
+                @Override
+                public void run() {
+                    if (thing.getStatus() != ThingStatus.ONLINE) {
+                        initTransceiver();
+                    }
+                }
+
+            }, 0, 60, TimeUnit.SECONDS);
+        }
+    }
+
+    protected void initTransceiver() {
+
+        updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Opening serial port");
+        if (transceiver != null) {
+            transceiver.disconnect();
+        }
+        transceiver = new ModbusSerialTransceiver(serialPortManager, modbusSerialConfig, counters);
+
+        try {
+            logger.debug("We wil now connect and then initialize the Network");
+            transceiver.connect();
+            initializeCounters();
+            initializeActionFeeds();
+            updateStatus(ThingStatus.ONLINE);
+        } catch (ModbusProtocolException e) {
+            logger.error("IOException {}", e.getMessage());
+            updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.OFFLINE.COMMUNICATION_ERROR, e.getMessage());
+            return;
+        }
     }
 
     @Override
     public void dispose() {
         logger.info("Dispose Bridge called : {}", thing.getBridgeUID());
 
-        if (isConnected()) {
-            getModbusIO().getTransceiver().disconnect();
+        if ((updateCounterDisposable != null) && !updateCounterDisposable.isDisposed()) {
+            updateCounterDisposable.dispose();
+        }
+
+        if (transceiver != null) {
+            transceiver.disconnect();
+            transceiver = null;
+        }
+
+        if (connectorTask != null && !connectorTask.isDone()) {
+            connectorTask.cancel(true);
+            connectorTask = null;
         }
 
         // Remove the discovery service
@@ -101,7 +160,10 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
 
         if (getController() != null) {
             getController().stopListening();
+            controller = null;
         }
+
+        super.dispose();
     }
 
     /**
@@ -111,20 +173,39 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
      * @throws ModbusProtocolException
      *
      */
-    public void initializeNetwork() {
-        logger.info("Initializing ModbusBridge");
+    private void initializeActionFeeds() {
+        logger.info("Starting action feeds");
 
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Starting action feeds");
 
         getController().getActionFeed().setSlowPoll(modbusBridgeConfig.getSlowPoll());
         getController().getActionFeed().setFastPoll(modbusBridgeConfig.getFastPoll());
         getController().startListening();
+    }
 
-        updateStatus(ThingStatus.ONLINE, ThingStatusDetail.BRIDGE_OFFLINE, ModbusBindingConstants.OFFLINE_CTLR_ONLINE);
+    private void initializeCounters() {
+        if (updateCounterDisposable != null) {
+            if (!updateCounterDisposable.isDisposed())
+                updateCounterDisposable.dispose();
+        }
+        counters.clearCounters();
+        updateCounterDisposable = Observable
+                .interval(modbusSerialConfig.getTimeBetweenCounterUpdates(), TimeUnit.SECONDS)
+                .doOnNext(n -> refreshCounters()).subscribe();
+    }
+
+    /**
+     * Refresh counters in OpenHAB
+     */
+    private void refreshCounters() {
+        updateState(new ChannelUID(getThing().getUID(), ModbusBindingConstants.CHANNEL_MESSAGE_COUNT),
+                new DecimalType(counters.getMessageCounter()));
+        updateState(new ChannelUID(getThing().getUID(), ModbusBindingConstants.CHANNEL_TIMEOUT_COUNT),
+                new DecimalType(counters.getTimeOutCounter()));
     }
 
     public boolean isConnected() {
-        return getModbusIO().getTransceiver() != null ? getModbusIO().getTransceiver().isConnected() : false;
+        return (transceiver != null) ? transceiver.isConnected() : false;
     }
 
     public boolean getListening() {
@@ -138,14 +219,8 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
         if (command instanceof RefreshType) {
             // We do not support REFRESH
         } else {
-            switch (channelUID.getIdWithoutGroup()) {
-            case "update_counter":
-                updateCounter = (command == OnOffType.ON);
-                break;
-            default:
-                stateSubscriber.modbusState(new ModbusState(channelUID, (State) command));
-                break;
-            }
+            // switch (channelUID.getIdWithoutGroup()) {
+            stateSubscriber.modbusState(new ModbusState(channelUID, (State) command));
         }
     }
 
@@ -161,6 +236,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
 
     @Override
     public void handleRemoval() {
+        logger.debug("Called handleRemoval");
         dispose();
         updateStatus(ThingStatus.REMOVED);
     }
@@ -232,17 +308,12 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
         return modbusBridgeConfig;
     }
 
-    public ModbusIOHandler getModbusIO() {
-        return modbusIO;
-    }
-
     public ModbusController getController() {
-        return modbusIO.getController();
+        return controller;
     }
 
     protected ModbusBridgeHandler getBridgeHandler() {
-        Bridge bridge = getBridge();
-        return bridge != null ? (ModbusBridgeHandler) bridge.getHandler() : null;
+        return this;
     }
 
     public ModbusCounters getCounters() {
@@ -250,7 +321,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
     }
 
     public ModbusThingHandler getThingHandlerByUID(ThingUID thingUID) {
-        return (ModbusThingHandler) getBridge().getThing(thingUID).getHandler();
+        return (ModbusThingHandler) getThing().getThing(thingUID).getHandler();
     }
 
     protected void onSuccessfulOperation() {
@@ -258,5 +329,14 @@ public class ModbusBridgeHandler extends BaseBridgeHandler {
         if (getThing().getStatus() == ThingStatus.OFFLINE) {
             updateStatus(ThingStatus.ONLINE);
         }
+    }
+
+    @Override
+    public ModbusTransceiver getTransceiver() {
+        return transceiver;
+    }
+
+    public ModbusSerialConfiguration getModbusSerialConfig() {
+        return modbusSerialConfig;
     }
 }

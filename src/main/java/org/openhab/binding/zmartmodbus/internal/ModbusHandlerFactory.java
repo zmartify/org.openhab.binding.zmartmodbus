@@ -8,9 +8,7 @@
  */
 package org.openhab.binding.zmartmodbus.internal;
 
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.BRIDGE_TYPE_RTU;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.BRIDGE_TYPE_SERIAL;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.BRIDGE_TYPE_TCP;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_BRIDGE_TYPES_UIDS;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_THING_TYPES_UIDS;
 
@@ -23,8 +21,6 @@ import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
-import org.openhab.binding.zmartmodbus.handler.ModbusSerialHandler;
-import org.openhab.binding.zmartmodbus.handler.ModbusTcpHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
@@ -76,14 +72,10 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (SUPPORTED_BRIDGE_TYPES_UIDS.contains(thingTypeUID)) {
-            // Handle Bridget controllers here
-            ModbusBridgeHandler bridge = null;
+            // Handle Bridge controllers here
             if (thingTypeUID.equals(BRIDGE_TYPE_SERIAL)) {
-                bridge = new ModbusSerialHandler((Bridge) thing, serialPortManager);
-            } else if (thingTypeUID.equals(BRIDGE_TYPE_TCP) || thingTypeUID.equals(BRIDGE_TYPE_RTU)) {
-                bridge = new ModbusTcpHandler((Bridge) thing);
+                return new ModbusBridgeHandler((Bridge) thing, serialPortManager);
             }
-            return bridge;
         } else if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
             // Everything else gets handled in a single handler
             return new ModbusThingHandler(thing);

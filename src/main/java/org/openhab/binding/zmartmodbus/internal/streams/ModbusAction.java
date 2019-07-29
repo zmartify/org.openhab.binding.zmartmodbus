@@ -179,4 +179,8 @@ public class ModbusAction {
             return false;
         }
     }
+
+    public String toString() {
+        return "modbusAction = " + thingUID.getAsString();
+    }
 }

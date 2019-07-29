@@ -50,6 +50,10 @@ public class ModbusSerialConfiguration {
     private int connectMaxTries;
     private int connectTimeoutMillis;
 
+    // Time between updating the reported counters in OpenHAB
+    private int timeBetweenCounterUpdates;
+
+
     public @Nullable String getPort() {
         return port;
     }
@@ -176,6 +180,14 @@ public class ModbusSerialConfiguration {
 
     public void setTxMode(int txMode) {
         this.txMode = txMode;
+    }
+
+    public int getTimeBetweenCounterUpdates() {
+        return timeBetweenCounterUpdates;
+    }
+
+    public void setTimeBetweenCounterUpdates(int timeBetweenCounterUpdates) {
+        this.timeBetweenCounterUpdates = timeBetweenCounterUpdates;
     }
 
 }

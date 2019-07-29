@@ -54,7 +54,7 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
     }
 
     private ModbusController getController() {
-        return bridgeHandler.getModbusIO().getController();
+        return bridgeHandler.getController();
     }
 
     public void activate() {
@@ -174,8 +174,8 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
         bridgeHandler.getThing().getThings().forEach(thing -> {
             ModbusThingHandler thingHandler = (ModbusThingHandler) thing.getHandler();
             logger.info("Initiate discovery for any subdevices on the node");
-            if (thingHandler.getModbusThing().getNodeClass().supportDiscovery()) {
-                thingHandler.getModbusThing().getModbusFunction().startSubDeviceDiscovery(thing.getUID());
+            if (thingHandler.getNodeClass().supportDiscovery()) {
+                thingHandler.getModbusFunction().startSubDeviceDiscovery(thing.getUID());
             }
         });
     }

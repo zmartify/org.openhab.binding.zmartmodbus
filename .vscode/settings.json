@@ -1,6 +1,9 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
     "cSpell.words": [
+        "CHANNELCFG",
+        "HEATUNITID",
+        "THERMOSTATID",
         "zmartmodbus"
     ]
 }

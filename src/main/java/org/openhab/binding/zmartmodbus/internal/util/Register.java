@@ -463,15 +463,7 @@ public final class Register {
         return registersToFloat(fromLittleBigEndian(Arrays.copyOfRange(bytes, from, from + 4)));
     }// registersToFloatSwap
 
-    /*
-     * public static final float registersToFloatSwap(byte[] bytes) {
-     * return registersToFloat(fromLittleBigEndian(bytes));
-     * }
-     *
-     * public static final float registersToFloatSwap(byte[] bytes, int from) {
-     * return registersToFloat(fromLittleBigEndian(bytes), from);
-     * }
-     */
+ 
     /**
      * Converts a float value to a byte[4] binary float value.
      *
@@ -536,44 +528,6 @@ public final class Register {
     }// unsignedByteToInt
 
     /**
-     * Returns the broadcast address for the subnet of the host the code
-     * is executed on.
-     *
-     * @return the broadcast address as <tt>InetAddress</tt>.
-     *         <p/>
-     *         public static final InetAddress getBroadcastAddress() {
-     *         byte[] addr = new byte[4];
-     *         try {
-     *         addr = InetAddress.getLocalHost().getAddress();
-     *         addr[3] = -1;
-     *         return getAddressFromBytes(addr);
-     *         } catch (Exception ex) {
-     *         ex.printStackTrace();
-     *         return null;
-     *         }
-     *         }//getBroadcastAddress
-     */
-
-    /*
-     * public static final InetAddress getAddressFromBytes(byte[] addr) throws Exception {
-     * StringBuffer sbuf = new StringBuffer();
-     * for (int i = 0; i < addr.length; i++) {
-     * if (addr[i] < 0) {
-     * sbuf.append(256 + addr[i]);
-     * } else {
-     * sbuf.append(addr[i]);
-     * }
-     * if (i < (addr.length - 1)) {
-     * sbuf.append('.');
-     * }
-     * }
-     * //DEBUG:System.out.println(sbuf.toString());
-     * return InetAddress.getByName(sbuf.toString());
-     * }//getAddressFromBytes
-     */
-
-    // TODO: John description.
-    /**
      * Returs the low byte of an integer word.
      *
      * @param wd
@@ -583,8 +537,8 @@ public final class Register {
         return (new Integer(0xff & wd).byteValue());
     }// lowByte
 
-    // TODO: John description.
     /**
+     * Returns the high byte of an integer word.
      *
      * @param wd
      * @return the hi byte.
@@ -595,7 +549,8 @@ public final class Register {
 
     // TODO: John description.
     /**
-     *
+     * Make one integer word out of a high byte and a low byte
+     * 
      * @param hibyte
      * @param lowbyte
      * @return a word.

@@ -31,18 +31,15 @@ public class ModbusMessage {
     public ModbusMessage() {
     }
 
-    public ModbusMessage(int dataSetId, Object payload) {
-        super();
-        this.dataSetId = dataSetId;
-        this.payload = payload;
-        this.internal = false;
-    }
-
     public ModbusMessage(int dataSetId, Object payload, boolean internal) {
         super();
         this.dataSetId = dataSetId;
         this.payload = payload;
         this.internal = internal;
+    }
+
+    public ModbusMessage(int dataSetId, Object payload) {
+        this(dataSetId, payload, false);
     }
 
     public int getDataSetId() {
