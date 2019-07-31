@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataSetClass;
@@ -34,7 +35,7 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 @NonNullByDefault
 public class ModbusDataSet {
 
-    private Object payload;
+    @Nullable Object payload;
     private ThingUID thingUID;
     private int dataSetId;
 
@@ -111,7 +112,7 @@ public class ModbusDataSet {
     /**
      * @return the payload
      */
-    public Object getPayload() {
+    @Nullable public Object getPayload() {
         return payload;
     }
 

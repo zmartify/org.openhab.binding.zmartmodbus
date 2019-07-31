@@ -30,7 +30,6 @@ import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
-import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -38,28 +37,23 @@ import org.slf4j.LoggerFactory;
 /**
  * Responsible for discovering Modbus devices attached to the controller
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  *
  */
 @Component(service = { ModbusSlaveDiscoveryService.class }, immediate = true, configurationPid = "discovery." + ModbusBindingConstants.BINDING_ID)
 @NonNullByDefault
 public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
+    private static final int TIMEOUT = 5;
+    private static final long REFRESH = 600;
 
     private final Logger logger = LoggerFactory.getLogger(ModbusSlaveDiscoveryService.class);
-    private static final int searchTime = 5;
 
     private ModbusBridgeHandler bridgeHandler;
 
     public ModbusSlaveDiscoveryService(ModbusBridgeHandler bridgeHandler) {
-        super(ModbusBindingConstants.SUPPORTED_SLAVES_THING_TYPES_UIDS, searchTime);
+        super(ModbusBindingConstants.SUPPORTED_SLAVES_THING_TYPES_UIDS, TIMEOUT);
         this.bridgeHandler = bridgeHandler;
-        logger.debug("Creating ZmartModbus discovery service for {} with scan time of {}",
-                bridgeHandler.getThing().getUID(), searchTime);
-    }
-
-    private ModbusController getController() {
-        return bridgeHandler.getController();
     }
 
     public void activate() {

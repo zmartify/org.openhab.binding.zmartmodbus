@@ -13,9 +13,9 @@
 package org.openhab.binding.zmartmodbus.internal.controller;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.ModbusHandler;
-import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusInterfaceException;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusActionFeed;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusFactory;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
@@ -24,7 +24,6 @@ import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +34,7 @@ import io.reactivex.flowables.ConnectableFlowable;
 /**
  * This interface defines interface to communicate ModbusFunction controller.
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 @NonNullByDefault
@@ -53,14 +52,14 @@ public class ModbusController {
      */
     static final String PROTOCOL_NAME = "modbusFunction";
 
-    private ModbusActionFeed<ModbusAction> actionFeed;
-    private ModbusHandler<ModbusMessage> modbusHandler;
-    private ModbusFactory<ModbusState> modbusFactory;
+    private ModbusActionFeed<ModbusAction> actionFeed = new ModbusActionFeed<ModbusAction>();
+    private ModbusHandler<ModbusMessage> modbusHandler = new ModbusHandler<ModbusMessage>();
+    private ModbusFactory<ModbusState> modbusFactory = new ModbusFactory<ModbusState>();
 
-    public ConnectableFlowable<ModbusAction> hotAction;
-    public ConnectableFlowable<ModbusMessage> hotMessage;
-    public ConnectableFlowable<ModbusState> hotStateFromModbus;
-    public ConnectableFlowable<ModbusState> hotStateToModbus;
+    @Nullable private ConnectableFlowable<ModbusAction> hotAction;
+    @Nullable private ConnectableFlowable<ModbusMessage> hotMessage;
+    @Nullable private ConnectableFlowable<ModbusState> hotStateFromModbus;
+    @Nullable private ConnectableFlowable<ModbusState> hotStateToModbus;
 
     public Flowable<ModbusAction> modbusActionQueue = Flowable.create(emitter -> {
         ActionListener listener = new ActionListener() {
@@ -139,29 +138,22 @@ public class ModbusController {
     /**
      * Creates a new instance of the ModbusFunction controller class.
      *
-     * @param handler the io handler to use for communication with the ModbusFunction controller interface
-     * @param config a map of configuration parameters
+     * @param bridgeHandler  the io handler to use for communication with the ModbusFunction controller interface
      *
-     * @throws ModbusInterfaceException
-     *             when a connection error occurs
-     *             Controller connection parameters (e.g. serial port name or IP
-     *             address).
      */
-    public ModbusController(ModbusBridgeHandler handler) {
-        logger.info("Starting ModbusFunction controller {} - {}", handler);
-        this.bridgeHandler = handler;
-        this.actionFeed = new ModbusActionFeed<>(handler.getModbusBridgeConfig().getSlowPoll(), handler.getModbusBridgeConfig().getFastPoll());
-        this.modbusHandler = new ModbusHandler<>(handler);
-        this.modbusFactory = new ModbusFactory<>();
-
+    public ModbusController(ModbusBridgeHandler bridgeHandler) {
+        logger.info("Starting ModbusFunction controller {} - {}", bridgeHandler);
+        this.bridgeHandler = bridgeHandler;
+        this.modbusHandler.setBridgeHandler(bridgeHandler);
+ 
         // If we are not the controller, then get device information populated
         /*
-        if (nodeId != CONTROLLER_NODE_ID) {
-            ModbusAction action = new ModbusAction(nodeId, 0, ModbusMessageClass.GetDeviceInfo, ModbusActionClass.Read,
-                    ModbusFeedRepeat.Once, 0, 0, 0, ModbusReportOn.Allways);
-            getActionFeed().addAction(action);
-        }
-        */
+         * if (nodeId != CONTROLLER_NODE_ID) {
+         * ModbusAction action = new ModbusAction(nodeId, 0, ModbusMessageClass.GetDeviceInfo, ModbusActionClass.Read,
+         * ModbusFeedRepeat.Once, 0, 0, 0, ModbusReportOn.Allways);
+         * getActionFeed().addAction(action);
+         * }
+         */
 
     }
 
@@ -251,5 +243,8 @@ public class ModbusController {
 
     public ModbusHandler<ModbusMessage> getModbusHandler() {
         return modbusHandler;
+    }
+    @Nullable public ConnectableFlowable<ModbusMessage> getHotMessage() {
+        return hotMessage;
     }
 }

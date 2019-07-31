@@ -31,6 +31,7 @@ import org.eclipse.smarthome.core.thing.ThingTypeUID;
 public class ModbusBindingConstants {
 
         public static final String BINDING_ID = "zmartmodbus";
+        public static final String CONFIGURATION_PID = "binding." + BINDING_ID;
 
         public static final String SERIAL_PORT = "serialbridge"; // Serial RS 485
         public static final String TCP_PORT = "tcpbridge"; // Serial TCP port
@@ -89,6 +90,8 @@ public class ModbusBindingConstants {
         public static final String CHANNEL_MESSAGE_COUNT = "message_count";
         public static final String CHANNEL_TIMEOUT_COUNT = "timeout_count";
         public static final String CHANNEL_FAILED_COUNT = "failed_count";
+
+        public static final String CHANNEL_DEVICE_INFO = "deviceInfo";
 
         public static final String CHANNEL_LAST_READ_SUCCESS = "lastReadSuccess";
         public static final String CHANNEL_LAST_READ_ERROR = "lastReadError";

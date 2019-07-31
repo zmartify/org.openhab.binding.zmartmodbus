@@ -12,8 +12,6 @@
  */
 package org.openhab.binding.zmartmodbus.internal.streams;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 /**
  * This class represents a message which is used in modbus API interface to communicate with SlaveListener
  *
@@ -25,7 +23,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
 public class ModbusMessage {
 
     private int dataSetId;

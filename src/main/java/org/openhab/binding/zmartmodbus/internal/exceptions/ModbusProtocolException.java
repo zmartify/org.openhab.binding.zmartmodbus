@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * @author Peter Kristensen - Initial contribution
@@ -28,12 +27,11 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  *         keyed on the exception code.
  *
  */
-@NonNullByDefault
 public class ModbusProtocolException extends Exception {
 
     private static final long serialVersionUID = -6155136065068974723L;
 
-    protected ModbusProtocolErrorCode m_code;
+    ModbusProtocolErrorCode m_code;
 
     @SuppressWarnings("unused")
     private ModbusProtocolException() {

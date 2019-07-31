@@ -23,7 +23,7 @@ import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 
 /**
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 @NonNullByDefault
@@ -46,6 +46,7 @@ public class ModbusThingChannel {
         this.uid = uid;
         this.dataSetKey = dataSetKey;
         this.valueClass = valueClass;
+        this.dataType = ModbusDataType.Unknown;
         this.index = index;
         this.state = UnDefType.UNDEF;
         this.oldState = UnDefType.UNDEF;

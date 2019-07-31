@@ -16,7 +16,6 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 import java.util.Arrays;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
@@ -36,7 +35,6 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
  *         For the moment in Ethernet mode, only RTU over TCP/IP is supported
  */
 
-@NonNullByDefault
 public class ModbusFunction {
 
     protected ModbusBridgeHandler bridgeHandler;

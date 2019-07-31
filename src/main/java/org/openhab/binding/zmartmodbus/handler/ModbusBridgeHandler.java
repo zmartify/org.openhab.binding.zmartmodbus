@@ -141,6 +141,16 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
     public void dispose() {
         logger.info("Dispose Bridge called : {}", thing.getBridgeUID());
 
+        // Cancel all slow running Modbus actions
+        if (slowPollTask != null && !slowPollTask.isDone()) {
+            slowPollTask.cancel(true);
+        }
+
+        // Cancel all fast running Modbus actions
+        if (fastPollTask != null && !fastPollTask.isDone()) {
+            fastPollTask.cancel(true);
+        }
+
         if ((updateCounterDisposable != null) && !updateCounterDisposable.isDisposed()) {
             updateCounterDisposable.dispose();
         }
@@ -178,23 +188,23 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
      *
      */
     private void initializeActionFeeds() {
-        logger.info("Starting action feeds");
+        logger.debug("Starting action feeds slow = {} - fast = {}", modbusBridgeConfig.getSlowPoll(), modbusBridgeConfig.getFastPoll());
 
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Starting action feeds");
 
-        getController().getActionFeed().setSlowPoll(modbusBridgeConfig.getSlowPoll());
-        getController().getActionFeed().setFastPoll(modbusBridgeConfig.getFastPoll());
-
         slowPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                getController().getActionFeed().execSlowActions();
+            }
+        }, 0, modbusBridgeConfig.getSlowPoll(), TimeUnit.SECONDS);
 
-                @Override
-                public void run() {
-                    getController().getActionFeed().getSlowActions().forEach(fastAction -> {
-                            subscriber.modbusAction(fastAction);
-                        });
-                }
-            }, 0, modbusBridgeConfig.getSlowPoll(), TimeUnit.MILLISECONDS);
-
+        fastPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
+            @Override
+            public void run() {
+                getController().getActionFeed().execFastActions();
+            }
+        }, 0, modbusBridgeConfig.getFastPoll(), TimeUnit.SECONDS);
 
         getController().startListening();
     }
@@ -232,7 +242,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        logger.info("ModbusBridgeHandler.handlecommand: {} {}", channelUID.getIdWithoutGroup(), command);
+        logger.trace("ModbusBridgeHandler.handlecommand: {} {}", channelUID.getIdWithoutGroup(), command);
         // Push it on the queue
         if (command instanceof RefreshType) {
             // We do not support REFRESH

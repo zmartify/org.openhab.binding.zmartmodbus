@@ -18,6 +18,7 @@ import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.SerialPort;
 import org.eclipse.smarthome.io.transport.serial.SerialPortIdentifier;
@@ -48,12 +49,11 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
 
     protected ModbusSerialConfiguration serialConfig;
 
-    private SerialPort serialPort;
+    @Nullable SerialPort serialPort = null;
 
     public ModbusSerialTransceiver(SerialPortManager serialPortManager, ModbusSerialConfiguration serialConfig,
             ModbusCounters counters) {
         super(counters);
-        this.serialPort = null;
         this.serialPortManager = serialPortManager;
         this.serialConfig = serialConfig;
     }
@@ -61,7 +61,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
     @Override
     public void connect() throws ModbusProtocolException {
         // Call disconnect to ensure we are not connected
-        if (serialPort == null) disconnect();
+        if (serialPort != null) disconnect();
 
         try {
             String port = serialConfig.getPort();
@@ -163,7 +163,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
             cmd = convertCommandToAscii(msg);
         }
 
-        logger.debug("MODBUS send ({}): {}", counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
+        logger.trace("MODBUS send ({}): {}", counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
         // Send the message
         try {
             //
@@ -319,7 +319,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                     for (int i = 0; i < byteCnt; i++) {
                                         ret[i] = response[i];
                                     }
-                                    logger.debug("MODBUS receive: {}", DatatypeConverter.printHexBinary(ret));
+                                    logger.trace("MODBUS receive: {}", DatatypeConverter.printHexBinary(ret));
                                     return ret;
                                 }
                                 break;

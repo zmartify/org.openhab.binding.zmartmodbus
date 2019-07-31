@@ -178,37 +178,37 @@
 				</options>
 			</parameter>
 
-			<parameter name="slowPoll" type="integer" required="true" min="1000" max="720000">
+			<parameter name="slowPoll" type="integer" required="true" min="10" max="3600">
 				<label>Slow polling interval</label>
-				<description>Slow polling interval in milliseconds</description>
-				<default>60000</default>
+				<description>Slow polling interval in seconds (10 - 3600 seconds)</description>
+				<default>60</default>
 				<advanced>true</advanced>
-				<limitToOptions>true</limitToOptions>
+				<limitToOptions>false</limitToOptions>
 				<options>
-					<option value="10000">10 seconds</option>
-					<option value="30000">30 seconds</option>
-					<option value="60000">1 minute</option>
-					<option value="120000">2 minutes</option>
-					<option value="300000">5 minutes</option>
-					<option value="900000">15 minutes</option>
-					<option value="1800000">30 minutes</option>
-					<option value="3600000">1 hour</option>
+					<option value="10">10 seconds</option>
+					<option value="30">30 seconds</option>
+					<option value="60">1 minute</option>
+					<option value="120">2 minutes</option>
+					<option value="300">5 minutes</option>
+					<option value="900">15 minutes</option>
+					<option value="1800">30 minutes</option>
+					<option value="3600">1 hour</option>
 				</options>
 			</parameter>
 
-			<parameter name="fastPoll" type="integer" required="true" min="200" max="60000">
+			<parameter name="fastPoll" type="integer" required="true" min="2" max="300">
 				<label>Fast polling interval</label>
-				<description>Fast polling interval in milliseconds</description>
-				<default>10000</default>
-				<limitToOptions>true</limitToOptions>
+				<description>Fast polling interval in seconds (2 - 300 seconds)</description>
+				<default>10</default>
+				<limitToOptions>false</limitToOptions>
 				<options>
-					<option value="2000">2 seconds</option>
-					<option value="5000">5 seconds</option>
-					<option value="10000">10 seconds</option>
-					<option value="30000">30 seconds</option>
-					<option value="60000">1 minute</option>
-					<option value="120000">2 minutes</option>
-					<option value="300000">5 minutes</option>
+					<option value="2">2 seconds</option>
+					<option value="5">5 seconds</option>
+					<option value="10">10 seconds</option>
+					<option value="30">30 seconds</option>
+					<option value="60">1 minute</option>
+					<option value="120">2 minutes</option>
+					<option value="300">5 minutes</option>
 				</options>
 				<advanced>true</advanced>
 			</parameter>

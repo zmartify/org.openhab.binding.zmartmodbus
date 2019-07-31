@@ -12,11 +12,10 @@
  */
 package org.openhab.binding.zmartmodbus.internal;
 
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.BRIDGE_TYPE_SERIAL;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_BRIDGE_TYPES_UIDS;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_THING_TYPES_UIDS;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.*;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
@@ -41,7 +40,7 @@ import org.slf4j.LoggerFactory;
  */
 
 @NonNullByDefault
-@Component(immediate = true, service = ThingHandlerFactory.class, configurationPid = "binding.zmartmodbus")
+@Component(immediate = true, service = ThingHandlerFactory.class, configurationPid = CONFIGURATION_PID)
 public class ModbusHandlerFactory extends BaseThingHandlerFactory {
     private Logger logger = LoggerFactory.getLogger(BaseThingHandlerFactory.class);
 
@@ -71,7 +70,7 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
      * when the bridge is created.
      */
     @Override
-    protected ThingHandler createHandler(Thing thing) {
+    @Nullable public ThingHandler createHandler(Thing thing) {
         logger.debug("CreateHandler for Thing {}", thing.getUID());
 
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();

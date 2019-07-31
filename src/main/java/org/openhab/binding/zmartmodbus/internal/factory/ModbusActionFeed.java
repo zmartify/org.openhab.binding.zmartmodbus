@@ -13,10 +13,9 @@
 package org.openhab.binding.zmartmodbus.internal.factory;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ScheduledFuture;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
@@ -29,23 +28,17 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T>
  */
-@NonNullByDefault
+
 public class ModbusActionFeed<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusActionFeed.class);
 
-    private List<ModbusAction> slowActions = new ArrayList<ModbusAction>();
-    private List<ModbusAction> fastActions = new ArrayList<ModbusAction>();
+    private List<ModbusAction> slowActions = Collections.synchronizedList(new ArrayList<ModbusAction>());
+    private List<ModbusAction> fastActions = Collections.synchronizedList(new ArrayList<ModbusAction>());
 
     private ActionListener subscriber = null;
 
-    private transient boolean running = false;
-
-    public ModbusActionFeed(int slowPoll, int fastPoll) {
-        super();
-        setSlowPoll(slowPoll);
-        setFastPoll(fastPoll);
-        launchPublisher();
+    public ModbusActionFeed() {
     }
 
     public void addAction(ModbusAction action) {
@@ -79,48 +72,23 @@ public class ModbusActionFeed<T> {
         }
     }
 
-    public List<ModbusAction> getSlowActions() {
-        return slowActions;
-    }
-
-    public List<ModbusAction> getFastActions() {
-        return fastActions;
-    }
-    private class ActionThread extends Thread {
-
-        ActionThread() {
-            super("ModbusActionThread");
-        }
-
-        @Override
-        public void run() {
-            int fastTicker = 0;
-            try {
-                while (running) {
-                    // Slow Actions are running every slowPoll <= (fastPoll * n) interval
-                    synchronized (slowActions) {
-                        slowActions.forEach(slowAction -> {
-                            subscriber.modbusAction(slowAction);
-                        });
-                    }
-                    fastTicker = 0;
-                    while (running && (fastTicker < slowPoll)) {
-                        synchronized (fastActions) {
-                            fastActions.forEach(fastAction -> {
-                                subscriber.modbusAction(fastAction);
-                            });
-                            fastTicker = fastTicker + fastPoll;
-                        }
-                        Thread.sleep(fastPoll);
-                    }
-                }
-            } catch (InterruptedException e) {
-                logger.error("ModbusActionFeed interrupted: {}", e.getMessage());
-            }
-            logger.debug("Leaving THREAD");
+    public void execSlowActions() {
+        logger.debug("execSlowActions ({})", slowActions.size());
+        synchronized(slowActions) {
+            slowActions.forEach(action -> {
+                subscriber.modbusAction(action);
+            });
         }
     }
 
+    public void execFastActions() {
+        logger.debug("execFastActions ({})", fastActions.size());
+        synchronized(fastActions) {
+            fastActions.forEach(action -> {
+                subscriber.modbusAction(action);
+            });
+        }
+    }
 
     public void register(ActionListener listener) {
         subscriber = listener;

@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 
 /**
  * The ModbusCommEvent class contains the values returned by ModbusFunction functions 11(0x0B)
@@ -28,7 +28,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
 public class ModbusCommEvent {
 
     private int status;

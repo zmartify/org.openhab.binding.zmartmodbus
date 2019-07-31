@@ -17,7 +17,6 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.*;
 
 import java.util.Arrays;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
@@ -39,7 +38,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 
-@NonNullByDefault
 public class ModbusFunctionJablotron extends ModbusFunction {
 
     private Logger logger = LoggerFactory.getLogger(ModbusFunctionJablotron.class);
@@ -294,7 +292,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         }
     }
 
-    private byte[] enumeration(int unitAddr, byte[] physicalAddress) throws ModbusProtocolException {
+    public byte[] enumeration(int unitAddr, byte[] physicalAddress) throws ModbusProtocolException {
         if (!isConnected()) {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.NOT_CONNECTED);
         }
@@ -428,7 +426,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
                 registerToUnsignedShort(Arrays.copyOfRange(response, 6, 8)) & 0x000F);
         String deviceName = "AC-"
                 + String.format("%1$03d", registerToUnsignedShort(Arrays.copyOfRange(response, 8, 10)));
-        return new ModbusDeviceInfo(serialNo, hwVersion, swVersion, deviceName);
+                return new ModbusDeviceInfo(serialNo, hwVersion, swVersion, deviceName);
     }
 
 }

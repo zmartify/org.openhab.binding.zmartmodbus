@@ -17,16 +17,20 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionCla
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Write;
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat.Once;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.MessageListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCommEvent;
+import org.openhab.binding.zmartmodbus.internal.protocol.ModbusDeviceInfo;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,18 +41,16 @@ import io.reactivex.disposables.Disposable;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
+
 public class ModbusHandler<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusHandler.class);
 
-    private ModbusBridgeHandler bridgeHandler = null;
-
-    private ActionListener actionSubscriber;
-    private MessageListener messageSubscriber;
+    @Nullable private ModbusBridgeHandler bridgeHandler;
+    @Nullable private ActionListener actionSubscriber;
+    @Nullable private MessageListener messageSubscriber;
     
-    public ModbusHandler(ModbusBridgeHandler bridgeHandler) {
-        this.bridgeHandler = bridgeHandler;
+    public ModbusHandler() {
     }
 
     public Observer<ModbusAction> ModbusCommunicator() {
@@ -69,7 +71,7 @@ public class ModbusHandler<T> {
                 Object payload = null;
                 @SuppressWarnings("unused")
                 ModbusCommEvent commEvent = null;
-                ModbusThingHandler modbusThingHandler = (ModbusThingHandler) bridgeHandler.getThingHandlerByUID(modbusAction.getThingUID());
+                ModbusThingHandler modbusThingHandler = (ModbusThingHandler) getBridgeHandler().getThingHandlerByUID(modbusAction.getThingUID());
                 int unitAddress = modbusThingHandler.getId();
                 ModbusFunction modbusFunction = modbusThingHandler.getModbusFunction();
 
@@ -94,9 +96,10 @@ public class ModbusHandler<T> {
                                             modbusAction.getLength());
                                     break;
                                 case GetDeviceInfo:
-                                modbusThingHandler.setDeviceInfo(modbusFunction.getDeviceInfo(unitAddress));
-                                    // Set no further action
+                                    getBridgeHandler().handleUpdate(new ChannelUID( modbusAction.getThingUID(), ModbusBindingConstants.CHANNEL_DEVICE_INFO),
+                                    new StringType(modbusFunction.getDeviceInfo(unitAddress).toString()));
                                     payload = null;
+                                    break;
                                 default:
                                     break;
                             }
@@ -152,7 +155,7 @@ public class ModbusHandler<T> {
                                 // Add it to the action feed
                                 actionSubscriber.modbusAction(modbusAction);
                             } else {
-                                bridgeHandler.getCounters().incrementFailedCounter();
+                                getBridgeHandler().getCounters().incrementFailedCounter();
                             }
                             break;
                         case TRANSACTION_FAILURE:
@@ -167,7 +170,7 @@ public class ModbusHandler<T> {
                             break;
                         case CONNECTION_FAILURE:
                             logger.error("Connection failure: {} {}", e.getCause(), e.getMessage());
-                            bridgeHandler.getTransceiver().disconnect();
+                            getBridgeHandler().getTransceiver().disconnect();
                             break;
                         default:
                             logger.error("We got an exception in ModbusCommunicator ({}) {}", e.getCode(), e.getCode().name());
@@ -185,7 +188,7 @@ public class ModbusHandler<T> {
 
             @Override
             public void onComplete() {
-                bridgeHandler.getTransceiver().disconnect();
+                getBridgeHandler().getTransceiver().disconnect();
                 logger.info("onComplete");
             }
         };
@@ -204,5 +207,18 @@ public class ModbusHandler<T> {
     }
 
     public void terminate() {
+    }
+
+    public ModbusBridgeHandler getBridgeHandler() {
+        if (bridgeHandler != null) {
+            return bridgeHandler;
+        } else {
+            logger.error("BridgeHandler not set");
+            return null;
+        }
+    }
+
+    public void setBridgeHandler(ModbusBridgeHandler bridgeHandler) {
+        this.bridgeHandler = bridgeHandler;
     }
 }

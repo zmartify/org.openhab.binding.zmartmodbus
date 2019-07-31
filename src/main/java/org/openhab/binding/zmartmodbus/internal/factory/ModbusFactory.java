@@ -14,7 +14,7 @@ package org.openhab.binding.zmartmodbus.internal.factory;
 
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
@@ -39,15 +39,15 @@ import io.reactivex.disposables.Disposable;
  * @param <T>
  */
 
-@NonNullByDefault
+
 public class ModbusFactory<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusFactory.class);
 
     private ModbusDataSets dataSets = new ModbusDataSets();
 
-    private StateListener stateSubscriber = null;
-    private ActionListener actionSubscriber = null;
+    @Nullable private StateListener stateSubscriber = null;
+    @Nullable private ActionListener actionSubscriber = null;
 
     public ModbusFactory() {
     }

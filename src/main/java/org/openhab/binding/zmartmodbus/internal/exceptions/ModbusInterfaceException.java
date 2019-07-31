@@ -18,7 +18,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * Exceptions thrown from the serial interface.
  *
  * @author Chris Jackson - Initial contribution
- * @author Jan-Willem Spuij
+ * @author Jan-Willem Spuij - Added functionality
+ * 
  */
 @NonNullByDefault
 public class ModbusInterfaceException extends Exception {

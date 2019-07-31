@@ -14,7 +14,6 @@ package org.openhab.binding.zmartmodbus.internal.util;
 
 import java.util.Arrays;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Class that implements a collection for
@@ -27,7 +26,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @version @version@ (@date@)
  */
 
-@NonNullByDefault
 public final class BitVector {
 
     // instance attributes

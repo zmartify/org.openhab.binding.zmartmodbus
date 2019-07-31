@@ -34,8 +34,9 @@ import java.util.Map.Entry;
 import java.util.TimeZone;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
-import org.eclipse.smarthome.core.thing.Bridge;
+import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -69,9 +70,6 @@ import org.openhab.binding.zmartmodbus.internal.util.Register;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import io.reactivex.Observer;
-import io.reactivex.disposables.Disposable;
-
 /**
  *
  * @author Peter Kristensen - Initial contribution
@@ -82,10 +80,14 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusThingHandler.class);
 
-    protected ModbusThingConfiguration modbusThingConfig;
+    @Nullable
+    private ModbusThingConfiguration modbusThingConfig;
 
+    @Nullable
     private ModbusSlaveDiscoveryService discoveryService;
-    private ModbusNodeClass nodeClass;
+
+    private ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
+    @Nullable
     private ModbusFunction modbusFunction = null;
 
     // Special configuration parameters needed for jablotron
@@ -94,10 +96,9 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private boolean configured = false;
 
-    private ModbusDeviceInfo deviceInfo = new ModbusDeviceInfo("", "", "", "");
-
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
+        logger.debug("ModbusThingHandler getBride()==null {}", (getBridge() == null));
     }
 
     @Override
@@ -114,14 +115,17 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.BRIDGE_OFFLINE,
                 ModbusBindingConstants.OFFLINE_CTLR_OFFLINE);
 
+        if (getBridge() == null) {
+            logger.error("getBridge() returned 'null'");
+            return;
+        }
         // Make sure the thingType is set correctly from the database
         // if (updateThingType() == true) {
         // The thing will have been disposed of so let's exit!
         // return;
         // b }
 
-        initializeBridge((getBridge() == null) ? null : getBridge().getHandler(),
-                (getBridge() == null) ? null : getBridge().getStatus());
+        initializeBridge(getBridge().getStatus());
 
         logger.debug("Starting to register deviceDiscovery");
         discoveryService = new ModbusSlaveDiscoveryService(getBridgeHandler());
@@ -132,14 +136,16 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     @SuppressWarnings("null")
     @Override
-    public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
+    public void bridgeStatusChanged(@Nullable ThingStatusInfo bridgeStatusInfo) {
         logger.debug("{} : Controller status changed to {}.", thing.getUID(), bridgeStatusInfo.getStatus());
 
-        initializeBridge((getBridge() == null) ? null : getBridge().getHandler(), bridgeStatusInfo.getStatus());
+        initializeBridge(bridgeStatusInfo.getStatus());
     }
 
     @SuppressWarnings("null")
-    private void initializeBridge(ThingHandler thingHandler, ThingStatus controllerStatus) {
+    private void initializeBridge(ThingStatus controllerStatus) {
+        ThingHandler thingHandler = getBridgeHandler();
+
         logger.info("Initialize Bridge {} for thing {}", controllerStatus, getThing().getUID());
 
         if (thingHandler != null && controllerStatus != null) {
@@ -188,22 +194,27 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
         if (nodeClass.equals(ModbusNodeClass.JablotronAC116)) {
             logger.debug("Registering JablotronAC116 to receive internal messages i.e. discovery information");
-            getBridgeHandler().getController().hotMessage
-                    .filter(modbusMessage -> modbusMessage.isInternal())
-                    .subscribe(modbusMessage -> this.MessageListener().onNext(modbusMessage));
-        }
+            getBridgeHandler().getController().getHotMessage().filter(modbusMessage -> modbusMessage.isInternal())
+                    .subscribe(modbusMessage -> receivedDiscovery(modbusMessage));
+
+          }
+
+          if (getParentThingUID() == null) {
+              // It's a real modbus device - not a subslave, try get device info
+            getController().getActionFeed().addAction(new ModbusAction(getThing().getUID(),ModbusMessageClass.GetDeviceInfo));
+          }
 
         logger.debug("Initialized the modbusId {} {}", modbusThingConfig.getId(), this.getThing().getUID());
     }
 
     private int addressWizard(String property, int channelId, int elementId) {
         switch (property) {
-        case "channel":
-            return channelId;
-        case "element":
-            return elementId;
-        default:
-            return Integer.decode(property);
+            case "channel":
+                return channelId;
+            case "element":
+                return elementId;
+            default:
+                return Integer.decode(property);
         }
     }
 
@@ -235,37 +246,35 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
                 int length = addressWizard(cfg[3], channelId, elementId);
                 switch (cfg.length) {
-                // Jablotron AC-116
-                case 8:
-                    offset = addressWizard(cfg[7], channelId, elementId);
-                case 7:
-                    start = Jablotron.getAddress(/* category */ addressWizard(cfg[4], channelId, elementId),
-                            /* index */ addressWizard(cfg[5], channelId, elementId),
-                            /* page */ addressWizard(cfg[6], channelId, elementId));
-                    break;
-                // Standard Modbus
-                case 6:
-                case 5:
-                    offset = addressWizard(cfg[cfg.length - 1], channelId, elementId);
-                    break;
-                default:
-                    logger.warn("Thing {}: Illegal number of property parameters", thing.getUID());
-                    return;
+                    // Jablotron AC-116
+                    case 8:
+                        offset = addressWizard(cfg[7], channelId, elementId);
+                    case 7:
+                        start = Jablotron.getAddress(/* category */ addressWizard(cfg[4], channelId, elementId),
+                                /* index */ addressWizard(cfg[5], channelId, elementId),
+                                /* page */ addressWizard(cfg[6], channelId, elementId));
+                        break;
+                    // Standard Modbus
+                    case 6:
+                    case 5:
+                        offset = addressWizard(cfg[cfg.length - 1], channelId, elementId);
+                        break;
+                    default:
+                        logger.warn("Thing {}: Illegal number of property parameters", thing.getUID());
+                        return;
                 }
                 if (messageClass.equals(ModbusMessageClass.Unknown)) {
                     logger.error("Thing {}: Unknown ModbusMessageClass '{}'", thing.getUID(), cfg[0]);
                 } else {
                     ModbusDataSet dataSet = new ModbusDataSet(thing.getUID(), messageClass, start, length, offset,
-                            channelId, elementId, reportOn, feedRepeat, ModbusDataSetClass.SmartHome,
-                            nodeClass);
+                            channelId, elementId, reportOn, feedRepeat, ModbusDataSetClass.SmartHome, nodeClass);
 
-                    getBridgeHandler().getController().getModbusFactory().getDataSets()
-                            .addDataSet(dataSetKey, dataSet);
+                    getBridgeHandler().getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
 
                     getBridgeHandler().getController().getActionFeed()
                             .addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
 
-                    logger.debug("Thing {}: DataSet {} added", thing.getUID(), dataSetKey);
+                    logger.trace("Thing {}: DataSet {} added", thing.getUID(), dataSetKey);
                 }
             }
         }
@@ -289,7 +298,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 channel.getConfiguration().put(META_HEATUNITID, channelId);
             }
 
-            logger.debug("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:",
+            logger.trace("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:",
                     thing.getUID(), elementId, channelId, channel.getUID().getId());
 
             if (properties.containsKey(PROPERTY_CHANNELCFG_INDEX)) {
@@ -308,10 +317,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         logger.debug("Disposing node {}", getThing().getUID());
         if (getBridgeHandler() != null) {
             getBridgeHandler().getController().getActionFeed().removeActions(thing.getUID());
-            getBridgeHandler().getController().getModbusFactory().getDataSets()
-                    .removeChannels(thing.getUID());
-            getBridgeHandler().getController().getModbusFactory().getDataSets()
-                    .removeDataSets(thing.getUID());
+            getBridgeHandler().getController().getModbusFactory().getDataSets().removeChannels(thing.getUID());
+            getBridgeHandler().getController().getModbusFactory().getDataSets().removeDataSets(thing.getUID());
 
             getBridgeHandler().removeDeviceDiscoveryService(thing.getUID());
         }
@@ -332,23 +339,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     public void handleRemoval() {
         dispose();
         updateStatus(ThingStatus.REMOVED);
-    }
-
-    @SuppressWarnings("null")
-    protected synchronized ModbusBridgeHandler getBridgeHandler() {
-        Bridge bridge = getBridge();
-        if (bridge != null) {
-            ThingHandler handler = bridge.getHandler();
-            if (handler instanceof ModbusBridgeHandler) {
-                return (ModbusBridgeHandler) handler;
-            } else {
-                logger.error("This Bridge is not a ModbusBridge - {}", handler.getThing().getUID());
-                return null;
-            }
-        } else {
-            logger.warn("Bridge not found...");
-            return null;
-        }
     }
 
     /**
@@ -373,31 +363,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         return dateFormat.format(date);
     }
 
-    public Observer<ModbusMessage> MessageListener() {
-        return new Observer<ModbusMessage>() {
-
-            @Override
-            public void onSubscribe(Disposable d) {
-                logger.debug(" onSubscribe : {}", d.isDisposed());
-            }
-
-            @Override
-            public void onComplete() {
-                logger.debug("MessageListener completed");
-            }
-
-            @Override
-            public void onError(Throwable arg0) {
-                logger.error("We have received an error :: {}", arg0.getMessage());
-            }
-
-            @Override
-            public void onNext(ModbusMessage modbusMessage) {
-                receivedDiscovery(modbusMessage);
-            }
-        };
-    }
-
     /**
      * Received discovery message from Message Listener ThingHandler
      * 
@@ -418,7 +383,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             // status.setMSBAccess();
             if (!status.getBit(9)) {
                 // We assume it is a Thermostat as it is not a magnetic contact
-                logger.debug("Thing {} : We have discovered a Thermostat", thing.getUID());
                 int lowestChannel = 16;
                 for (int i = 0; i < 16; i++) {
                     if (assignmentMap.getBit(i)) {
@@ -426,11 +390,12 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                         if (lowestChannel == 16) {
                             lowestChannel = i;
                         }
-                        logger.debug("NODE {} : We have discovered an actuator", thing.getUID());
+                        // We have discovered an actuator
                         discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
                                 ID_NOT_USED);
                     }
                 }
+                // We have discover a thermostat
                 discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel, Jablotron
                         .getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId).getStart()));
             }
@@ -469,6 +434,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         return elementId;
     }
 
+    @Nullable
     public ModbusFunction getModbusFunction() {
         return modbusFunction;
     }
@@ -477,15 +443,13 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         return nodeClass;
     }
 
+    @Nullable
     public ModbusThingConfiguration getModbusThingConfig() {
         return modbusThingConfig;
     }
-    public void setDeviceInfo(ModbusDeviceInfo deviceInfo) {
-        this.deviceInfo = deviceInfo;
-    }
 
-    public ModbusDeviceInfo getDeviceInfo() {
-        return deviceInfo;
+    public ModbusBridgeHandler getBridgeHandler() {
+        return (ModbusBridgeHandler) getBridge().getHandler();
     }
 
     public boolean isConfigured() {

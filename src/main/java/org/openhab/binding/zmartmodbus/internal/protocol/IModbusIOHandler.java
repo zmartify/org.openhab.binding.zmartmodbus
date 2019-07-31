@@ -12,7 +12,7 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
+
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
 
@@ -21,7 +21,7 @@ import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
+
 public interface IModbusIOHandler {
 
     public ModbusTransceiver getTransceiver();

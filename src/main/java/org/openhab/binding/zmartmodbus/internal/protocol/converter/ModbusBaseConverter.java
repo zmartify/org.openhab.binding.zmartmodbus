@@ -18,7 +18,7 @@ import java.math.BigDecimal;
 import java.util.Arrays;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -38,7 +38,7 @@ import com.google.gson.JsonParser;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
+
 public class ModbusBaseConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(ModbusBaseConverter.class);
@@ -130,6 +130,7 @@ public class ModbusBaseConverter {
         return state;
     }
 
+    @Nullable
     public static Object fromStateToModbus(ChannelUID uid, State state, ModbusThingChannel channel) {
         Object payload = null;
         switch (channel.getValueClass()) {

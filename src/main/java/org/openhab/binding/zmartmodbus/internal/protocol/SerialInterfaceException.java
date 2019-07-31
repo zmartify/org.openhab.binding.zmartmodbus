@@ -18,8 +18,8 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * Exceptions thrown from the serial interface.
  * 
  * @author Chris Jackson - Initial contribution
- * @author Jan-Willem Spuij
- * @author Peter Kristensen (adopted for zmartmodbus)
+ * @author Jan-Willem Spuij - Added more code
+ * @author Peter Kristensen - adopted for zmartmodbus
  * 
  */
 

@@ -12,14 +12,12 @@
  */
 package org.openhab.binding.zmartmodbus.internal.util;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 /**
  * @author Peter Kristensen - Initial contribution
  *
  *         Used to calculate the CRC-16 (cyclical redundancy check) for an array of bytes.
  */
-@NonNullByDefault
+
 public class Crc16 {
 
     private Crc16() {

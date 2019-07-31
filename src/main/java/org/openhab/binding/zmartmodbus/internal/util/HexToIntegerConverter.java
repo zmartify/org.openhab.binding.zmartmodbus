@@ -18,7 +18,6 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 
 /**
  * Implements a Hex value to integer converter and vice versa.
@@ -26,30 +25,21 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Chris Jackson - Initial contribution
  * @author Jan-Willem Spuij
  */
-@NonNullByDefault
+
 public class HexToIntegerConverter implements Converter {
 
-    /**
-     * {@inheritDoc}
-     */
     @SuppressWarnings("rawtypes")
     @Override
     public boolean canConvert(Class type) {
         return type.equals(Integer.class) || type.equals(int.class);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
         int number = (Integer) source;
         writer.setValue("0x" + Integer.toHexString(number));
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
         String value = reader.getValue();

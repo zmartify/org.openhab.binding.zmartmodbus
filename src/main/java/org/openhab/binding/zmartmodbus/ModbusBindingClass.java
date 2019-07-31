@@ -18,7 +18,6 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLO
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLOTRON_TP150;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_NILAN_COMFORT300;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
 
@@ -30,7 +29,6 @@ import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron
  *
  */
 
-@NonNullByDefault
 public class ModbusBindingClass {
 
     private ModbusBindingClass() {
@@ -239,7 +237,8 @@ public class ModbusBindingClass {
     public static enum ModbusActionClass {
         Read, // 0x00
         Write, // 0x01
-        Status // 0x02
+        Status, // 0x02
+        Undef; // 0x03
     }
 
     public static enum ModbusReportOn {
@@ -275,7 +274,8 @@ public class ModbusBindingClass {
     public static enum ModbusFeedRepeat {
         Once("once"),
         Slow("slow"),
-        Fast("fast");
+        Fast("fast"),
+        Unknown("unknown");
 
         private ModbusFeedRepeat(final String text) {
             this.text = text;
@@ -351,7 +351,8 @@ public class ModbusBindingClass {
         THURSDAY("thursday"),
         FRIDAY("friday"),
         SATURDAY("saturday"),
-        SUNDAY("sunday");
+        SUNDAY("sunday"),
+        UNKNOWN("unknown");
 
         private WeekDayClass(final String day) {
             this.day = day;
@@ -371,7 +372,7 @@ public class ModbusBindingClass {
                     }
                 }
             }
-            return null;
+            return UNKNOWN;
         }
     }
 

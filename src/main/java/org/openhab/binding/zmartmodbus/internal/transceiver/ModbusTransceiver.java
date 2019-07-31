@@ -16,6 +16,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
 
@@ -28,8 +29,8 @@ import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
 public abstract class ModbusTransceiver {
 
     // Input and output streams, must be created by transceiver implementations
-    protected InputStream inputStream;
-    protected OutputStream outputStream;
+    @Nullable protected InputStream inputStream;
+    @Nullable protected OutputStream outputStream;
 
     protected ModbusCounters counters;
 
@@ -60,8 +61,8 @@ public abstract class ModbusTransceiver {
      * @return msg
      * @throws ModbusProtocolException
      */
-     public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
-        return null;
+    public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
+        return new byte[0];
     }
 
     protected byte asciiLrcCalc(byte[] msg, int len) {

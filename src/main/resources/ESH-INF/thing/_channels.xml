@@ -1,10 +1,7 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="zmartmodbus"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-    xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 org.eclipse.smarthome.thing-description.xsd">
-    
-   <!-- Battery Alarm Channel -->
+<?xml version="1.0" encoding="UTF-8" ?>
+<thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0" xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 org.eclipse.smarthome.thing-description.xsd">
+
+    <!-- Battery Alarm Channel -->
     <channel-type id="alarm_battery">
         <item-type>Contact</item-type>
         <label>Low battery alarm</label>
@@ -79,19 +76,17 @@
         <label>Electric Current Consumption</label>
         <description>Indicates the instantaneous current consumption</description>
         <category>energyMeter</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
-    
+
     <!-- Energy - Energy Consumption (kVAh) -->
     <channel-type id="meter_kvah">
         <item-type>Number</item-type>
         <label>Energy Consumption</label>
         <description>Indicates the energy consumption (kVAh)</description>
         <category>energyMeterKVAH</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <!-- Energy - Energy Consumption (kWh) -->
@@ -100,8 +95,7 @@
         <label>Energy Consumption</label>
         <description>Indicates the energy consumption (kWh)</description>
         <category>energyMeterKWH</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <!-- Energy - Power Factor -->
@@ -110,20 +104,18 @@
         <label>Power Factor</label>
         <description>Indicates the instantaneous power factor</description>
         <category>energyMeterAmp</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
-    
+
     <!-- Energy - Power Factor -->
     <channel-type id="meter_pulse">
         <item-type>Number</item-type>
         <label>Pulse Count</label>
         <description>Indicates the pulse count</description>
         <category>Energy</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
-    
+
     <!-- Meter Reset -->
     <channel-type id="meter_reset">
         <item-type>Switch</item-type>
@@ -138,18 +130,16 @@
         <label>Voltage</label>
         <description>Indicates the instantaneous voltage</description>
         <category>energyMeterVolt</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
-    
+
     <!-- Energy - Power Consumption -->
     <channel-type id="meter_watts">
         <item-type>Number</item-type>
         <label>Electric Power Consumption</label>
         <description>Indicates the instantaneous power consumption</description>
         <category>energyMeterWatt</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
 
@@ -284,11 +274,12 @@
         <label>Number counter number</label>
         <description>Used for simple counters</description>
         <category>counter</category>
+        <state readOnly="true"></state>
     </channel-type>
 
     <!-- Binary Sensor -->
     <channel-type id="sensor_binary">
-        <item-type>Switch</item-type>
+        <item-type>Contact</item-type>
         <label>Binary Sensor</label>
         <description>Indicates if a sensor has triggered</description>
         <category>button</category>
@@ -306,8 +297,7 @@
         <label>Dewpoint</label>
         <description>Indicates the dewpoint</description>
         <category>dewpointtemperature</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <!-- Direction Channel -->
@@ -316,8 +306,7 @@
         <label>Direction</label>
         <description>Indicates the direction</description>
         <category></category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <!-- Activate learning mode -->
@@ -341,8 +330,7 @@
         <label>Sensor</label>
         <description></description>
         <category>counter</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <!-- Sensor - Power -->
@@ -351,8 +339,7 @@
         <label>Energy Consumption</label>
         <description>Indicates the energy consumption (kWh)</description>
         <category>Energy</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <!-- Humidity Channel -->
@@ -361,8 +348,7 @@
         <label>Humidity</label>
         <description>Indicates the current relative humidity</description>
         <category>relativehumiditymeasurement</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
 
@@ -372,8 +358,7 @@
         <label>Temperature</label>
         <description>Indicates the current temperature</description>
         <category>Temperature</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
         <config-description>
             <parameter name="config_scale" type="text">
                 <label>Scale</label>
@@ -392,8 +377,7 @@
         <label>Air temperature</label>
         <description>Indicates the current air temperature</description>
         <category>airtemperature</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
     <channel-type id="sensor_floortemperature">
@@ -401,8 +385,7 @@
         <label>Floor temperature</label>
         <description>Indicates the current floor temperature</description>
         <category>floortemperature</category>
-        <state pattern="%.1f" readOnly="true">
-        </state>
+        <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
 
@@ -421,6 +404,7 @@
         <label>SyncGroup</label>
         <description>Synchronization Group</description>
         <category>Config</category>
+        <state readOnly="true"></state>
     </channel-type>
 
     <!-- Switch Channel -->
@@ -596,9 +580,11 @@
         <config-description>
             <parameter name="config_offset" type="integer" min="10" max="600">
                 <label>Automatic Update Offset</label>
-                <description><![CDATA[The number of seconds difference in the time before it is reset<br/>
+                <description>
+                    <![CDATA[The number of seconds difference in the time before it is reset<br/>
                 Setting this will automatically update the devices clock when the time difference between
-                the device, and the computer exceeds this number of seconds.]]></description>
+                the device, and the computer exceeds this number of seconds.]]>
+                </description>
                 <default>60</default>
                 <options>
                     <option value="0">Disable Auto Update</option>
@@ -616,5 +602,16 @@
         <category>Schedule</category>
     </channel-type>
 
+    <channel-type id="deviceInfo">
+        <item-type>String</item-type>
+        <label>Device info</label>
+        <description>Device information</description>
+    </channel-type>
 
+    <channel-type id="internalFlags" advanced="true">
+        <item-type>Number</item-type>
+        <label>Internal control flags</label>
+        <description>Internal control flags - only for test</description>
+        <state readOnly="true"></state>
+    </channel-type>
 </thing:thing-descriptions>

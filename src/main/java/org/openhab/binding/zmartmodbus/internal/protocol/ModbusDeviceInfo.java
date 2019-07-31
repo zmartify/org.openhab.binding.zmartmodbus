@@ -59,4 +59,9 @@ public class ModbusDeviceInfo {
     public String getDeviceName() {
         return deviceName;
     }
+
+    @Override
+    public String toString() {
+        return String.format("%s H/W %s S/W %s S/N %s", deviceName, HWVersion, SWVersion, serialNumber);
+    }
 }
