@@ -12,12 +12,15 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Exceptions thrown from the serial interface.
  *
  * @author Chris Jackson - Initial contribution
  * @author Jan-Willem Spuij
  */
+@NonNullByDefault
 public class ModbusInterfaceException extends Exception {
 
     private static final long serialVersionUID = 8852643957484264124L;

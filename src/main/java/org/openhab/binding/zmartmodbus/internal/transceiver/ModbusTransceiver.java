@@ -15,13 +15,16 @@ package org.openhab.binding.zmartmodbus.internal.transceiver;
 import java.io.InputStream;
 import java.io.OutputStream;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
 
 /**
  *
  * @author Peter Kristensen - Initial contribution
+ * 
  */
+@NonNullByDefault
 public abstract class ModbusTransceiver {
 
     // Input and output streams, must be created by transceiver implementations
@@ -45,7 +48,19 @@ public abstract class ModbusTransceiver {
         setConnected(false);
     }
 
-    public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
+    /**
+     * msgTransaction is responsible for the low level communication with the modbus device
+     *  
+     * msgTransaction must be called with a byte array having two extra bytes for
+     * the CRC. It will return a byte array of the response to the message.
+     * Validation will include checking the CRC and verifying the command matches.
+     * 
+     * @param msg
+     * @param customCode
+     * @return msg
+     * @throws ModbusProtocolException
+     */
+     public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
         return null;
     }
 

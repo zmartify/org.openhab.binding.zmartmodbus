@@ -12,6 +12,8 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  *
  * @author Peter Kristensen - Initial contribution
@@ -22,6 +24,7 @@ package org.openhab.binding.zmartmodbus.internal.exceptions;
  *
  *
  */
+@NonNullByDefault
 public enum ModbusProtocolErrorCode {
     INVALID_CONFIGURATION,
     INVALID_DATA_ADDRESS,

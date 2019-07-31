@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.zmartmodbus.internal.streams;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
 
@@ -20,6 +21,7 @@ import org.eclipse.smarthome.core.types.State;
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusState {
 
     private ChannelUID uid;

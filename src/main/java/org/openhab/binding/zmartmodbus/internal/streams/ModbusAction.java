@@ -16,6 +16,7 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.DEFAULT_RETRIES
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
@@ -36,6 +37,7 @@ import org.slf4j.LoggerFactory;
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusAction {
 
     private Logger logger = LoggerFactory.getLogger(ModbusAction.class);

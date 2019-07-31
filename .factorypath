@@ -3,8 +3,6 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-utils/3.0.22/plexus-utils-3.0.22.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-compiler-api/2.8.5/plexus-compiler-api-2.8.5.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jdt/ecj/3.16.0/ecj-3.16.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/io/reactivex/rxjava2/rxjava/2.2.9/rxjava-2.2.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/osgi/osgi.core/6.0.0/osgi.core-6.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/osgi/osgi.cmpn/7.0.0/osgi.cmpn-7.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/osgi/osgi.annotation/7.0.0/osgi.annotation-7.0.0.jar" enabled="true" runInBatchMode="false"/>
@@ -164,4 +162,6 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ui.icon/2.5.0-SNAPSHOT/org.openhab.core.ui.icon-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.storage.json/2.5.0-SNAPSHOT/org.openhab.core.storage.json-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.storage.mapdb/2.5.0-SNAPSHOT/org.openhab.core.storage.mapdb-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/reactivestreams/reactive-streams/1.0.2/reactive-streams-1.0.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/io/reactivex/rxjava2/rxjava/2.2.9/rxjava-2.2.9.jar" enabled="true" runInBatchMode="false"/>
 </factorypath>

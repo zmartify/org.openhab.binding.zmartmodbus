@@ -14,6 +14,7 @@ package org.openhab.binding.zmartmodbus.internal.listener;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
 
 /**
@@ -21,6 +22,7 @@ import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public abstract class StateListener {
     private static final AtomicInteger COUNTER = new AtomicInteger(1);
     private final int ID;

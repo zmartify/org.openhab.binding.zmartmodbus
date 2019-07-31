@@ -12,6 +12,7 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.ModbusHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusInterfaceException;
@@ -37,6 +38,7 @@ import io.reactivex.flowables.ConnectableFlowable;
  * @author Peter Kristensen
  *
  */
+@NonNullByDefault
 public class ModbusController {
 
     private Logger logger = LoggerFactory.getLogger(ModbusController.class);

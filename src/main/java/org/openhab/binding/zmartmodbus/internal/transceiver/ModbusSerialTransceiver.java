@@ -17,6 +17,7 @@ import java.io.IOException;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.SerialPort;
 import org.eclipse.smarthome.io.transport.serial.SerialPortIdentifier;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
  * @author Peter Kristensen - Adopted for ZmartModbus
  * 
  */
+@NonNullByDefault
 public class ModbusSerialTransceiver extends ModbusTransceiver {
 
     private Logger logger = LoggerFactory.getLogger(ModbusSerialTransceiver.class);

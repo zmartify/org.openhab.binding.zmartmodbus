@@ -79,6 +79,9 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     private ScheduledFuture<?> connectorTask;
 
+    private ScheduledFuture<?> slowPollTask;
+    private ScheduledFuture<?> fastPollTask;
+
     private ModbusSerialConfiguration modbusSerialConfig;
 
     private SerialPortManager serialPortManager;
@@ -181,6 +184,18 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
         getController().getActionFeed().setSlowPoll(modbusBridgeConfig.getSlowPoll());
         getController().getActionFeed().setFastPoll(modbusBridgeConfig.getFastPoll());
+
+        slowPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
+
+                @Override
+                public void run() {
+                    getController().getActionFeed().getSlowActions().forEach(fastAction -> {
+                            subscriber.modbusAction(fastAction);
+                        });
+                }
+            }, 0, modbusBridgeConfig.getSlowPoll(), TimeUnit.MILLISECONDS);
+
+
         getController().startListening();
     }
 

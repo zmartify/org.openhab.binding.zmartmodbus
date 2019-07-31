@@ -33,6 +33,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Channel;
@@ -76,6 +77,7 @@ import io.reactivex.disposables.Disposable;
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusThingHandler.class);

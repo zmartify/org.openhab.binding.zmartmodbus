@@ -40,6 +40,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 
+@NonNullByDefault
 @Component(immediate = true, service = ThingHandlerFactory.class, configurationPid = "binding.zmartmodbus")
 public class ModbusHandlerFactory extends BaseThingHandlerFactory {
     private Logger logger = LoggerFactory.getLogger(BaseThingHandlerFactory.class);

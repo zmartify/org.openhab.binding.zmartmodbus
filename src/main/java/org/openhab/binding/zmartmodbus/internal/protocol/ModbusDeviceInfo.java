@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  *
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusDeviceInfo {
 
     private String serialNumber;

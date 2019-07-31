@@ -17,6 +17,7 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataSetClass;
@@ -30,6 +31,7 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusDataSet {
 
     private Object payload;

@@ -18,6 +18,7 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLO
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLOTRON_TP150;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_NILAN_COMFORT300;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
 
@@ -25,8 +26,11 @@ import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron
  * supported modbus commands
  *
  * @author matt.demaree - Initial contribution
+ * @author Peter Kristensen - Adopted and extended for ZmartModbus
  *
  */
+
+@NonNullByDefault
 public class ModbusBindingClass {
 
     private ModbusBindingClass() {

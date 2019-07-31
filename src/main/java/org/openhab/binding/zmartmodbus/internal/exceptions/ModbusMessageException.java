@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  *
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusMessageException extends Exception {
 
     /**

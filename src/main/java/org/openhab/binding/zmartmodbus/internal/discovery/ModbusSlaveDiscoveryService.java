@@ -31,6 +31,7 @@ import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
+import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,7 +42,7 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-// @Component(service = { ModbusSlaveDiscoveryService.class }, immediate = true, configurationPid = "discovery.modbusslavediscoveryservice")
+@Component(service = { ModbusSlaveDiscoveryService.class }, immediate = true, configurationPid = "discovery." + ModbusBindingConstants.BINDING_ID)
 @NonNullByDefault
 public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
 
@@ -50,11 +51,11 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
 
     private ModbusBridgeHandler bridgeHandler;
 
-    public ModbusSlaveDiscoveryService(ModbusBridgeHandler  bridgeHandler) {
+    public ModbusSlaveDiscoveryService(ModbusBridgeHandler bridgeHandler) {
         super(ModbusBindingConstants.SUPPORTED_SLAVES_THING_TYPES_UIDS, searchTime);
         this.bridgeHandler = bridgeHandler;
         logger.debug("Creating ZmartModbus discovery service for {} with scan time of {}",
-            bridgeHandler.getThing().getUID(), searchTime);
+                bridgeHandler.getThing().getUID(), searchTime);
     }
 
     private ModbusController getController() {
@@ -99,7 +100,6 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
         super.stopScan();
     }
 
-
     /**
      * Constructs the ThingUID based on unitAddress, channelId and elementId if available
      *
@@ -107,7 +107,8 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * @param unitAddress
      * @param channelId
      * @param elementId
-     * @return
+     * 
+     * @return ThingUID
      */
     private ThingUID makeThingUID(ThingTypeUID thingTypeUID, int channelId, int elementId) {
         String subAddress;
@@ -124,33 +125,54 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
     }
 
     /**
+     * Constructs the Label based on unitAddress, channelId and elementId if available
+     * 
+     * @param thingTypeUID
+     * @param channelId
+     * @param elementId
+     * 
+     * @return String
+     */
+    private String makeLabel(ThingTypeUID thingTypeUID, int channelId, int elementId) {
+        String subAddress;
+        if (channelId != ID_NOT_USED) {
+            if (elementId != ID_NOT_USED) {
+                subAddress = String.format("channel %d element %d", channelId, elementId);
+            } else {
+                subAddress = String.format("channel %d", channelId);
+            }
+        } else {
+            subAddress = "(sub-slave)";
+        }
+        return thingTypeUID + " "  + subAddress;
+    }
+    /**
      * Get called when a device is discovered
      *
      * @param thingTypeUID
      * @param unitAddress
-     * @param channelId (ID_NOT_USED if not Jablotron)
-     * @param elementId (ID_NOT_USED if not Jablotron)
+     * @param channelId    (ID_NOT_USED if not Jablotron)
+     * @param elementId    (ID_NOT_USED if not Jablotron)
      */
     public void deviceDiscovered(ThingTypeUID thingTypeUID, ThingUID parentThingUID, int channelId, int elementId) {
         logger.debug("DeviceDiscovered: {} - parentNodeId {}", thingTypeUID, parentThingUID);
 
         try {
             String nodeClassLabel = thingTypeUID.getId();
-
+   
             // Initialize it (create if absent)
             ThingUID thingUID = makeThingUID(thingTypeUID, channelId, elementId);
-            String label = thingUID.getId().toString();
+            String label = makeLabel(thingTypeUID, channelId, elementId);
 
-            if (thingUID != null) {
-                logger.trace("Adding new Modbus Slave Thing {} to smarthome inbox", thingUID);
-                DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID)
-                        .withProperty(PROPERTY_NODECLASS, nodeClassLabel)
-                        .withProperty(PROPERTY_PARENTTHINGUID, parentThingUID.getAsString())
-                        .withProperty(PROPERTY_CHANNELID, String.valueOf(channelId))
-                        .withProperty(PROPERTY_ELEMENTID, String.valueOf(elementId)).withLabel(label)
-                        .withBridge(bridgeHandler.getThing().getUID()).build();
-                thingDiscovered(discoveryResult);
-            }
+            logger.debug("Adding new Modbus Slave Thing {} to smarthome inbox", thingUID);
+
+            DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID)
+                    .withProperty(PROPERTY_NODECLASS, nodeClassLabel)
+                    .withProperty(PROPERTY_PARENTTHINGUID, parentThingUID.getAsString())
+                    .withProperty(PROPERTY_CHANNELID, String.valueOf(channelId))
+                    .withProperty(PROPERTY_ELEMENTID, String.valueOf(elementId)).withLabel(label)
+                    .withBridge(bridgeHandler.getThing().getUID()).build();
+            thingDiscovered(discoveryResult);
         } catch (Exception e) {
             logger.debug("Error occurred during device discovery", e);
         }
@@ -168,11 +190,6 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
 
     private synchronized void discoverModbus() {
 
-        if (getController() == null) {
-            logger.error("no controller");
-            return;
-        }
-        
         // Initiate discovery for any subdevices on the node
 
         bridgeHandler.getThing().getThings().forEach(thing -> {
@@ -185,8 +202,5 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
     }
 
     public void stopDeviceDiscovery() {
-        if (getController() == null) {
-            return;
-        }
     }
 }

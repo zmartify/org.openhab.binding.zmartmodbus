@@ -14,6 +14,8 @@ package org.openhab.binding.zmartmodbus.internal.util;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Helper class that provides utility methods.
  *
@@ -23,6 +25,7 @@ import java.util.Arrays;
  *
  * @version @version@ (@date@)
  */
+@NonNullByDefault
 public final class Register {
 
     /**
@@ -538,7 +541,7 @@ public final class Register {
      * @return the low byte.
      */
     public static final byte lowByte(int wd) {
-        return (new Integer(0xff & wd).byteValue());
+        return (byte) (0xff & wd);
     }// lowByte
 
     /**
@@ -548,7 +551,7 @@ public final class Register {
      * @return the hi byte.
      */
     public static final byte hiByte(int wd) {
-        return (new Integer(0xff & (wd >> 8)).byteValue());
+        return (byte) (0xff & (wd >> 8));
     }// hiByte
 
     /**

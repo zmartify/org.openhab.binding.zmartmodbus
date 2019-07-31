@@ -21,7 +21,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 
 /**
- * The {@link ModbusBinding} class defines some constants public that might be
+ * The {@link ModbusBindingConstants} class defines some constants public that might be
  * used from other bundles as well.
  *
  * @author Peter Kristensen - Initial contribution
@@ -154,11 +154,5 @@ public class ModbusBindingConstants {
         public final static String OFFLINE_SERIAL_INUSE = "@text/modbus.thingstate.serial_inuse";
         public final static String OFFLINE_SERIAL_UNSUPPORTED = "@text/modbus.thingstate.serial_unsupported";
         public final static String OFFLINE_SERIAL_LISTENERS = "@text/modbus.thingstate.serial_listeners";
-
-        /**
-         * Presents all supported Thing types by Zmartify MODBUS binding.
-         */
-
-        public static final Integer ACTION_CHECK_VALUE = new Integer(-232323);
 
 }

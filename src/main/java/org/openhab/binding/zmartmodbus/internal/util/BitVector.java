@@ -14,6 +14,8 @@ package org.openhab.binding.zmartmodbus.internal.util;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Class that implements a collection for
  * bits, storing them packed into bytes.
@@ -24,6 +26,8 @@ import java.util.Arrays;
  *
  * @version @version@ (@date@)
  */
+
+@NonNullByDefault
 public final class BitVector {
 
     // instance attributes

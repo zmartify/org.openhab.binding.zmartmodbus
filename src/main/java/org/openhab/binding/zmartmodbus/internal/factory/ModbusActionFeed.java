@@ -14,7 +14,9 @@ package org.openhab.binding.zmartmodbus.internal.factory;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ScheduledFuture;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
@@ -27,6 +29,7 @@ import org.slf4j.LoggerFactory;
  *
  * @param <T>
  */
+@NonNullByDefault
 public class ModbusActionFeed<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusActionFeed.class);
@@ -35,9 +38,6 @@ public class ModbusActionFeed<T> {
     private List<ModbusAction> fastActions = new ArrayList<ModbusAction>();
 
     private ActionListener subscriber = null;
-
-    private int slowPoll = 0;
-    private int fastPoll = 0;
 
     private transient boolean running = false;
 
@@ -79,6 +79,13 @@ public class ModbusActionFeed<T> {
         }
     }
 
+    public List<ModbusAction> getSlowActions() {
+        return slowActions;
+    }
+
+    public List<ModbusAction> getFastActions() {
+        return fastActions;
+    }
     private class ActionThread extends Thread {
 
         ActionThread() {
@@ -114,34 +121,9 @@ public class ModbusActionFeed<T> {
         }
     }
 
-    void launchPublisher() {
-        logger.debug("LaunchPublisher");
-        running = true;
-        Thread actionThread = new ActionThread();
-        actionThread.start();
-    }
-
-    public void setSlowPoll(int slowPoll) {
-        this.slowPoll = slowPoll;
-    }
-
-    public void setFastPoll(int fastPoll) {
-        this.fastPoll = fastPoll;
-    }
-
-    public void terminate() {
-        running = false;
-    }
 
     public void register(ActionListener listener) {
         subscriber = listener;
     }
 
-    public int getSlowPoll() {
-        return slowPoll;
-    }
-
-    public int getFastPoll() {
-        return fastPoll;
-    }
 }

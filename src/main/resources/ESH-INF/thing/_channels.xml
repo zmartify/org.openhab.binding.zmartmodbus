@@ -6,7 +6,7 @@
     
    <!-- Battery Alarm Channel -->
     <channel-type id="alarm_battery">
-        <item-type>Switch</item-type>
+        <item-type>Contact</item-type>
         <label>Low battery alarm</label>
         <description>Indicates if the low battery alarm is triggered
         </description>
@@ -22,7 +22,7 @@
 
     <!-- General Alarm Channel -->
     <channel-type id="alarm_general">
-        <item-type>Switch</item-type>
+        <item-type>Contact</item-type>
         <label>General alarm</label>
         <description>Indicates if an alarm is triggered
         </description>
@@ -37,7 +37,7 @@
 
     <!-- Heat Alarm Channel -->
     <channel-type id="alarm_heat">
-        <item-type>Switch</item-type>
+        <item-type>Contact</item-type>
         <label>Heat alarm</label>
         <description>Indicates if a heat alarm is triggered
         </description>
@@ -52,7 +52,7 @@
 
     <!-- Power Alarm Channel -->
     <channel-type id="alarm_power">
-        <item-type>Switch</item-type>
+        <item-type>Contact</item-type>
         <label>Power alarm</label>
         <description>Indicates if a power alarm is triggered
         </description>

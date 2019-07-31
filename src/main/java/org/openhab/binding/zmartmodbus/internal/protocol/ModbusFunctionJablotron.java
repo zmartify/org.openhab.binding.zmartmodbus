@@ -17,6 +17,7 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.*;
 
 import java.util.Arrays;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
@@ -38,6 +39,7 @@ import org.slf4j.LoggerFactory;
  *
  */
 
+@NonNullByDefault
 public class ModbusFunctionJablotron extends ModbusFunction {
 
     private Logger logger = LoggerFactory.getLogger(ModbusFunctionJablotron.class);

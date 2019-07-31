@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Exception for when RFXCOM messages are too long for the spec.
  *
  * @author James Hewitt-Thomas - Initial contribution
  */
+@NonNullByDefault
 public class ModbusMessageTooLongException extends ModbusException {
 
     private static final long serialVersionUID = -3352067410289719335L;

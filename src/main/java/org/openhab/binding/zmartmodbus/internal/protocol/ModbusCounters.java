@@ -14,12 +14,15 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Modbus global counters
  *
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusCounters {
 
     private AtomicInteger MessageCounter = new AtomicInteger(0);

@@ -18,12 +18,15 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Implements a Hex value to integer converter and vice versa.
  *
  * @author Chris Jackson - Initial contribution
  * @author Jan-Willem Spuij
  */
+@NonNullByDefault
 public class HexToIntegerConverter implements Converter {
 
     /**

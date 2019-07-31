@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Exception for when RFXCOM messages have a value that we don't understand.
  *
  * @author James Hewitt-Thomas - Initial contribution
  */
+@NonNullByDefault
 public class ModbusUnsupportedValueException extends ModbusException {
 
     private static final long serialVersionUID = 402781611495845169L;

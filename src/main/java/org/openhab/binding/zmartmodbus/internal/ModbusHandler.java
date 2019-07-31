@@ -17,6 +17,7 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionCla
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Write;
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat.Once;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
@@ -36,6 +37,7 @@ import io.reactivex.disposables.Disposable;
  * @author Peter Kristensen - Initial contribution
  *
  */
+@NonNullByDefault
 public class ModbusHandler<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusHandler.class);

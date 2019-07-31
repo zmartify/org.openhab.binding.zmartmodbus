@@ -71,8 +71,8 @@ public class ModbusSerialConfiguration {
     }
 
     public int getStopBits() {
-        switch (this.stopBits) {
-            case "1.0": return SerialPort.STOPBITS_1;
+        switch (this.stopBits != null ? this.stopBits : "1.0") {
+            case "1.0": return SerialPort.STOPBITS_1; // default if not specified
             case "1.5": return SerialPort.STOPBITS_1_5;
             case "2.0": return SerialPort.STOPBITS_2;
             default: return 0;
@@ -84,8 +84,8 @@ public class ModbusSerialConfiguration {
     }
 
     public int getParity() {
-        switch (this.parity) {
-            case "none": return SerialPort.PARITY_NONE;
+        switch (this.parity != null ? this.parity : "none") {
+            case "none": return SerialPort.PARITY_NONE; // default if not specified
             case "even": return SerialPort.PARITY_EVEN;
             case "odd": return SerialPort.PARITY_ODD;
             case "space": return SerialPort.PARITY_SPACE;

@@ -12,11 +12,14 @@
  */
 package org.openhab.binding.zmartmodbus.internal.exceptions;
 
+import org.eclipse.jdt.annotation.NonNullByDefault;
+
 /**
  * Exception for RFXCOM errors.
  *
  * @author Pauli Anttila - Initial contribution
  */
+@NonNullByDefault
 public class ModbusException extends Exception {
 
     private static final long serialVersionUID = 2975102966905930260L;
