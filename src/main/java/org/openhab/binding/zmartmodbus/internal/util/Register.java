@@ -144,7 +144,7 @@ public final class Register {
     /**
      * Returns a <tt>String</tt> containing unsigned hexadecimal
      * numbers as digits.
-     * The <tt>String</tt> will coontain two hex digit characters
+     * The <tt>String</tt> will contain two hex digit characters
      * for each byte from the passed in <tt>byte[]</tt>.<br>
      * The bytes will be separated by a space character.
      * <p/>
@@ -532,7 +532,7 @@ public final class Register {
     }// unsignedByteToInt
 
     /**
-     * Returs the low byte of an integer word.
+     * Returns the low byte of an integer word.
      *
      * @param wd
      * @return the low byte.
@@ -551,17 +551,16 @@ public final class Register {
         return (new Integer(0xff & (wd >> 8)).byteValue());
     }// hiByte
 
-    // TODO: John description.
     /**
      * Make one integer word out of a high byte and a low byte
      * 
-     * @param hibyte
-     * @param lowbyte
+     * @param hiByte
+     * @param lowByte
      * @return a word.
      */
-    public static final int makeWord(int hibyte, int lowbyte) {
-        int hi = 0xFF & hibyte;
-        int low = 0xFF & lowbyte;
+    public static final int makeWord(int hiByte, int lowByte) {
+        int hi = 0xFF & hiByte;
+        int low = 0xFF & lowByte;
         return ((hi << 8) | low);
     }// makeWord
 

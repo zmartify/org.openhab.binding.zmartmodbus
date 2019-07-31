@@ -8,6 +8,11 @@
         "HEATUNITID",
         "THERMOSTATID",
         "Wimberger",
+        "dataset",
+        "datasets",
+        "dd'T'HH",
+        "reporton",
+        "ss'Z",
         "zmartmodbus"
     ]
 }

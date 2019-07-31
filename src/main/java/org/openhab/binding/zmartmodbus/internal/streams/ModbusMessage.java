@@ -63,7 +63,6 @@ public class ModbusMessage {
     }
 
     public boolean isLast() {
-        // TODO Auto-generated method stub
         return false;
     }
 }

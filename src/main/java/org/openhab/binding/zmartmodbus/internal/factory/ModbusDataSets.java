@@ -13,7 +13,6 @@
 package org.openhab.binding.zmartmodbus.internal.factory;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -116,7 +115,7 @@ public class ModbusDataSets {
     }
 
     /**
-     * addDataSet - adds the dataSet to the list of datasets for modbushandling
+     * addDataSet - adds the dataSet to the list of datasets for modbus handling
      *
      * @param dataSetKey
      * @param dataSet

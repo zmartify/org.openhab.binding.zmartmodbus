@@ -163,25 +163,23 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         }
     }
 
+    private int getIdStrAsInt(String idProperty) {
+        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_ELEMENTID);
+        if (idStr == null) {
+            return ID_NOT_USED;
+        } else {
+            return Integer.decode(idStr);
+        }
+    }
+
     public void initializeThing() {
         logger.debug("initializeThing {}", getThing().getUID());
 
         nodeClass = ModbusNodeClass.fromString(getThing().getThingTypeUID().getId());
         modbusFunction = getBridgeHandler().newModbusFunction(nodeClass);
 
-        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_CHANNELID);
-        if (idStr == null) {
-            channelId = ID_NOT_USED;
-        } else {
-            channelId = Integer.decode(idStr);
-        }
-
-        idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_ELEMENTID);
-        if (idStr == null) {
-            elementId = ID_NOT_USED;
-        } else {
-            elementId = Integer.decode(idStr);
-        }
+        channelId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_CHANNELID);
+        elementId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_ELEMENTID);
 
         initializeDataSets();
         initializeChannels();
@@ -422,7 +420,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 int lowestChannel = 16;
                 for (int i = 0; i < 16; i++) {
                     if (assignmentMap.getBit(i)) {
-                        // First channel found, set lowestchannel equal it.
+                        // First channel found, set lowestChannel equal it.
                         if (lowestChannel == 16) {
                             lowestChannel = i;
                         }
@@ -445,7 +443,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         ThingUID parentThingUID = getParentThingUID();
         if (parentThingUID != null) {
             // if parentThingUID defined return the Id of the parent (this is only relevant
-            // for subslave things)
+            // for sub-slave things)
             Thing thing = getBridgeHandler().getThingByUID(parentThingUID);
             return (thing != null) ? ((ModbusThingHandler) thing.getHandler()).getId() : null;
         } else
