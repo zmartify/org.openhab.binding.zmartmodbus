@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * The {@link ModbusBaseConfiguration} is the base class for configuration
  * information held by the device
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 @NonNullByDefault

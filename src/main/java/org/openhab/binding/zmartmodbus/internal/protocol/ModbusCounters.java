@@ -17,13 +17,14 @@ import java.util.concurrent.atomic.AtomicInteger;
 /**
  * Modbus global counters
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 public class ModbusCounters {
 
     private AtomicInteger MessageCounter = new AtomicInteger(0);
     private AtomicInteger TimeOutCounter = new AtomicInteger(0);
+    private AtomicInteger FailedCounter = new AtomicInteger(0);
 
     /**
      *
@@ -34,6 +35,7 @@ public class ModbusCounters {
     public void clearCounters() {
         MessageCounter = new AtomicInteger(0);
         TimeOutCounter = new AtomicInteger(0);
+        FailedCounter = new AtomicInteger(0);
     }
 
     public int incrementMessageCounter() {
@@ -44,11 +46,19 @@ public class ModbusCounters {
         return TimeOutCounter.incrementAndGet();
     }
 
+    public int incrementFailedCounter() {
+        return FailedCounter.incrementAndGet();
+    }
+
     public int getMessageCounter() {
         return MessageCounter.get();
     }
 
     public int getTimeOutCounter() {
         return TimeOutCounter.get();
+    }
+
+    public int getFailedCounter() {
+        return FailedCounter.get();
     }
 }

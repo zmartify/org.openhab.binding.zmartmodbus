@@ -317,7 +317,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                     for (int i = 0; i < byteCnt; i++) {
                                         ret[i] = response[i];
                                     }
-                                    // logger.debug("MODBUS receive: {}", DatatypeConverter.printHexBinary(ret));
+                                    logger.debug("MODBUS receive: {}", DatatypeConverter.printHexBinary(ret));
                                     return ret;
                                 }
                                 break;

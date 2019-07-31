@@ -14,7 +14,7 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 
 /**
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 public class ModbusDeviceInfo {

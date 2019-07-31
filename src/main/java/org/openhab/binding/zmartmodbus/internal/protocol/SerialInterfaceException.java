@@ -15,7 +15,7 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 /**
  * Exceptions thrown from the serial interface.
  * 
- * @author Chris Jackson
+ * @author Chris Jackson - Initial contribution
  * @author Jan-Willem Spuij
  * @author Peter Kristensen (adopted for zmartmodbus)
  * 

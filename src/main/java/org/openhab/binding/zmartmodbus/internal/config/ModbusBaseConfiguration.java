@@ -18,7 +18,7 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * The {@link ModbusSlaveConfiguration} is the base class for configuration
  * information held by the device
  *
- * @author Peter Kristensen - Modified for ZmartModbus
+ * @author Peter Kristensen - Initial contribution
  *
  */
 @NonNullByDefault

@@ -34,7 +34,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 
@@ -279,12 +279,14 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
     @Override
     public void startSubDeviceDiscovery(ThingUID thingUID) {
+        logger.debug("Jablotron: startSubDeviceDiscovery {}", thingUID);
         for (int elementId = 0; elementId < 48; elementId++) {
             // Add channel for the element index
             ModbusDataSet dataSet = new ModbusDataSet(thingUID, ModbusMessageClass.Holding,
                     Jablotron.getAddress(0x01, 0, elementId), 0x0C, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
             dataSet.setInternal(true);
             String dataSetKey = String.format("%s-%d-discovery1", thingUID.getAsString(), elementId);
+            logger.debug("dataSetKey: {}", dataSetKey);
             bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
             bridgeHandler.getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
         }
@@ -380,7 +382,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
                     // That was expected
                     break;
                 default:
-                    logger.error("setLogicalAddres got an error {} {}", e.getCode().getClass(), e.getMessage());
+                    logger.error("setLogicalAddress got an error {} {}", e.getCode().getClass(), e.getMessage());
                     break;
             }
             logger.debug("Enumeration process completed - ({}) units got new addresses starting from {}", counter,

@@ -14,6 +14,10 @@
 				<label>Modbus Response Time-out</label>
 				<description>Number of Modbus time-out errors recieved since last restart</description>
 			</channel>
+			<channel id="failed_count" typeId="counter">
+				<label>Modbus Failed transactions</label>
+				<description>Number of Modbus transactions failed (e.g. time-out > limit) since last restart</description>
+			</channel>
 		</channels>
 
 		<config-description>

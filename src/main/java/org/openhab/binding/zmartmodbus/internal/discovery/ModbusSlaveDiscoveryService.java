@@ -1,10 +1,14 @@
 /**
- * Copyright (c) 2014-2016 by the respective copyright holders.
+ * Copyright (c) 2010-2019 Contributors to the openHAB project
  *
- * All rights reserved. This program and the accompanying materials
- * are made available under the terms of the Eclipse Public License v1.0
- * which accompanies this distribution, and is available at
- * http://www.eclipse.org/legal/epl-v10.html
+ * See the NOTICE file(s) distributed with this work for additional
+ * information.
+ *
+ * This program and the accompanying materials are made available under the
+ * terms of the Eclipse Public License 2.0 which is available at
+ * http://www.eclipse.org/legal/epl-2.0
+ *
+ * SPDX-License-Identifier: EPL-2.0
  */
 package org.openhab.binding.zmartmodbus.internal.discovery;
 
@@ -173,7 +177,7 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
 
         bridgeHandler.getThing().getThings().forEach(thing -> {
             ModbusThingHandler thingHandler = (ModbusThingHandler) thing.getHandler();
-            logger.info("Initiate discovery for any subdevices on the node");
+            logger.debug("Initiate discovery for any subdevices on the node {}", thing.getUID());
             if (thingHandler.getNodeClass().supportDiscovery()) {
                 thingHandler.getModbusFunction().startSubDeviceDiscovery(thing.getUID());
             }

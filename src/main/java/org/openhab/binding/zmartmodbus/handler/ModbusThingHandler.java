@@ -73,7 +73,7 @@ import io.reactivex.disposables.Disposable;
 
 /**
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  *
  */
 public class ModbusThingHandler extends ConfigStatusThingHandler {
@@ -128,6 +128,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     }
 
+    @SuppressWarnings("null")
     @Override
     public void bridgeStatusChanged(ThingStatusInfo bridgeStatusInfo) {
         logger.debug("{} : Controller status changed to {}.", thing.getUID(), bridgeStatusInfo.getStatus());
@@ -135,6 +136,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         initializeBridge((getBridge() == null) ? null : getBridge().getHandler(), bridgeStatusInfo.getStatus());
     }
 
+    @SuppressWarnings("null")
     private void initializeBridge(ThingHandler thingHandler, ThingStatus controllerStatus) {
         logger.info("Initialize Bridge {} for thing {}", controllerStatus, getThing().getUID());
 
@@ -332,6 +334,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         updateStatus(ThingStatus.REMOVED);
     }
 
+    @SuppressWarnings("null")
     protected synchronized ModbusBridgeHandler getBridgeHandler() {
         Bridge bridge = getBridge();
         if (bridge != null) {
@@ -401,6 +404,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
      * @param modbusMessage
      */
     public void receivedDiscovery(ModbusMessage modbusMessage) {
+        logger.debug("Received discovery message");
         int dataSetId = modbusMessage.getDataSetId();
         int elementAddress = Register.registersToIntSwap((byte[]) modbusMessage.getPayload(), 0);
 
@@ -442,7 +446,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         if (parentThingUID != null) {
             // if parentThingUID defined return the Id of the parent (this is only relevant
             // for subslave things)
-            return ((ModbusThingHandler) getBridgeHandler().getThingByUID(parentThingUID).getHandler()).getId();
+            Thing thing = getBridgeHandler().getThingByUID(parentThingUID);
+            return (thing != null) ? ((ModbusThingHandler) thing.getHandler()).getId() : null;
         } else
             return modbusThingConfig.getId();
     }

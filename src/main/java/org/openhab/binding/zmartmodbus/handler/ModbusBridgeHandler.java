@@ -24,6 +24,7 @@ import org.eclipse.smarthome.core.library.types.DecimalType;
 
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingStatus;
 import org.eclipse.smarthome.core.thing.ThingStatusDetail;
 import org.eclipse.smarthome.core.thing.ThingUID;
@@ -58,7 +59,7 @@ import io.reactivex.disposables.Disposable;
  * The {@link ModbusBridgeHandler} is responsible for handling commands, which
  * are sent to one of the channels.
  *
- * @author Peter Kristensen
+ * @author Peter Kristensen - Initial contribution
  */
 public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOHandler {
 
@@ -202,6 +203,8 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
                 new DecimalType(counters.getMessageCounter()));
         updateState(new ChannelUID(getThing().getUID(), ModbusBindingConstants.CHANNEL_TIMEOUT_COUNT),
                 new DecimalType(counters.getTimeOutCounter()));
+        updateState(new ChannelUID(getThing().getUID(), ModbusBindingConstants.CHANNEL_FAILED_COUNT),
+                new DecimalType(counters.getFailedCounter()));
     }
 
     public boolean isConnected() {
@@ -255,12 +258,12 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
      */
     public ModbusFunction newModbusFunction(ModbusNodeClass nodeClass) {
         switch (nodeClass) {
-        case JablotronAC116:
-        case JablotronActuator:
-        case JablotronTP150:
-            return new ModbusFunctionJablotron((ModbusBridgeHandler) getBridgeHandler());
-        default:
-            return new ModbusFunction((ModbusBridgeHandler) getBridgeHandler());
+            case JablotronAC116:
+            case JablotronActuator:
+            case JablotronTP150:
+                return new ModbusFunctionJablotron((ModbusBridgeHandler) getBridgeHandler());
+            default:
+                return new ModbusFunction((ModbusBridgeHandler) getBridgeHandler());
         }
     }
 
@@ -321,7 +324,8 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
     }
 
     public ModbusThingHandler getThingHandlerByUID(ThingUID thingUID) {
-        return (ModbusThingHandler) getThing().getThing(thingUID).getHandler();
+        Thing thing = getThing().getThing(thingUID);
+        return (thing != null) ? (ModbusThingHandler) thing.getHandler() : null;
     }
 
     protected void onSuccessfulOperation() {

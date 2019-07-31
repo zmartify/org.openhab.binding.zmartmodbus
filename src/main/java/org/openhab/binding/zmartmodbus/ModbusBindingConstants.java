@@ -88,6 +88,7 @@ public class ModbusBindingConstants {
 
         public static final String CHANNEL_MESSAGE_COUNT = "message_count";
         public static final String CHANNEL_TIMEOUT_COUNT = "timeout_count";
+        public static final String CHANNEL_FAILED_COUNT = "failed_count";
 
         public static final String CHANNEL_LAST_READ_SUCCESS = "lastReadSuccess";
         public static final String CHANNEL_LAST_READ_ERROR = "lastReadError";

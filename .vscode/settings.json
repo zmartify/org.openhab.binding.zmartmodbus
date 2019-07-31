@@ -1,9 +1,13 @@
 {
     "java.configuration.updateBuildConfiguration": "automatic",
+    "java.format.comments.enabled": true,
+    "java.format.settings.url": "https://raw.githubusercontent.com/openhab/openhab-docs/master/developers/ESH.xml",
+    "java.format.settings.profile": "ESH",
     "cSpell.words": [
         "CHANNELCFG",
         "HEATUNITID",
         "THERMOSTATID",
+        "Wimberger",
         "zmartmodbus"
     ]
 }
