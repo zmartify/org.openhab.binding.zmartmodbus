@@ -188,8 +188,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
      *
      */
     private void initializeActionFeeds() {
-        logger.debug("Starting action feeds slow = {} - fast = {}", modbusBridgeConfig.getSlowPoll(), modbusBridgeConfig.getFastPoll());
-
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Starting action feeds");
 
         slowPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
@@ -207,14 +205,24 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
         }, 0, modbusBridgeConfig.getFastPoll(), TimeUnit.SECONDS);
 
         getController().startListening();
+
+        logger.debug("Initialized ActionFeeds slow = {} seconds - fast = {} seconds", modbusBridgeConfig.getSlowPoll(), modbusBridgeConfig.getFastPoll());   
     }
 
+    /**
+     * Initialize transmission counters
+     */
     private void initializeCounters() {
+
+        // Cleanup if already running, before initiating a new run
         if (updateCounterDisposable != null) {
             if (!updateCounterDisposable.isDisposed())
                 updateCounterDisposable.dispose();
         }
+
         counters.clearCounters();
+
+        // Initiate automatic update to OpenHAB of counter values every 'timeBetweenCounterUpdates' seconds
         updateCounterDisposable = Observable
                 .interval(modbusSerialConfig.getTimeBetweenCounterUpdates(), TimeUnit.SECONDS)
                 .doOnNext(n -> refreshCounters()).subscribe();
