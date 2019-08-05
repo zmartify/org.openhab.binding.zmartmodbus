@@ -142,7 +142,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
      * the CRC. It will return a byte array of the response to the message.
      * Validation will include checking the CRC and verifying the command matches.
      */
-    @SuppressWarnings("null")
+
     @Override
     public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
         byte[] cmd = null;

@@ -36,7 +36,6 @@ import java.util.TimeZone;
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
-import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.Channel;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -60,7 +59,6 @@ import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusDeviceInfo;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
@@ -134,7 +132,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     }
 
-    @SuppressWarnings("null")
     @Override
     public void bridgeStatusChanged(@Nullable ThingStatusInfo bridgeStatusInfo) {
         logger.debug("{} : Controller status changed to {}.", thing.getUID(), bridgeStatusInfo.getStatus());
@@ -142,7 +139,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         initializeBridge(bridgeStatusInfo.getStatus());
     }
 
-    @SuppressWarnings("null")
     private void initializeBridge(ThingStatus controllerStatus) {
         ThingHandler thingHandler = getBridgeHandler();
 

@@ -45,7 +45,6 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
     private static final int TIMEOUT = 5;
-    private static final long REFRESH = 600;
 
     private final Logger logger = LoggerFactory.getLogger(ModbusSlaveDiscoveryService.class);
 
@@ -184,11 +183,11 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
 
     private synchronized void discoverModbus() {
 
-        // Initiate discovery for any subdevices on the node
+        // Initiate discovery for any subdevice on the node
 
         bridgeHandler.getThing().getThings().forEach(thing -> {
             ModbusThingHandler thingHandler = (ModbusThingHandler) thing.getHandler();
-            logger.debug("Initiate discovery for any subdevices on the node {}", thing.getUID());
+            logger.debug("Initiate discovery for any subdevice on the node {}", thing.getUID());
             if (thingHandler.getNodeClass().supportDiscovery()) {
                 thingHandler.getModbusFunction().startSubDeviceDiscovery(thing.getUID());
             }

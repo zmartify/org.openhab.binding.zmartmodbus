@@ -5,15 +5,23 @@
     "java.format.settings.profile": "ESH",
     "cSpell.words": [
         "CHANNELCFG",
+        "CHANNELID",
+        "ELEMENTID",
         "HEATUNITID",
         "NILAN",
+        "NODECLASS",
+        "PARENTTHINGUID",
         "THERMOSTATID",
+        "UIDS",
         "Wimberger",
         "dataset",
         "datasets",
         "dd'T'HH",
         "reporton",
+        "smarthome",
         "ss'Z",
+        "subdevice",
+        "subslave",
         "zmartmodbus"
     ]
 }
