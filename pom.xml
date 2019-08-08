@@ -40,12 +40,12 @@
 
   <distributionManagement>
     <repository>
-      <id>bintray</id>
-      <url>https://api.bintray.com/maven/openhab/mvn/org.openhab.binding.zmartmodbus/;publish=1</url>
+      <id>myMavenRepo</id>
+      <url>${myMavenRepoWriteUrl}</url>
     </repository>
     <snapshotRepository>
-      <id>jfrog</id>
-      <url>https://openhab.jfrog.io/openhab/libs-snapshot-local</url>
+      <id>mySnapshotRepo</id>
+      <url>${mySnapshotRepoWriteUrl}</url>
     </snapshotRepository>
   </distributionManagement>
 
