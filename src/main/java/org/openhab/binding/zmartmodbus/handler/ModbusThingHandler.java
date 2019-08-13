@@ -126,10 +126,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         initializeBridge(getBridge().getStatus());
 
         logger.debug("Starting to register deviceDiscovery");
-        discoveryService = new ModbusSlaveDiscoveryService(getBridgeHandler());
-
-        getBridgeHandler().registerDeviceDiscoveryService(discoveryService, getThing().getUID());
-
     }
 
     @Override

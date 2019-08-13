@@ -100,9 +100,6 @@ public class ModbusThingChannel {
     }
 
     public boolean stateChanged() {
-        if ((state == null) || (oldState == null)) {
-            return false;
-        }
         if (oldState.equals(state)) {
             return false;
         } else {

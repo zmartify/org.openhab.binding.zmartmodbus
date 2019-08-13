@@ -14,17 +14,25 @@ package org.openhab.binding.zmartmodbus.internal;
 
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.*;
 
+import java.util.HashMap;
+import java.util.Hashtable;
+import java.util.Map;
+
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
+import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
+import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Component;
 import org.osgi.service.component.annotations.Reference;
 import org.slf4j.Logger;
@@ -36,6 +44,7 @@ import org.slf4j.LoggerFactory;
  * bridge when the bridge is created.
  *
  * @author Peter Kristensen - Initial contribution
+ * @param <ThingUID>
  *
  */
 
@@ -43,6 +52,8 @@ import org.slf4j.LoggerFactory;
 @Component(immediate = true, service = ThingHandlerFactory.class, configurationPid = CONFIGURATION_PID)
 public class ModbusHandlerFactory extends BaseThingHandlerFactory {
     private Logger logger = LoggerFactory.getLogger(BaseThingHandlerFactory.class);
+
+    private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
      private @NonNullByDefault({}) SerialPortManager serialPortManager;
 
@@ -73,14 +84,27 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
     @Nullable public ThingHandler createHandler(Thing thing) {
         logger.debug("CreateHandler for Thing {}", thing.getUID());
 
+        ModbusBridgeHandler controller = null;
+
         ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (SUPPORTED_BRIDGE_TYPES_UIDS.contains(thingTypeUID)) {
             // Handle Bridge controllers here
             if (thingTypeUID.equals(BRIDGE_TYPE_SERIAL)) {
-                return new ModbusBridgeHandler((Bridge) thing, serialPortManager);
+                controller = new ModbusBridgeHandler((Bridge) thing, serialPortManager);
+            }
+
+            if (controller != null) {
+                ModbusSlaveDiscoveryService discoveryService = new ModbusSlaveDiscoveryService(controller, 60);
+                discoveryService.activate();
+    
+                discoveryServiceRegs.put(controller.getThing().getUID(), bundleContext.registerService(
+                        DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
+    
+                return controller;
             }
         } else if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
+
             // Everything else gets handled in a single handler
             return new ModbusThingHandler(thing);
         }

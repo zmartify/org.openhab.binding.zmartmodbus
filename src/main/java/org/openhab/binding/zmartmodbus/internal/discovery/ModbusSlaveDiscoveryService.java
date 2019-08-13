@@ -27,10 +27,8 @@ import org.eclipse.smarthome.config.discovery.DiscoveryResult;
 import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
 import org.eclipse.smarthome.core.thing.ThingTypeUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
-import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
-import org.osgi.service.component.annotations.Component;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -41,17 +39,16 @@ import org.slf4j.LoggerFactory;
  *
  *
  */
-@Component(service = { ModbusSlaveDiscoveryService.class }, immediate = true, configurationPid = "discovery." + ModbusBindingConstants.BINDING_ID)
 @NonNullByDefault
 public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
-    private static final int TIMEOUT = 5;
 
     private final Logger logger = LoggerFactory.getLogger(ModbusSlaveDiscoveryService.class);
 
-    private ModbusBridgeHandler bridgeHandler;
+    private final ModbusBridgeHandler bridgeHandler;
 
-    public ModbusSlaveDiscoveryService(ModbusBridgeHandler bridgeHandler) {
-        super(ModbusBindingConstants.SUPPORTED_SLAVES_THING_TYPES_UIDS, TIMEOUT);
+    public ModbusSlaveDiscoveryService(ModbusBridgeHandler bridgeHandler, int searchTime) {
+        super(searchTime);
+        logger.debug("ModbusSlaveDiscovery started");
         this.bridgeHandler = bridgeHandler;
     }
 

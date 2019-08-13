@@ -13,15 +13,12 @@
 package org.openhab.binding.zmartmodbus.handler;
 
 import java.util.HashMap;
-import java.util.Hashtable;
 import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.discovery.DiscoveryService;
 import org.eclipse.smarthome.core.library.types.DecimalType;
-
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
@@ -33,12 +30,11 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
-import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
+import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusBridgeConfiguration;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
-import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.IModbusIOHandler;
@@ -316,14 +312,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
                 discoveryServiceRegs.remove(uid);
             }
         }
-    }
-
-    public void registerDeviceDiscoveryService(ModbusSlaveDiscoveryService discoveryService, ThingUID uid) {
-        logger.debug("Registering DiscoveryService for {}", uid);
-
-        discoveryService.activate();
-        this.discoveryServiceRegs.put(uid, bundleContext.registerService(DiscoveryService.class.getName(),
-                discoveryService, new Hashtable<String, Object>()));
     }
 
     public void stopDeviceDiscovery() {
