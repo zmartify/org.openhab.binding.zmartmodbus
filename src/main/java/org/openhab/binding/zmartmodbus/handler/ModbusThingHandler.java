@@ -33,7 +33,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TimeZone;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
 import org.eclipse.smarthome.core.thing.Channel;
@@ -73,19 +72,17 @@ import org.slf4j.LoggerFactory;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
+
 public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusThingHandler.class);
 
-    @Nullable
     private ModbusThingConfiguration modbusThingConfig;
 
-    @Nullable
     private ModbusSlaveDiscoveryService discoveryService;
 
     private ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
-    @Nullable
+
     private ModbusFunction modbusFunction = null;
 
     // Special configuration parameters needed for jablotron
