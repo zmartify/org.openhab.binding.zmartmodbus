@@ -210,8 +210,8 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                 if (elapsed > timeOut) {
                                     String failMsg = "Recv timeout";
 
-                                    logger.warn("{} : {} minimumLength={} respIndex={} {}", failMsg, elapsed,
-                                            minimumLength, respIndex);
+                                    logger.warn("{} : minLength={} respIndex={}({}) #{} cmd={}", failMsg, elapsed,
+                                             respIndex, minimumLength, counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
 
                                     // Increase Response Time Out counter
                                     counters.incrementTimeOutCounter();

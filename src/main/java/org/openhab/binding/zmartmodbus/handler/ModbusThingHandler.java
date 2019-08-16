@@ -79,8 +79,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private ModbusThingConfiguration modbusThingConfig;
 
-    private ModbusSlaveDiscoveryService discoveryService;
-
     private ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
 
     private ModbusFunction modbusFunction = null;
