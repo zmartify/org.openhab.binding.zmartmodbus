@@ -81,7 +81,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
 
-    private ModbusFunction modbusFunction = null;
+    protected ModbusFunction modbusFunction = null;
 
     // Special configuration parameters needed for jablotron
     private int channelId = ID_NOT_USED; // Used for Jablotron special addressing
@@ -91,7 +91,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
-        logger.debug("ModbusThingHandler getBride()==null {}", (getBridge() == null));
     }
 
     @Override
