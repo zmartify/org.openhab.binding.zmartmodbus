@@ -81,7 +81,10 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     protected ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
 
+<<<<<<< HEAD
     protected ModbusFunction modbusFunction = new ModbusFunction();
+=======
+>>>>>>> 9285026f58efc8c41d961888881d57e72019334a
 
     protected ModbusSlaveDiscoveryService discoveryService;
     
@@ -93,8 +96,11 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
+<<<<<<< HEAD
         this.nodeClass = ModbusNodeClass.fromString(modbusDevice.getThingTypeUID().getId());
         logger.debug("ModbusThingHandler...");
+=======
+>>>>>>> 9285026f58efc8c41d961888881d57e72019334a
     }
 
     @Override
