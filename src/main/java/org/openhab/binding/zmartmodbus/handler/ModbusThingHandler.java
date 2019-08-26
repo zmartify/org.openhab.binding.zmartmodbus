@@ -79,10 +79,12 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     private ModbusThingConfiguration modbusThingConfig;
 
-    private ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
+    protected ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
 
-    private ModbusFunction modbusFunction = null;
+    protected ModbusFunction modbusFunction = new ModbusFunction();
 
+    protected ModbusSlaveDiscoveryService discoveryService;
+    
     // Special configuration parameters needed for jablotron
     private int channelId = ID_NOT_USED; // Used for Jablotron special addressing
     private int elementId = ID_NOT_USED; // Used for Jablotron special addressing
@@ -91,7 +93,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
-        logger.debug("ModbusThingHandler getBride()==null {}", (getBridge() == null));
+        this.nodeClass = ModbusNodeClass.fromString(modbusDevice.getThingTypeUID().getId());
+        logger.debug("ModbusThingHandler...");
     }
 
     @Override
@@ -112,6 +115,9 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             logger.error("getBridge() returned 'null'");
             return;
         }
+
+        modbusFunction.setBridgeHandler((ModbusBridgeHandler) getBridge().getHandler());
+
         // Make sure the thingType is set correctly from the database
         // if (updateThingType() == true) {
         // The thing will have been disposed of so let's exit!

@@ -29,8 +29,10 @@ import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
 import org.eclipse.smarthome.core.thing.binding.ThingHandler;
 import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
+import org.openhab.binding.zmartmodbus.handler.ModbusThingHandlerJablotron;
 import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.osgi.framework.ServiceRegistration;
 import org.osgi.service.component.annotations.Component;
@@ -55,7 +57,7 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
 
     private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
-     private @NonNullByDefault({}) SerialPortManager serialPortManager;
+    private @NonNullByDefault({}) SerialPortManager serialPortManager;
 
     @Reference
     protected void setSerialPortManager(final SerialPortManager serialPortManager) {
@@ -65,7 +67,7 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
     protected void unsetSerialPortManager(final SerialPortManager serialPortManager) {
         this.serialPortManager = null;
     }
-    
+
     /**
      * The things this factory supports creating
      */
@@ -77,11 +79,12 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
     }
 
     /**
-     * Creates a handler for the specific thing. THis also creates the discovery service
-     * when the bridge is created.
+     * Creates a handler for the specific thing. THis also creates the discovery
+     * service when the bridge is created.
      */
     @Override
-    @Nullable public ThingHandler createHandler(Thing thing) {
+    @Nullable
+    public ThingHandler createHandler(Thing thing) {
         logger.debug("CreateHandler for Thing {}", thing.getUID());
 
         ModbusBridgeHandler controller = null;
@@ -97,16 +100,23 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
             if (controller != null) {
                 ModbusSlaveDiscoveryService discoveryService = new ModbusSlaveDiscoveryService(controller, 60);
                 discoveryService.activate();
-    
+
                 discoveryServiceRegs.put(controller.getThing().getUID(), bundleContext.registerService(
                         DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
-    
+
                 return controller;
             }
         } else if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
 
-            // Everything else gets handled in a single handler
-            return new ModbusThingHandler(thing);
+            switch (ModbusNodeClass.fromString(thingTypeUID.getId())) {
+            case JablotronAC116:
+            case JablotronActuator:
+            case JablotronTP150:
+                return new ModbusThingHandlerJablotron(thing);
+            default:
+                // Everything else gets handled in a single handler
+                return new ModbusThingHandler(thing);
+            }
         }
         return null;
     }

@@ -39,7 +39,10 @@ public class ModbusFunction {
 
     protected ModbusBridgeHandler bridgeHandler;
 
-    public ModbusFunction(ModbusBridgeHandler modbusBridgeHandler) {
+    public ModbusFunction() {
+    }
+
+    public void setBridgeHandler(ModbusBridgeHandler modbusBridgeHandler) {
         this.bridgeHandler = modbusBridgeHandler;
     }
 

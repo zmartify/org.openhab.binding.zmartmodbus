@@ -42,10 +42,6 @@ public class ModbusFunctionJablotron extends ModbusFunction {
 
     private Logger logger = LoggerFactory.getLogger(ModbusFunctionJablotron.class);
 
-    public ModbusFunctionJablotron(ModbusBridgeHandler modbusBridgeHandler) {
-        super(modbusBridgeHandler);
-    }
-
     @Override
     public BitVector readCoils(int unitAddr, int dataAddress, int offset, int count) throws ModbusProtocolException {
         BitVector ret = new BitVector(count + offset);
