@@ -90,21 +90,21 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            starting address
+     *                        starting address
      * @param offset
-     *            Offset to be added to address - used for customcode, just leave as 0 otherwise
+     *                        Offset to be added to address - used for custom code, just leave as 0 otherwise
      * @param count
-     *            quantity of coils
+     *                        quantity of coils
      * @return an array of booleans representing the requested data points.
      *         <b>true</b> for a given point if the point is set, <b>false</b>
      *         otherwise.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public BitVector readCoils(int unitAddr, int dataAddress, int offset, int count) throws ModbusProtocolException {
         return readBitVector((byte) ModbusBindingClass.READ_COIL_STATUS, unitAddr, dataAddress, offset, count);
@@ -116,21 +116,21 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            starting address
+     *                        starting address
      * @param offset
-     *            Offset to be added to address - used for customcode, just leave as 0 otherwise
+     *                        Offset to be added to address - used for customcode, just leave as 0 otherwise
      * @param count
-     *            quantity of inputs
+     *                        quantity of inputs
      * @return an array of booleans representing the requested data points.
      *         <b>true</b> for a given point if the point is set, <b>false</b>
      *         otherwise.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public BitVector readDiscreteInputs(int unitAddr, int dataAddress, int offset, int count)
             throws ModbusProtocolException {
@@ -143,12 +143,12 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                     modbus slave address (must be unique in the range 1 - 247)
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public BitVector readExceptionStatus(int unitAddr) throws ModbusProtocolException {
         if (!isConnected()) {
@@ -221,17 +221,17 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            starting address
+     *                        starting address
      * @param count
-     *            quantity of registers (maximum 0x7D)
+     *                        quantity of registers (maximum 0x7D)
      * @return an array of int representing the requested data points (data registers on 2 bytes).
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public byte[] readHoldingRegisters(int unitAddr, int dataAddress, int count) throws ModbusProtocolException {
         return readRegisters((byte) ModbusBindingClass.READ_HOLDING_REGS, unitAddr, dataAddress, count);
@@ -243,17 +243,17 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            starting address
+     *                        starting address
      * @param count
-     *            quantity of registers (maximum 0x7D)
+     *                        quantity of registers (maximum 0x7D)
      * @return an array of int representing the requested data points (data registers on 2 bytes).
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public byte[] readInputRegisters(int unitAddr, int dataAddress, int count) throws ModbusProtocolException {
         return readRegisters((byte) ModbusBindingClass.READ_INPUT_REGS, unitAddr, dataAddress, count);
@@ -265,18 +265,18 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            Starting Output address.
+     *                        Starting Output address.
      * @param offset
-     *            Offset to be added to address - used for customcode, just leave as 0 otherwise
+     *                        Offset to be added to address - used for customcode, just leave as 0 otherwise
      * @param data
-     *            Outputs value (array of boolean) to write.
+     *                        Outputs value (array of boolean) to write.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public void writeMultipleCoils(int unitAddr, int dataAddress, int offset, BitVector data)
             throws ModbusProtocolException {
@@ -331,16 +331,16 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            Output address.
+     *                        Output address.
      * @param data
-     *            Registers value (array of int converted in 2 bytes values) to write.
+     *                        Registers value (array of int converted in 2 bytes values) to write.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public void writeMultipleRegisters(int unitAddr, int dataAddress, byte[] data) throws ModbusProtocolException {
         if (!isConnected()) {
@@ -392,18 +392,18 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            Output address.
+     *                        Output address.
      * @param offset
-     *            Offset to be added to address - used for customcode, just leave as 0 otherwise
+     *                        Offset to be added to address - used for customcode, just leave as 0 otherwise
      * @param data
-     *            Output value (boolean) to write.
+     *                        Output value (boolean) to write.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public void writeSingleCoil(int unitAddr, int dataAddress, int offset, boolean state)
             throws ModbusProtocolException {
@@ -449,12 +449,12 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                     modbus slave address (must be unique in the range 1 - 247)
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      * @see ModbusCommEvent
      */
     public ModbusCommEvent getCommEventCounter(int unitAddr) throws ModbusProtocolException {
@@ -502,12 +502,12 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                     modbus slave address (must be unique in the range 1 - 247)
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      * @see ModbusCommEvent
      */
     public ModbusCommEvent getCommEventLog(int unitAddr) throws ModbusProtocolException {
@@ -567,16 +567,16 @@ public class ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            Output address.
+     *                        Output address.
      * @param data
-     *            Output value (2 bytes) to write.
+     *                        Output value (2 bytes) to write.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTION_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     public void writeSingleRegister(int unitAddr, int dataAddress, byte[] data) throws ModbusProtocolException {
         if (!isConnected()) {
@@ -635,11 +635,11 @@ public class ModbusFunction {
         // Currently only implemented for Jablotron AC-116
     }
 
-    public ModbusDeviceInfo getDeviceInfo(int unitAddr) {
-        return new ModbusDeviceInfo("serialno", "hwVersion", "swVersion", "deviceName");
+    public void getDeviceInfo(ThingUID thingUID) {
+        // TODO: currently do nothing
     }
 
-        /**
+    /**
     *
     */
     public byte[] msgTransaction(byte[] msg) throws ModbusProtocolException {

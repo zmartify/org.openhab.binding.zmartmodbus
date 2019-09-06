@@ -30,7 +30,6 @@ import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.RefreshType;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
-import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusBridgeConfiguration;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
@@ -39,8 +38,6 @@ import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolExcepti
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.IModbusIOHandler;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
 import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusSerialTransceiver;
 import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
@@ -268,23 +265,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
     protected void incomingMessage() {
         if (getController() == null) {
             return;
-        }
-    }
-
-    /**
-     * Based on nodeClass the corresponding set of ModbusFunction calls are selected
-     * 
-     * @param nodeClass
-     * @return
-     */
-    public ModbusFunction newModbusFunction(ModbusNodeClass nodeClass) {
-        switch (nodeClass) {
-            case JablotronAC116:
-            case JablotronActuator:
-            case JablotronTP150:
-                return new ModbusFunctionJablotron((ModbusBridgeHandler) getBridgeHandler());
-            default:
-                return new ModbusFunction((ModbusBridgeHandler) getBridgeHandler());
         }
     }
 

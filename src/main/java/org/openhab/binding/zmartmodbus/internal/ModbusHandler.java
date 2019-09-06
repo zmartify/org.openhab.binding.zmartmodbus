@@ -18,9 +18,6 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionCla
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat.Once;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
@@ -93,11 +90,6 @@ public class ModbusHandler<T> {
                                 case Input:
                                     payload = modbusFunction.readHoldingRegisters(unitAddress, modbusAction.getStart(),
                                             modbusAction.getLength());
-                                    break;
-                                case GetDeviceInfo:
-                                    getBridgeHandler().handleUpdate(new ChannelUID( modbusAction.getThingUID(), ModbusBindingConstants.CHANNEL_DEVICE_INFO),
-                                    new StringType(modbusFunction.getDeviceInfo(unitAddress).toString()));
-                                    payload = null;
                                     break;
                                 default:
                                     break;

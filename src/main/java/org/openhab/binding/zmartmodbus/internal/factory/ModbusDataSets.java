@@ -153,8 +153,17 @@ public class ModbusDataSets {
         return dataSets.get(dataSetId);
     }
 
+    public String getDataSetKey(int dataSetId) {
+        for (Entry<String, Integer> keySet : dataSetList.entrySet() ) {
+            if (keySet.getValue().equals(dataSetId)) {
+                return keySet.getKey();
+            }
+        }
+        return "UNKNOWN";
+    }
+
     /**
-     * Return daaSet based on dataSetKey
+     * Return dataSet based on dataSetKey
      *
      * @param dataSetKey
      * @return

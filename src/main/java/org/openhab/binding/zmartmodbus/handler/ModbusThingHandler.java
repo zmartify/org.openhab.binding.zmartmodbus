@@ -81,10 +81,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     protected ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
 
-<<<<<<< HEAD
     protected ModbusFunction modbusFunction = new ModbusFunction();
-=======
->>>>>>> 9285026f58efc8c41d961888881d57e72019334a
 
     protected ModbusSlaveDiscoveryService discoveryService;
     
@@ -96,11 +93,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
-<<<<<<< HEAD
         this.nodeClass = ModbusNodeClass.fromString(modbusDevice.getThingTypeUID().getId());
         logger.debug("ModbusThingHandler...");
-=======
->>>>>>> 9285026f58efc8c41d961888881d57e72019334a
     }
 
     @Override
@@ -183,7 +177,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         logger.debug("initializeThing {}", getThing().getUID());
 
         nodeClass = ModbusNodeClass.fromString(getThing().getThingTypeUID().getId());
-        modbusFunction = getBridgeHandler().newModbusFunction(nodeClass);
 
         channelId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_CHANNELID);
         elementId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_ELEMENTID);
@@ -194,7 +187,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         if (nodeClass.equals(ModbusNodeClass.JablotronAC116)) {
             logger.debug("Registering JablotronAC116 to receive internal messages i.e. discovery information");
             getBridgeHandler().getController().getHotMessage().filter(modbusMessage -> modbusMessage.isInternal())
-                    .subscribe(modbusMessage -> receivedDiscovery(modbusMessage));
+                    .subscribe(modbusMessage -> handleInternalMsg(modbusMessage));
 
           }
 
@@ -367,7 +360,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
      * 
      * @param modbusMessage
      */
-    public void receivedDiscovery(ModbusMessage modbusMessage) {
+    public void handleInternalMsg(ModbusMessage modbusMessage) {
         logger.debug("Received discovery message");
         int dataSetId = modbusMessage.getDataSetId();
         int elementAddress = Register.registersToIntSwap((byte[]) modbusMessage.getPayload(), 0);
@@ -394,7 +387,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                                 ID_NOT_USED);
                     }
                 }
-                // We have discover a thermostat
+                // We have discovered a thermostat
                 discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel, Jablotron
                         .getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId).getStart()));
             }

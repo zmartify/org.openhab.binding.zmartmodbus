@@ -13,7 +13,8 @@
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.CUSTOMCODE_JABLOTRON;
-import static org.openhab.binding.zmartmodbus.internal.util.Register.*;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.intToRegisters;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.toHex;
 
 import java.util.Arrays;
 
@@ -23,7 +24,6 @@ import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
-import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusDataSet;
@@ -252,16 +252,16 @@ public class ModbusFunctionJablotron extends ModbusFunction {
      * <p>
      *
      * @param unitAddr
-     *            modbus slave address (must be unique in the range 1 - 247)
+     *                        modbus slave address (must be unique in the range 1 - 247)
      * @param dataAddress
-     *            Output address.
+     *                        Output address.
      * @param data
-     *            Output value (2 bytes) to write.
+     *                        Output value (2 bytes) to write.
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#NOT_CONNECTED}
-     *             current connection is in a status other than <b>CONNECTED</b>
+     *                                     current connection is in a status other than <b>CONNECTED</b>
      * @throws ModbusProtocolException with a {@link ModbusProtocolErrorCode#TRANSACTion_FAILURE}
-     *             should include a protocol specific message to help clarify
-     *             the cause of the exception
+     *                                     should include a protocol specific message to help clarify
+     *                                     the cause of the exception
      */
     @Override
     public void writeSingleRegister(int unitAddr, int dataAddress, byte[] data) throws ModbusProtocolException {
@@ -273,6 +273,9 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         jablotronWriteRegisterToIndex(unitAddr, dataAddress, data);
     }
 
+    /**
+     * Initiates modbus internal action to get sub device discovery information
+     */
     @Override
     public void startSubDeviceDiscovery(ThingUID thingUID) {
         logger.debug("Jablotron: startSubDeviceDiscovery {}", thingUID);
@@ -286,6 +289,21 @@ public class ModbusFunctionJablotron extends ModbusFunction {
             bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
             bridgeHandler.getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
         }
+    }
+
+    /**
+     * Initiates modbus internal action to get device information
+     * 
+     */
+    @Override
+    public void getDeviceInfo(ThingUID thingUID) {
+        logger.debug("Jablotron: getDeviceInfo {}", thingUID);
+        ModbusDataSet dataSet = new ModbusDataSet(thingUID, ModbusMessageClass.Input, Jablotron.getAddress(0x07, 0, 0),
+                0x05, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
+        dataSet.setInternal(true);
+        String dataSetKey = "get-device-info";
+        bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
+        bridgeHandler.getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
     }
 
     public byte[] enumeration(int unitAddr, byte[] physicalAddress) throws ModbusProtocolException {
@@ -404,25 +422,4 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         // If we reach here we got a successful read
         return true;
     }
-
-    @Override
-    public ModbusDeviceInfo getDeviceInfo(int unitAddr) {
-        byte[] response;
-        try {
-            response = readInputRegisters(unitAddr, Jablotron.getAddress(0x07, 0, 0), 5);
-        } catch (ModbusProtocolException e) {
-            return new ModbusDeviceInfo("serialno", "hwVersion", "swVersion", "deviceName");
-        }
-        // We got a response, no build the deviceInfo
-        String serialNo = String.format("%2$08d-%1$08d", registerToUnsignedShort(Arrays.copyOfRange(response, 0, 2)),
-                registerToUnsignedShort(Arrays.copyOfRange(response, 2, 4)));
-        String hwVersion = "MC110" + String.format("%1$02d", response[4] & 0xEF);
-        String swVersion = "MC610" + String.format("%1$02d.%2$02d",
-                registerToUnsignedShort(Arrays.copyOfRange(response, 6, 8)) & 0x0FF0 >> 4,
-                registerToUnsignedShort(Arrays.copyOfRange(response, 6, 8)) & 0x000F);
-        String deviceName = "AC-"
-                + String.format("%1$03d", registerToUnsignedShort(Arrays.copyOfRange(response, 8, 10)));
-                return new ModbusDeviceInfo(serialNo, hwVersion, swVersion, deviceName);
-    }
-
 }
