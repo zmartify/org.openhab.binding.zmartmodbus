@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.types.State;
@@ -20,14 +19,17 @@ import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
 public class ModbusThingChannel {
+
+    private Logger logger = LoggerFactory.getLogger(ModbusThingChannel.class);
 
     private ThingUID thingUID;
     private ChannelUID uid;
@@ -35,8 +37,8 @@ public class ModbusThingChannel {
     private int index;
     private ModbusValueClass valueClass;
     private ModbusDataType dataType;
-    private State state;
-    private State oldState;
+    private State state = null;
+    private State oldState = null;
     private ModbusReportOn reportOn;
     private boolean internal = false; // True if channel is only used internally by controller
 

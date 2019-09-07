@@ -55,10 +55,12 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
      */
     @Override
     public void handleInternalMsg(ModbusMessage modbusMessage) {
-        logger.debug("Received discovery message");
         int dataSetId = modbusMessage.getDataSetId();
+        String dataSetKey = getController().getModbusFactory().getDataSets().getDataSetKey(dataSetId);
 
-        switch (getController().getModbusFactory().getDataSets().getDataSetKey(dataSetId)) {
+        logger.debug("Received internal message - dataSet: {}", dataSetKey);
+
+        switch (dataSetKey) {
             case "get-device-info": {
                 byte[] response = (byte[]) modbusMessage.getPayload();
 
@@ -80,8 +82,10 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
                         new StringType(modbusDeviceInfo.toString()));
 
                 logger.debug("New DeviceInfo set: {}", modbusDeviceInfo);
+                break;
             }
-            default: {
+            default: 
+                if (dataSetKey.contains("discovery")) {
 
                 int elementAddress = Register.registersToIntSwap((byte[]) modbusMessage.getPayload(), 0);
 
@@ -113,6 +117,7 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
                                         .getStart()));
                     }
                 }
+                break;
             }
         }
     }

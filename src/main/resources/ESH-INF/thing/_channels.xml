@@ -399,7 +399,7 @@
 
 
     <!-- Switch Channel -->
-    <channel-type id="jablotron_syncgroup">
+    <channel-type id="jablotron_syncgroup" advanced="true">
         <item-type>Number</item-type>
         <label>SyncGroup</label>
         <description>Synchronization Group</description>
@@ -408,7 +408,7 @@
     </channel-type>
 
     <!-- Switch Channel -->
-    <channel-type id="jablotron_timerevent">
+    <channel-type id="jablotron_timerevent" advanced="true">
         <item-type>Number</item-type>
         <label>Timer Event</label>
         <description>Channels current timer event</description>
@@ -430,7 +430,7 @@
     </channel-type>
 
     <!-- Switch Channel -->
-    <channel-type id="jablotron_element">
+    <channel-type id="jablotron_element" advanced="true">
         <item-type>Number</item-type>
         <label>Element (0-47)</label>
         <description>Element</description>
@@ -595,7 +595,7 @@
     </channel-type>
 
     <!-- Weekly schedules -->
-    <channel-type id="schedule">
+    <channel-type id="schedule" advanced="true">
         <item-type>String</item-type>
         <label>Schedule</label>
         <description>Weekly schedule as a json string</description>

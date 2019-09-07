@@ -252,15 +252,6 @@
                     <property name="valuetype">jablotron_packetdataChangeFlags</property>
                 </properties>
             </channel>
-            <channel id="Schedule" typeId="schedule">
-                <label>Schedule</label>
-                <description>Controller week schedule</description>
-                <properties>
-                    <property name="dataset">schedules</property>
-                    <property name="index">0x00</property>
-                    <property name="valuetype">jablotron_schedules</property>
-                </properties>
-            </channel>
             <channel id="deviceInfo" typeId="deviceInfo">
                 <label>Modbus device information</label>
                 <description>Modbus device information hw, sw versions and serial no.</description>
@@ -279,9 +270,8 @@
             <property name="dataset_actuatorpolarity">coil:slow:change:0x10:0x00:0x1E:0x00</property>
             <property name="dataset_mainsensors">input:slow:change:0x04:0x00:0x0E:0x00</property>
             <property name="dataset_mainsetpoints">holding:slow:change:0x0A:0x00:0x14:0x00</property>
-            <property name="dataset_circulationpump">holding:fast:change:0x06:0x04:0x00:0x00</property>
+            <property name="dataset_circulationpump">holding:fast:change:0x07:0x04:0x00:0x00</property>
             <property name="dataset_boilerrelay">holding:slow:change:0x06:0x04:0x01:0x00</property>
-            <property name="dataset_schedules">input:slow:change:0x16:0x06:0x00:0x10</property>
         </properties>
 
         <config-description>

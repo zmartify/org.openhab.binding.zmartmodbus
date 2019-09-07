@@ -22,7 +22,6 @@ import org.eclipse.jdt.annotation.NonNullByDefault;
  * @author Peter Kristensen - Modified for ZmartModbus
  *
  */
-@NonNullByDefault
 public class ModbusBridgeConfiguration extends ModbusBaseConfiguration {
     private int slowPoll = 40000;
     private int fastPoll = 4000;

@@ -351,8 +351,7 @@ public class ModbusBindingClass {
         THURSDAY("thursday"),
         FRIDAY("friday"),
         SATURDAY("saturday"),
-        SUNDAY("sunday"),
-        UNKNOWN("unknown");
+        SUNDAY("sunday");
 
         private WeekDayClass(final String day) {
             this.day = day;
@@ -372,7 +371,7 @@ public class ModbusBindingClass {
                     }
                 }
             }
-            return UNKNOWN;
+            return MONDAY;
         }
     }
 

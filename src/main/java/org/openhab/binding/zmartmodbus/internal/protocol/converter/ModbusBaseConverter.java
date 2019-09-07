@@ -24,6 +24,7 @@ import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.State;
+import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.WeekDayClass;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
@@ -45,7 +46,7 @@ public class ModbusBaseConverter {
 
     public static State fromModbusToState(ModbusValueClass valueClass, Object payload, int channelIndex) {
         int index = channelIndex * valueClass.size();
-        State state = null;
+        State state = UnDefType.UNDEF;
 
         switch (valueClass) {
             case Bit:
@@ -118,7 +119,7 @@ public class ModbusBaseConverter {
                             ArrayUtils.subarray(((byte[]) payload), startIndexInclusive, endIndexExclusive));
                     schedule.addProperty(day.getDay(), bv.toString());
                 }
-                state = new StringType(schedule.getAsString());
+                state = new StringType(schedule.toString());
                 break;
             case Jablotron_elementChangeFlags:
             case Jablotron_channelChangeFlags:

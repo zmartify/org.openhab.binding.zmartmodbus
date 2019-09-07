@@ -37,7 +37,6 @@ import io.reactivex.flowables.ConnectableFlowable;
  * @author Peter Kristensen - Initial contribution
  *
  */
-@NonNullByDefault
 public class ModbusController {
 
     private Logger logger = LoggerFactory.getLogger(ModbusController.class);
@@ -56,10 +55,10 @@ public class ModbusController {
     private ModbusHandler<ModbusMessage> modbusHandler = new ModbusHandler<ModbusMessage>();
     private ModbusFactory<ModbusState> modbusFactory = new ModbusFactory<ModbusState>();
 
-    @Nullable private ConnectableFlowable<ModbusAction> hotAction;
-    @Nullable private ConnectableFlowable<ModbusMessage> hotMessage;
-    @Nullable private ConnectableFlowable<ModbusState> hotStateFromModbus;
-    @Nullable private ConnectableFlowable<ModbusState> hotStateToModbus;
+    private ConnectableFlowable<ModbusAction> hotAction;
+    private ConnectableFlowable<ModbusMessage> hotMessage;
+    private ConnectableFlowable<ModbusState> hotStateFromModbus;
+    private ConnectableFlowable<ModbusState> hotStateToModbus;
 
     public Flowable<ModbusAction> modbusActionQueue = Flowable.create(emitter -> {
         ActionListener listener = new ActionListener() {

@@ -349,7 +349,7 @@
                 <properties>
                     <property name="dataset">schedules</property>
                     <property name="index">0x00</property>
-                    <property name="valuetype">jablotron_schedules</property>
+                    <property name="valuetype">jablotron_schedule</property>
                 </properties>
             </channel>
             

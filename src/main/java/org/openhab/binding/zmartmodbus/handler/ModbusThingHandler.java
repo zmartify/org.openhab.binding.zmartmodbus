@@ -188,11 +188,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             getBridgeHandler().getController().getHotMessage().filter(modbusMessage -> modbusMessage.isInternal())
                     .subscribe(modbusMessage -> handleInternalMsg(modbusMessage));
 
-          }
-
-          if (getParentThingUID() == null) {
-              // It's a real modbus device - not a subslave, try get device info
-              getModbusFunction().getDeviceInfo(getThing().getUID());
+                    getModbusFunction().getDeviceInfo(getThing().getUID());
           }
 
         logger.debug("Initialized the modbusId {} {}", modbusThingConfig.getId(), this.getThing().getUID());

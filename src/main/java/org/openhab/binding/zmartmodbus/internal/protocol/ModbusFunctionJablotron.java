@@ -285,7 +285,6 @@ public class ModbusFunctionJablotron extends ModbusFunction {
                     Jablotron.getAddress(0x01, 0, elementId), 0x0C, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
             dataSet.setInternal(true);
             String dataSetKey = String.format("%s-%d-discovery1", thingUID.getAsString(), elementId);
-            logger.debug("dataSetKey: {}", dataSetKey);
             bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
             bridgeHandler.getController().getActionFeed().addAction(new ModbusAction(dataSet, ModbusActionClass.Read));
         }
