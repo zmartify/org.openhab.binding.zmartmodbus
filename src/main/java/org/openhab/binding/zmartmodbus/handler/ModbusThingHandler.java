@@ -81,10 +81,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     protected ModbusNodeClass nodeClass = ModbusNodeClass.Unknown;
 
-    protected ModbusFunction modbusFunction = new ModbusFunction();
+    protected ModbusFunction modbusFunction;
 
-    protected ModbusSlaveDiscoveryService discoveryService;
-    
     // Special configuration parameters needed for jablotron
     private int channelId = ID_NOT_USED; // Used for Jablotron special addressing
     private int elementId = ID_NOT_USED; // Used for Jablotron special addressing
@@ -94,7 +92,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
         this.nodeClass = ModbusNodeClass.fromString(modbusDevice.getThingTypeUID().getId());
-        logger.debug("ModbusThingHandler...");
+        this.modbusFunction = new ModbusFunction();
+        logger.debug("ModbusThingHandler loaded...");
     }
 
     @Override
@@ -193,7 +192,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
           if (getParentThingUID() == null) {
               // It's a real modbus device - not a subslave, try get device info
-            getController().getActionFeed().addAction(new ModbusAction(getThing().getUID(),ModbusMessageClass.GetDeviceInfo));
+              getModbusFunction().getDeviceInfo(getThing().getUID());
           }
 
         logger.debug("Initialized the modbusId {} {}", modbusThingConfig.getId(), this.getThing().getUID());
@@ -311,8 +310,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             getBridgeHandler().getController().getActionFeed().removeActions(thing.getUID());
             getBridgeHandler().getController().getModbusFactory().getDataSets().removeChannels(thing.getUID());
             getBridgeHandler().getController().getModbusFactory().getDataSets().removeDataSets(thing.getUID());
-
-            getBridgeHandler().removeDeviceDiscoveryService(thing.getUID());
         }
         logger.debug("Handler disposed. Listeners unregistered.");
     }
@@ -383,15 +380,19 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                             lowestChannel = i;
                         }
                         // We have discovered an actuator
-                        discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
+                        getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
                                 ID_NOT_USED);
                     }
                 }
                 // We have discovered a thermostat
-                discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel, Jablotron
+                getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel, Jablotron
                         .getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId).getStart()));
             }
         }
+    }
+
+    protected ModbusSlaveDiscoveryService getDiscoveryService() {
+        return getBridgeHandler().getDiscoveryService();
     }
 
     public ModbusController getController() {

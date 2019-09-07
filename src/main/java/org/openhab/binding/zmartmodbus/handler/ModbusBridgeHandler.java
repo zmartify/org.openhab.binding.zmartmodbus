@@ -34,6 +34,7 @@ import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusBridgeConfiguration;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusController;
+import org.openhab.binding.zmartmodbus.internal.discovery.ModbusSlaveDiscoveryService;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
 import org.openhab.binding.zmartmodbus.internal.protocol.IModbusIOHandler;
@@ -79,9 +80,19 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     private SerialPortManager serialPortManager;
 
+    private ModbusSlaveDiscoveryService discoveryService;
+
     public ModbusBridgeHandler(Bridge thing, SerialPortManager serialPortManager) {
         super(thing);
         this.serialPortManager = serialPortManager;
+    }
+
+    public ModbusSlaveDiscoveryService getDiscoveryService() {
+        return discoveryService;
+    }
+
+    public void setDiscoveryService(ModbusSlaveDiscoveryService discoveryService) {
+        this.discoveryService = discoveryService;
     }
 
     @Override
@@ -156,13 +167,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
         if (connectorTask != null && !connectorTask.isDone()) {
             connectorTask.cancel(true);
             connectorTask = null;
-        }
-
-        // Remove the discovery service
-        if (discoveryServiceRegs.size() > 0) {
-            discoveryServiceRegs.entrySet().forEach(discoveryService -> {
-                removeDeviceDiscoveryService(discoveryService.getKey());
-            });
         }
 
         if (getController() != null) {
@@ -282,16 +286,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     public void setListening(boolean listening) {
         getController().setListening(listening);
-    }
-
-    protected void removeDeviceDiscoveryService(ThingUID uid) {
-        if (this.discoveryServiceRegs != null) {
-            ServiceRegistration<?> serviceReg = this.discoveryServiceRegs.get(uid);
-            if (serviceReg != null) {
-                serviceReg.unregister();
-                discoveryServiceRegs.remove(uid);
-            }
-        }
     }
 
     public void stopDeviceDiscovery() {

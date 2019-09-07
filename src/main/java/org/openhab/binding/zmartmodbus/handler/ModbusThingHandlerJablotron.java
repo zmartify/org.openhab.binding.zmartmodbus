@@ -24,7 +24,6 @@ import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.Thing;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusDeviceInfo;
-import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
@@ -43,11 +42,10 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusThingHandler.class);
 
-    protected ModbusFunction modbusFunction = new ModbusFunctionJablotron();
-
     public ModbusThingHandlerJablotron(Thing modbusDevice) {
         super(modbusDevice);
-        logger.debug("ModbusThingHandler Jablotron");
+        this.modbusFunction = new ModbusFunctionJablotron();
+        logger.debug("ModbusThingHandler Jablotron loaded...");
     }
 
     /**
@@ -105,12 +103,12 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
                                     lowestChannel = i;
                                 }
                                 // We have discovered an actuator
-                                discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
+                                getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
                                         ID_NOT_USED);
                             }
                         }
                         // We have discover a thermostat
-                        discoveryService.deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel,
+                        getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel,
                                 Jablotron.getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId)
                                         .getStart()));
                     }

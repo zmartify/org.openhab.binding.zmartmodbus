@@ -104,6 +104,8 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
                 discoveryServiceRegs.put(controller.getThing().getUID(), bundleContext.registerService(
                         DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
 
+                controller.setDiscoveryService(discoveryService);
+                
                 return controller;
             }
         } else if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {
@@ -112,8 +114,10 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
             case JablotronAC116:
             case JablotronActuator:
             case JablotronTP150:
+            logger.info("NEW JABLOTRON");
                 return new ModbusThingHandlerJablotron(thing);
             default:
+            logger.info("NEW STANDARD MODBUS");
                 // Everything else gets handled in a single handler
                 return new ModbusThingHandler(thing);
             }

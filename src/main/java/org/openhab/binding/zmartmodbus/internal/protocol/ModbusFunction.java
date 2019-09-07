@@ -23,6 +23,8 @@ import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -36,6 +38,8 @@ import org.openhab.binding.zmartmodbus.internal.util.BitVector;
  */
 
 public class ModbusFunction {
+
+    private Logger logger = LoggerFactory.getLogger(ModbusFunctionJablotron.class);
 
     protected ModbusBridgeHandler bridgeHandler;
 
@@ -234,7 +238,7 @@ public class ModbusFunction {
      *                                     the cause of the exception
      */
     public byte[] readHoldingRegisters(int unitAddr, int dataAddress, int count) throws ModbusProtocolException {
-        return readRegisters((byte) ModbusBindingClass.READ_HOLDING_REGS, unitAddr, dataAddress, count);
+         return readRegisters((byte) ModbusBindingClass.READ_HOLDING_REGS, unitAddr, dataAddress, count);
     }
 
     /**
