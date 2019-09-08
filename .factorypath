@@ -19,6 +19,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/eclipsesource/jaxrs/publisher/5.3.1/publisher-5.3.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/eclipsesource/jaxrs/jersey-all/2.22.2/jersey-all-2.22.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/orbit/bundles/com.google.gson/2.8.2.v20180104-1110/com.google.gson-2.8.2.v20180104-1110.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/igormaznitsa/jbbp/1.4.1/jbbp-1.4.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/jackson/jackson-core-asl/1.9.2/jackson-core-asl-1.9.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/jackson/jackson-mapper-asl/1.9.2/jackson-mapper-asl-1.9.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-client/9.3.25.v20180904/jetty-client-9.3.25.v20180904.jar" enabled="true" runInBatchMode="false"/>
@@ -94,6 +95,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.auth.jaas/2.5.0-SNAPSHOT/org.openhab.core.auth.jaas-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.auth.oauth2client/2.5.0-SNAPSHOT/org.openhab.core.auth.oauth2client-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.net/2.5.0-SNAPSHOT/org.openhab.core.io.net-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.bin2json/2.5.0-SNAPSHOT/org.openhab.core.io.bin2json-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console/2.5.0-SNAPSHOT/org.openhab.core.io.console-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.http/2.5.0-SNAPSHOT/org.openhab.core.io.http-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest/2.5.0-SNAPSHOT/org.openhab.core.io.rest-2.5.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>

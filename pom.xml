@@ -45,7 +45,7 @@
     </repository>
     <snapshotRepository>
       <id>mySnapshotRepo</id>
-      <url>${mySnapshotRepoWriteUrl}</url>
+      <url>${myMavenRepoWriteUrl}</url>
     </snapshotRepository>
   </distributionManagement>
 
