@@ -12,12 +12,9 @@
  */
 package org.openhab.binding.zmartmodbus.handler;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.thing.Bridge;
 import org.eclipse.smarthome.core.thing.ChannelUID;
@@ -42,7 +39,6 @@ import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCounters;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusState;
 import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusSerialTransceiver;
 import org.openhab.binding.zmartmodbus.internal.transceiver.ModbusTransceiver;
-import org.osgi.framework.ServiceRegistration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -63,8 +59,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
     protected ModbusTransceiver transceiver = null;
     protected ModbusController controller;
     protected ModbusCounters counters = new ModbusCounters();
-
-    private final Map<ThingUID, @Nullable ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
     // Checks if msgCounter should update to SmartHome - can be set from UI
     private Disposable updateCounterDisposable = null;

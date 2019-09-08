@@ -12,7 +12,6 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.ModbusHandler;

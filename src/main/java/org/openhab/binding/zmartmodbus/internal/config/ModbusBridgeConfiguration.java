@@ -12,8 +12,6 @@
  */
 package org.openhab.binding.zmartmodbus.internal.config;
 
-import org.eclipse.jdt.annotation.NonNullByDefault;
-
 /**
  * The {@link ModbusBaseConfiguration} is the base class for configuration
  * information held by the device

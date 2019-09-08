@@ -23,8 +23,6 @@ import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolErrorCode;
 import org.openhab.binding.zmartmodbus.internal.exceptions.ModbusProtocolException;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -39,7 +37,6 @@ import org.slf4j.LoggerFactory;
 
 public class ModbusFunction {
 
-    private Logger logger = LoggerFactory.getLogger(ModbusFunctionJablotron.class);
 
     protected ModbusBridgeHandler bridgeHandler;
 

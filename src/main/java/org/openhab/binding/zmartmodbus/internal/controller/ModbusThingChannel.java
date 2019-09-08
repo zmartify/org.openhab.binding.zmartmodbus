@@ -19,8 +19,6 @@ import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  *
@@ -28,8 +26,6 @@ import org.slf4j.LoggerFactory;
  *
  */
 public class ModbusThingChannel {
-
-    private Logger logger = LoggerFactory.getLogger(ModbusThingChannel.class);
 
     private ThingUID thingUID;
     private ChannelUID uid;
