@@ -27,11 +27,11 @@ public class Jablotron {
      * Special address conversion for Jablotron
      *
      */
-    public static byte getPage(int address) {
+    public static byte getCategory(int address) {
         return (byte) ((address & 0xE000) >>> 13);
     }
 
-    public static byte getCategory(int address) {
+    public static byte getPage(int address) {
         return (byte) ((address & 0x1F80) >>> 7);
     }
 
@@ -40,7 +40,7 @@ public class Jablotron {
     }
 
     public static int getAddress(int category, int index, int page) {
-        return ((page << 13) | (category << 7) | index);
+        return ((category << 13) | (page << 7) | index);
     }
 
     public static enum ChannelTimerEvent {
