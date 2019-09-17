@@ -159,19 +159,13 @@ public class ModbusBindingClass {
     public static final boolean DEFAULT_VALIDITYCHECK = true;
 
     /**
-     * Defines the default setting for I/O operation timeouts
-     * in milliseconds (=<tt>3000</tt>).
-     */
-    public static final int DEFAULT_TIMEOUT = 3000;
-
-    /**
      * Defines the default reconnecting setting for
      * transactions (=<tt>false</tt>).
      */
     public static final boolean DEFAULT_RECONNECTING = false;
 
     /**
-     * Defines the default amount of retires for opening
+     * Defines the default amount of retries for opening
      * a connection (=<tt>3</tt>).
      */
     public static final int DEFAULT_RETRIES = 3;

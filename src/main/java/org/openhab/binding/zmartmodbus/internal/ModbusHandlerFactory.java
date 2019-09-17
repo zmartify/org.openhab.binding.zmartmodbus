@@ -73,7 +73,6 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
      */
     @Override
     public boolean supportsThingType(ThingTypeUID thingTypeUID) {
-        logger.info("Supported: {} = {}", thingTypeUID, SUPPORTED_THING_TYPES_UIDS);
         return SUPPORTED_BRIDGE_TYPES_UIDS.contains(thingTypeUID) ? true
                 : SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
     }
@@ -114,7 +113,6 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
             case JablotronAC116:
             case JablotronActuator:
             case JablotronTP150:
-            logger.info("NEW JABLOTRON");
                 return new ModbusThingHandlerJablotron(thing);
             default:
             logger.info("NEW STANDARD MODBUS");

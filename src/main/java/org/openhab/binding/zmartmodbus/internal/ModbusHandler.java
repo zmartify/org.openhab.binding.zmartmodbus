@@ -55,7 +55,7 @@ public class ModbusHandler<T> {
 
             @Override
             public void onSubscribe(Disposable d) {
-                logger.info(" onSubscribe : {}", d.isDisposed());
+                logger.debug(" onSubscribe : {}", d.isDisposed());
             }
 
             @Override

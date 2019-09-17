@@ -80,8 +80,6 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
                 getBridgeHandler().handleUpdate(
                         new ChannelUID(getThing().getUID(), ModbusBindingConstants.CHANNEL_DEVICE_INFO),
                         new StringType(modbusDeviceInfo.toString()));
-
-                logger.debug("New DeviceInfo set: {}", modbusDeviceInfo);
                 break;
             }
             default: 
