@@ -1,65 +1,180 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0"
-	xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" ?>
+<thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0" xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
 
-	<thing-type id="nilancomfort300" listed="false">
-	    <supported-bridge-type-refs>
-            <bridge-type-ref id="serialbridge" />
-            <bridge-type-ref id="tcpbridge" />
-        </supported-bridge-type-refs>
+	<thing-type id="nilan_comfort300" listed="true">
+		<supported-bridge-type-refs>
+			<bridge-type-ref id="serialbridge" />
+		</supported-bridge-type-refs>
 
-	
+
 		<label>Nilan Comfort 300</label>
 		<description>Nilan Comfort 3000 Air Ventilation controller</description>
 
 		<channels>
-            <channel id="power_consumption" typeId="sensor_energy">
-                <properties>
-                    <property name="category">0x00</property>
-                    <property name="index">0x10</property>
-                    <property name="page">0x00</property>
-                    <property name="valuetype">float32_swap</property>
-                    <property name="bit">0x0D</property>
-                </properties>
-            </channel>
-            <channel id="DHW_enable" typeId="switch_binary">
-                <properties>
-                    <property name="category">0x00</property>
-                    <property name="index">0x08</property>
-                    <property name="page">0x00</property>
-                    <property name="valuetype">bit</property>
-                    <property name="bit">0x0D</property>
-                </properties>
-            </channel>
-			<channel id="HTC_enable" typeId="switch_binary">
+			<channel id="Input_T0_Controller" typeId="sensor_temperature">
+				<label>Controller</label>
+				<description>Controller board temperature</description>
 				<properties>
-					<property name="category">0x00</property>
-					<property name="index">0x08</property>
-					<property name="page">0x00</property>
-					<property name="valuetype">bit</property>
-					<property name="bit">0x0C</property>
+					<property name="dataset">Input2</property>
+					<property name="index">0</property>
+					<property name="valuetype">int16cen</property>
 				</properties>
 			</channel>
-			<channel id="Inlet_sensor_present" typeId="sensor_binary">
-                <properties>
-                    <property name="category">0x00</property>
-                    <property name="index">0x08</property>
-                    <property name="page">0x00</property>
-                    <property name="valuetype">bit</property>
-                    <property name="bit">0x0B</property>
-                </properties>
-            </channel>
-			<channel id="DHW_sensor_present" typeId="sensor_binary">
-                <properties>
-                    <property name="category">0x00</property>
-                    <property name="index">0x08</property>
-                    <property name="page">0x00</property>
-                    <property name="valuetype">bit</property>
-                    <property name="bit">0x0A</property>
-                </properties>
-            </channel>
-            <!-- NOT IMPLEMENTED YET  
+			<channel id="Input_T1_Intake" typeId="sensor_temperature">
+				<label>Intake</label>
+				<description>Fresh air intake temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">1</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T2_Inlet" typeId="sensor_temperature">
+				<label>Inlet before heater</label>
+				<description>Inlet temperature (before heater)</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">2</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T3_Exhaust" typeId="sensor_temperature">
+				<label>Exhaust</label>
+				<description>Room exhaust temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">3</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T4_Outlet" typeId="sensor_temperature">
+				<label>Outlet</label>
+				<description>Outlet temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">4</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T7_Inlet" typeId="sensor_temperature">
+				<label>Inlet after heater</label>
+				<description>Inlet temperature (after heater)</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">7</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T8_Outdoor" typeId="sensor_temperature">
+				<label>Outdoor</label>
+				<description>Outdoor temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">8</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T9_Heater" typeId="sensor_temperature">
+				<label>Heater</label>
+				<description>Heating surface temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">9</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T10_Extern" typeId="sensor_temperature">
+				<label>Extern</label>
+				<description>External room temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">10</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_T15_Room" typeId="sensor_temperature">
+				<label>Room - User panel</label>
+				<description>User panel room temperature</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">15</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_RH" typeId="sensor_relhumidity">
+				<label>RH</label>
+				<description>Relative Humidity</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">21</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="Input_CO2" typeId="sensor_relhumidity">
+				<label>RH</label>
+				<description>Relative Humidity</description>
+				<properties>
+					<property name="dataset">Input2</property>
+					<property name="index">22</property>
+					<property name="valuetype">int16cen</property>
+				</properties>
+			</channel>
+			<channel id="AirFlap" typeId="sensor_binary">
+				<label>Air flap</label>
+				<description>Air flap</description>
+				<properties>
+					<property name="dataset">Output1</property>
+					<property name="index">0</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="BypassOpen" typeId="sensor_binary">
+				<label>Bypass open</label>
+				<description>Bypass flap open</description>
+				<properties>
+					<property name="dataset">Output1</property>
+					<property name="index">2</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="BypassClose" typeId="sensor_binary">
+				<label>Bypass close</label>
+				<description>Bypass flap close</description>
+				<properties>
+					<property name="dataset">Output1</property>
+					<property name="index">3</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="system_time" typeId="timeofday">
+				<label>Time</label>
+				<description>System time</description>
+				<properties>
+					<property name="dataset">Time</property>
+					<property name="index">0</property>
+					<property name="valuetype">nilan_time</property>
+				</properties>
+			</channel>
+			<channel id="Text1" typeId="displayText">
+				<label>Display line 1</label>
+				<description>1st line of display</description>
+				<properties>
+					<property name="dataset">Display</property>
+					<property name="index">0</property>
+					<property name="valuetype">nilan_text</property>
+				</properties>
+			</channel>
+			<channel id="Text2" typeId="displayText">
+				<label>Display line 2</label>
+				<description>2nd line of display</description>
+				<properties>
+					<property name="dataset">Display</property>
+					<property name="index">1</property>
+					<property name="valuetype">nilan_text</property>
+				</properties>
+			</channel>
+
+			<!-- NOT IMPLEMENTED YET  
 			<channel id="Inlet_sensor" typeId="sensor_temperature"></channel>
 			<channel id="DHW_sensor" typeId="sensor_temperature"></channel>
 			<channel id="DHW_comfort_temperature" typeId="thermostat_setpoint"></channel>
@@ -74,17 +189,46 @@
             -->
 		</channels>
 
-		<config-description>
-			<parameter-group name="modbusslaves">
-				<context>modbudsslaves</context>
-				<label>Modbus slaves</label>
-				<description></description>
-			</parameter-group>
+		<!-- DATATYPE:SLOWorFAST:REPORTON:LENGTH:CATEGORY:INDEX:PAGE -->
+		<!-- DATATYPE:SLOWorFAST:REPORTON:LENGTH:OFFSET -->
 
-			<parameter name="logical_address" type="integer" groupName="modbusslaves" required="true" min="01" max="248">
-				<label>Logical Address</label>
-				<description>Logical Address of the unit</description>
-				<default>2</default>
+		<properties>
+			<property name="dataset_Input2">input:fast:change:23:200</property>
+			<property name="dataset_Display">input:fast:change:12:2000</property>
+			<property name="dataset_Output1">holding:fast:change:28:100</property>
+			<property name="dataset_Output2">holding:fast:change:2:200</property>
+			<property name="dataset_Time">holding:fast:change:6:300</property>
+			<property name="dataset_Alarm">holding:fast:change:1:400</property>
+			<property name="dataset_Program5">holding:fast:change:1:500</property>
+			<property name="dataset_Program6">holding:fast:change:6:600</property>
+			<property name="dataset_DisplayAirFlow">holding:fast:change:4:4001</property>
+			<property name="dataset_DisplayAirHeat">holding:fast:change:6:4007</property>
+			<property name="dataset_DisplayDefrost">holding:fast:change:7:4020</property>
+			<property name="dataset_DisplayProgram">holding:fast:change:7:4030</property>
+			<property name="dataset_DisplayAlarm">holding:fast:change:1:4050</property>
+		</properties>
+
+		<config-description>
+			<parameter name="id" type="integer">
+				<label>Modbus address</label>
+				<description>Modbus unit address</description>
+				<default>1</default>
+				<limitToOptions>true</limitToOptions>
+				<options>
+					<option value="1">1 (default)</option>
+					<option value="2">2</option>
+					<option value="3">3</option>
+					<option value="4">4</option>
+					<option value="5">5</option>
+					<option value="6">6</option>
+					<option value="7">7</option>
+					<option value="30">30</option>
+				</options>
+			</parameter>
+			<parameter name="enableDiscovery" type="boolean">
+				<label>Discovery enabled</label>
+				<description>When enabled we try to find a device specific handler. Turn this on if you're using one of the supported devices.</description>
+				<default>true</default>
 			</parameter>
 		</config-description>
 	</thing-type>

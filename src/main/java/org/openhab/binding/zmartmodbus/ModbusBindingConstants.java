@@ -57,7 +57,7 @@ public class ModbusBindingConstants {
         public static final String THING_JABLOTRON_AC116 = "jablotron_ac116";
         public static final String THING_JABLOTRON_TP150 = "jablotron_tp150";
         public static final String THING_JABLOTRON_ACTUATOR = "jablotron_actuator";
-        public static final String THING_NILAN_COMFORT300 = "jablotron_comfort300";
+        public static final String THING_NILAN_COMFORT300 = "nilan_comfort300";
 
         public static final Set<String> SUPPORTED_SLAVES = Stream.of(THING_JABLOTRON_AC116, THING_NILAN_COMFORT300)
                         .collect(toSet());

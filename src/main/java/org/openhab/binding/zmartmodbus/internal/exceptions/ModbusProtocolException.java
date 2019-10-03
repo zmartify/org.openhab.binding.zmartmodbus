@@ -32,6 +32,7 @@ public class ModbusProtocolException extends Exception {
     private static final long serialVersionUID = -6155136065068974723L;
 
     ModbusProtocolErrorCode m_code;
+    String m_failMsg;
 
     @SuppressWarnings("unused")
     private ModbusProtocolException() {
@@ -70,6 +71,7 @@ public class ModbusProtocolException extends Exception {
      */
     public ModbusProtocolException(ModbusProtocolErrorCode code, String complement) {
         this.m_code = code;
+        this.m_failMsg = complement;
     }
 
     /**
@@ -87,6 +89,10 @@ public class ModbusProtocolException extends Exception {
 
     public ModbusProtocolErrorCode getCode() {
         return this.m_code;
+    }
+
+    public String getFailMsg() {
+        return this.m_failMsg;
     }
 
 }

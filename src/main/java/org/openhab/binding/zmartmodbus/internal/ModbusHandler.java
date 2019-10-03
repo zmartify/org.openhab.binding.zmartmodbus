@@ -42,10 +42,13 @@ public class ModbusHandler<T> {
 
     private Logger logger = LoggerFactory.getLogger(ModbusHandler.class);
 
-    @Nullable private ModbusBridgeHandler bridgeHandler;
-    @Nullable private ActionListener actionSubscriber;
-    @Nullable private MessageListener messageSubscriber;
-    
+    @Nullable
+    private ModbusBridgeHandler bridgeHandler;
+    @Nullable
+    private ActionListener actionSubscriber;
+    @Nullable
+    private MessageListener messageSubscriber;
+
     public ModbusHandler() {
     }
 
@@ -67,7 +70,8 @@ public class ModbusHandler<T> {
                 Object payload = null;
                 @SuppressWarnings("unused")
                 ModbusCommEvent commEvent = null;
-                ModbusThingHandler modbusThingHandler = (ModbusThingHandler) getBridgeHandler().getThingHandlerByUID(modbusAction.getThingUID());
+                ModbusThingHandler modbusThingHandler = (ModbusThingHandler) getBridgeHandler()
+                        .getThingHandlerByUID(modbusAction.getThingUID());
                 int unitAddress = modbusThingHandler.getId();
                 ModbusFunction modbusFunction = modbusThingHandler.getModbusFunction();
 
@@ -87,8 +91,11 @@ public class ModbusHandler<T> {
                                             modbusAction.getOffset(), modbusAction.getLength());
                                     break;
                                 case Holding:
-                                case Input:
                                     payload = modbusFunction.readHoldingRegisters(unitAddress, modbusAction.getStart(),
+                                            modbusAction.getLength());
+                                    break;
+                                case Input:
+                                    payload = modbusFunction.readInputRegisters(unitAddress, modbusAction.getStart(),
                                             modbusAction.getLength());
                                     break;
                                 default:
@@ -146,6 +153,7 @@ public class ModbusHandler<T> {
                                 // Add it to the action feed
                                 actionSubscriber.modbusAction(modbusAction);
                             } else {
+                                logger.error("Response TimeOut: {}", e.getFailMsg());
                                 getBridgeHandler().getCounters().incrementFailedCounter();
                             }
                             break;
@@ -164,11 +172,12 @@ public class ModbusHandler<T> {
                             getBridgeHandler().getTransceiver().disconnect();
                             break;
                         default:
-                            logger.error("We got an exception in ModbusCommunicator ({}) {}", e.getCode(), e.getCode().name());
+                            logger.error("We got an exception in ModbusCommunicator ({}) {}", e.getCode(),
+                                    e.getCode().name());
                             break;
-                        }
+                    }
                 } catch (Exception e) {
-                    logger.error("EXCEPTION: {}", e.getMessage());
+                    logger.error("EXCEPTION: {} {}", e.getMessage(), e.getStackTrace());
                 }
             }
 

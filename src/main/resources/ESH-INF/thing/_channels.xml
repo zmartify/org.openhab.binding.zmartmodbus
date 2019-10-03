@@ -351,6 +351,14 @@
         <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
+    <!-- CO2 Channel -->
+    <channel-type id="sensor_co2">
+        <item-type>Number</item-type>
+        <label>Co2</label>
+        <description>Indicates the current Co2 level in ppm</description>
+        <state pattern="%.0f" readOnly="true"></state>
+    </channel-type>
+
 
     <!-- Temperature Channel -->
     <channel-type id="sensor_temperature">
@@ -376,7 +384,7 @@
         <item-type>Number</item-type>
         <label>Air temperature</label>
         <description>Indicates the current air temperature</description>
-        <category>airtemperature</category>
+        <category>Temperature</category>
         <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
@@ -608,10 +616,22 @@
         <description>Device information</description>
     </channel-type>
 
+    <channel-type id="displayText">
+        <item-type>String</item-type>
+        <label>Display</label>
+        <description>Display Text</description>
+    </channel-type>
+
     <channel-type id="internalFlags" advanced="true">
         <item-type>Number</item-type>
         <label>Internal control flags</label>
         <description>Internal control flags - only for test</description>
         <state readOnly="true"></state>
+    </channel-type>
+
+    <channel-type id="timeofday">
+        <item-type>DateTime</item-type>
+        <label>Date and time of day</label>
+        <description>Date and time down to seconds</description>
     </channel-type>
 </thing:thing-descriptions>

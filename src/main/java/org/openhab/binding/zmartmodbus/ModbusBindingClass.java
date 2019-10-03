@@ -497,7 +497,8 @@ public class ModbusBindingClass {
         Bit("bit", 1),
         Int8("int8", 1),
         Int16("int16", 2), // Big Endian byte order
-        Int16dec("int16dec", 2), // - value in 10th -> divided by 10 when reading and multiplyed by 10 when writing
+        Int16dec("int16dec", 2), // - value in 10th -> divided by 10 when reading and multiplied by 10 when writing
+        Int16cen("int16cen", 2), // - value in 100th -> divided by 100 when reading and multiplied by 100 when writing
         Uint16("uint16", 2), // Big Endian byte order
         Int32("int32", 4),
         Uint32("uint32", 4),
@@ -522,6 +523,8 @@ public class ModbusBindingClass {
         Jablotron_elementChangeFlags("jablotron_elementChangeFlags", 8),
         Jablotron_channelChangeFlags("jablotron_channelChangeFlags", 4),
         Jablotron_packetdataChangeFlags("jablotron_packetdataChangeFlags", 4),
+        Nilan_time("nilan_time", 12),
+        Nilan_text("nilan_text",9),
         Unknown("unknown", 0);
 
         private ModbusValueClass(final String text, final int byteSize) {

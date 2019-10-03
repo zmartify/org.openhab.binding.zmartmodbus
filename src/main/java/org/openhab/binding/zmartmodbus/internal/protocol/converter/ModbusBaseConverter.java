@@ -12,13 +12,35 @@
  */
 package org.openhab.binding.zmartmodbus.internal.protocol.converter;
 
-import static org.openhab.binding.zmartmodbus.internal.util.Register.*;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.floatToRegisters;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.floatToRegistersSwap;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.intToRegisters;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.intToRegistersSwap;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registerToShort;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registerToUnsignedShort;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registersToFloat;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registersToFloatSwap;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registersToInt;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registersToIntSwap;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registersToUnsignedInt;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.registersToUnsignedIntSwap;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.shortToRegister;
+import static org.openhab.binding.zmartmodbus.internal.util.Register.unsignedByteToInt;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Arrays;
+
+import javax.xml.bind.DatatypeConverter;
+
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jdt.annotation.Nullable;
+import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
 import org.eclipse.smarthome.core.library.types.StringType;
@@ -31,9 +53,6 @@ import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 /**
  * @author Peter Kristensen - Initial contribution
@@ -68,6 +87,10 @@ public class ModbusBaseConverter {
             case Int16dec:
                 state = new DecimalType(new BigDecimal(registerToUnsignedShort((byte[]) payload, index))
                         .divide(BigDecimal.TEN, 1, BigDecimal.ROUND_HALF_UP));
+                break;
+            case Int16cen:
+                state = new DecimalType(new BigDecimal(registerToUnsignedShort((byte[]) payload, index))
+                        .divide(new BigDecimal(100), 1, BigDecimal.ROUND_HALF_UP));
                 break;
             case Uint32:
                 state = new DecimalType(registersToUnsignedInt((byte[]) payload, index));
@@ -125,6 +148,20 @@ public class ModbusBaseConverter {
             case Jablotron_channelChangeFlags:
                 // We should never arrive here - it's handled in ModbusFactory
                 break;
+            case Nilan_text:
+                logger.info("Nilan_text ({}): {}", index, DatatypeConverter.printHexBinary(ArrayUtils.subarray((byte[]) payload, index + 2, index + 9)));
+                state = new StringType(new String(ArrayUtils.subarray((byte[]) payload, index + 2, index + 9)));
+                break;
+            case Nilan_time:
+                int second = registerToShort((byte[]) payload, index);
+                int minute = registerToShort((byte[]) payload, index + 2);
+                int hour = registerToShort((byte[]) payload, index + 4);
+                int day = registerToShort((byte[]) payload, index + 6);
+                int month = registerToShort((byte[]) payload, index + 8);
+                int year = registerToShort((byte[]) payload, index + 10);
+                state = new DateTimeType(
+                        LocalDateTime.of(year, month, day, hour, minute, second).atZone(ZoneId.of("Europe/Paris")));
+                break;
             default:
                 break;
         }
@@ -149,6 +186,9 @@ public class ModbusBaseConverter {
                 break;
             case Int16dec:
                 payload = shortToRegister((short) (((DecimalType) state).floatValue() * 10));
+                break;
+            case Int16cen:
+                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 100));
                 break;
             case Uint32:
                 payload = intToRegisters(((DecimalType) state).intValue());
@@ -188,6 +228,17 @@ public class ModbusBaseConverter {
                     BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
                     payload = ArrayUtils.addAll((byte[]) payload, bv.getBytes());
                 }
+                break;
+            case Nilan_time:
+                short[] time = new short[6];
+                ZonedDateTime dateTime = ((DateTimeType) state).getZonedDateTime();
+                time[0] = (short) dateTime.getSecond();
+                time[1] = (short) dateTime.getMinute();
+                time[2] = (short) dateTime.getHour();
+                time[3] = (short) dateTime.getDayOfMonth();
+                time[4] = (short) dateTime.getMonthValue();
+                time[5] = (short) dateTime.getYear();
+                payload = time;
                 break;
             default:
                 logger.error("ValueClass not found - return null");

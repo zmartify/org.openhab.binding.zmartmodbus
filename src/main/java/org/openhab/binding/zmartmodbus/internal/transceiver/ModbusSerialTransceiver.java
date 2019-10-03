@@ -209,8 +209,8 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                 long elapsed = System.currentTimeMillis() - start;
                                 if (elapsed > timeOut) {
                     
-                                    String failMsg = String.format("Recv timeout %d : minLength=%d respIndex=%d(%d) #%d cmd=%s", elapsed,
-                                             respIndex, minimumLength, counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
+                                    String failMsg = String.format("Recv timeout %d : minLength=%d respIndex=%d #%d cmd=%s", elapsed,
+                                             minimumLength, respIndex, counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
 
                                     // Increase Response Time Out counter
                                     counters.incrementTimeOutCounter();
