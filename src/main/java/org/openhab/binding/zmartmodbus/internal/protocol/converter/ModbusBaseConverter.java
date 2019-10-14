@@ -27,13 +27,14 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.registersTo
 import static org.openhab.binding.zmartmodbus.internal.util.Register.shortToRegister;
 import static org.openhab.binding.zmartmodbus.internal.util.Register.unsignedByteToInt;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
-
-import javax.xml.bind.DatatypeConverter;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -79,17 +80,17 @@ public class ModbusBaseConverter {
                 state = new DecimalType(unsignedByteToInt(((byte[]) payload)[index]));
                 break;
             case Uint16:
-                state = new DecimalType(registerToShort((byte[]) payload, index));
-                break;
-            case Int16:
                 state = new DecimalType(registerToUnsignedShort((byte[]) payload, index));
                 break;
+            case Int16:
+                state = new DecimalType(registerToShort((byte[]) payload, index));
+                break;
             case Int16dec:
-                state = new DecimalType(new BigDecimal(registerToUnsignedShort((byte[]) payload, index))
-                        .divide(BigDecimal.TEN, 1, BigDecimal.ROUND_HALF_UP));
+                state = new DecimalType(new BigDecimal(registerToShort((byte[]) payload, index)).divide(BigDecimal.TEN,
+                        1, BigDecimal.ROUND_HALF_UP));
                 break;
             case Int16cen:
-                state = new DecimalType(new BigDecimal(registerToUnsignedShort((byte[]) payload, index))
+                state = new DecimalType(new BigDecimal(registerToShort((byte[]) payload, index))
                         .divide(new BigDecimal(100), 1, BigDecimal.ROUND_HALF_UP));
                 break;
             case Uint32:
@@ -149,8 +150,38 @@ public class ModbusBaseConverter {
                 // We should never arrive here - it's handled in ModbusFactory
                 break;
             case Nilan_text:
-                logger.info("Nilan_text ({}): {}", index, DatatypeConverter.printHexBinary(ArrayUtils.subarray((byte[]) payload, index + 2, index + 9)));
-                state = new StringType(new String(ArrayUtils.subarray((byte[]) payload, index + 2, index + 9)));
+                int startIndex = index + 4;
+                int endIndex = startIndex + 10;
+
+                byte[] textAsByte = ArrayUtils.subarray((byte[]) payload, startIndex, endIndex);
+                // Swap the bytes
+                for (int i = 0; i < 8; i = i + 2) {
+                    byte b = textAsByte[i];
+                    textAsByte[i] = textAsByte[i + 1];
+                    textAsByte[i + 1] = b;
+                }
+
+                // Do character set conversion
+                byte b;
+                for (int i = 0; i < 8; i++) {
+                    switch ((byte) textAsByte[i]) {
+                        case (byte) 0xDF:
+                            b = (byte) 186;
+                            break; //
+                        case (byte) 0x09:
+                            b = (byte) 216;
+                            break; // Ø
+                        default:
+                            b = textAsByte[i];
+
+                    }
+                    textAsByte[i] = b;
+                }
+                BitVector attrib = new BitVector(16);
+                attrib.setBytes(ArrayUtils.subarray(textAsByte, 8, 2));
+                // logger.info("Attrib: {}", attrib.toString());
+
+                state = new StringType(new String(ArrayUtils.subarray(textAsByte, 0, 8), StandardCharsets.ISO_8859_1));
                 break;
             case Nilan_time:
                 int second = registerToShort((byte[]) payload, index);
@@ -171,78 +202,117 @@ public class ModbusBaseConverter {
     @Nullable
     public static Object fromStateToModbus(ChannelUID uid, State state, ModbusThingChannel channel) {
         Object payload = null;
-        switch (channel.getValueClass()) {
-            case Bit:
-                payload = (boolean) (((OnOffType) state) == OnOffType.ON);
-                break;
-            case Int8:
-                payload = ((DecimalType) state).byteValue();
-                break;
-            case Uint16:
-                payload = shortToRegister((short) ((DecimalType) state).intValue());
-                break;
-            case Int16:
-                payload = shortToRegister((short) ((DecimalType) state).intValue());
-                break;
-            case Int16dec:
-                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 10));
-                break;
-            case Int16cen:
-                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 100));
-                break;
-            case Uint32:
-                payload = intToRegisters(((DecimalType) state).intValue());
-                break;
-            case Int32:
-                payload = intToRegisters(((DecimalType) state).intValue());
-                break;
-            case Float32:
-                payload = floatToRegisters(((DecimalType) state).floatValue());
-                break;
-            case Int32_swap:
-                payload = intToRegistersSwap(((DecimalType) state).intValue());
-                break;
-            case Uint32_swap:
-                payload = intToRegistersSwap(((DecimalType) state).intValue());
-                break;
-            case Float32_swap:
-                payload = floatToRegistersSwap(((DecimalType) state).floatValue());
-                break;
-            case Custom16_power:
-                logger.warn("'Custom16_power' - write not supported, read-only channel");
-                return null;
-            case Custom8_4bit:
-                payload = ((DecimalType) state).byteValue() & 0x0F;
-                break;
-            case Custom8_5bit:
-                payload = ((DecimalType) state).byteValue() & 0x1F;
-                break;
-            case Custom8_6bit:
-                payload = ((DecimalType) state).byteValue() & 0x3F;
-                break;
-            case Jablotron_schedule:
-                JsonParser parser = new JsonParser();
-                JsonObject schedule = parser.parse(state.toFullString()).getAsJsonObject();
-                payload = shortToRegister(schedule.get("kind").getAsShort());
-                for (WeekDayClass day : WeekDayClass.values()) {
-                    BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
-                    payload = ArrayUtils.addAll((byte[]) payload, bv.getBytes());
-                }
-                break;
-            case Nilan_time:
-                short[] time = new short[6];
-                ZonedDateTime dateTime = ((DateTimeType) state).getZonedDateTime();
-                time[0] = (short) dateTime.getSecond();
-                time[1] = (short) dateTime.getMinute();
-                time[2] = (short) dateTime.getHour();
-                time[3] = (short) dateTime.getDayOfMonth();
-                time[4] = (short) dateTime.getMonthValue();
-                time[5] = (short) dateTime.getYear();
-                payload = time;
-                break;
-            default:
-                logger.error("ValueClass not found - return null");
-                return null;
+        if (state.getClass().equals(org.eclipse.smarthome.core.library.types.OnOffType.class)) {
+            DecimalType onOffAsDecimalType = new DecimalType((((OnOffType) state) == OnOffType.ON) ? 0xFF : 0);
+            switch (channel.getValueClass()) {
+                case Bit:
+                    payload = (boolean) (((OnOffType) state) == OnOffType.ON);
+                    break;
+                case Int8:
+                    payload = onOffAsDecimalType.byteValue();
+                    break;
+                case Uint16:
+                case Int16:
+                    payload = shortToRegister((short) onOffAsDecimalType.intValue());
+                    break;
+                case Int16dec:
+                    payload = shortToRegister((short) (onOffAsDecimalType.floatValue() * 10));
+                    break;
+                case Int16cen:
+                    payload = shortToRegister((short) (onOffAsDecimalType.floatValue() * 100));
+                    break;
+                case Uint32:
+                case Int32:
+                    payload = intToRegisters(onOffAsDecimalType.intValue());
+                    break;
+                case Float32:
+                    payload = floatToRegisters(onOffAsDecimalType.floatValue());
+                    break;
+                case Int32_swap:
+                case Uint32_swap:
+                    payload = intToRegistersSwap(onOffAsDecimalType.intValue());
+                    break;
+                default:
+                    logger.error("ValueClass not found - return null");
+                    return null;
+            }
+        } else {
+            switch (channel.getValueClass()) {
+                case Bit:
+                    payload = (boolean) (((OnOffType) state) == OnOffType.ON);
+                    break;
+                case Int8:
+                    payload = ((DecimalType) state).byteValue();
+                    break;
+                case Uint16:
+                    payload = shortToRegister((short) ((DecimalType) state).intValue());
+                    break;
+                case Int16:
+                    payload = shortToRegister((short) ((DecimalType) state).intValue());
+                    break;
+                case Int16dec:
+                    payload = shortToRegister((short) (((DecimalType) state).floatValue() * 10));
+                    break;
+                case Int16cen:
+                    payload = shortToRegister((short) (((DecimalType) state).floatValue() * 100));
+                    break;
+                case Uint32:
+                    payload = intToRegisters(((DecimalType) state).intValue());
+                    break;
+                case Int32:
+                    payload = intToRegisters(((DecimalType) state).intValue());
+                    break;
+                case Float32:
+                    payload = floatToRegisters(((DecimalType) state).floatValue());
+                    break;
+                case Int32_swap:
+                    payload = intToRegistersSwap(((DecimalType) state).intValue());
+                    break;
+                case Uint32_swap:
+                    payload = intToRegistersSwap(((DecimalType) state).intValue());
+                    break;
+                case Float32_swap:
+                    payload = floatToRegistersSwap(((DecimalType) state).floatValue());
+                    break;
+                case Custom16_power:
+                    logger.warn("'Custom16_power' - write not supported, read-only channel");
+                    return null;
+                case Custom8_4bit:
+                    payload = ((DecimalType) state).byteValue() & 0x0F;
+                    break;
+                case Custom8_5bit:
+                    payload = ((DecimalType) state).byteValue() & 0x1F;
+                    break;
+                case Custom8_6bit:
+                    payload = ((DecimalType) state).byteValue() & 0x3F;
+                    break;
+                case Jablotron_schedule:
+                    JsonParser parser = new JsonParser();
+                    JsonObject schedule = parser.parse(state.toFullString()).getAsJsonObject();
+                    payload = shortToRegister(schedule.get("kind").getAsShort());
+                    for (WeekDayClass day : WeekDayClass.values()) {
+                        BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
+                        payload = ArrayUtils.addAll((byte[]) payload, bv.getBytes());
+                    }
+                    break;
+                case Nilan_time:
+                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                    ZonedDateTime dateTime = ((DateTimeType) state).getZonedDateTime();
+                    try {
+                        outputStream.write(shortToRegister((short) dateTime.getSecond()));
+                        outputStream.write(shortToRegister((short) dateTime.getMinute()));
+                        outputStream.write(shortToRegister((short) dateTime.getHour()));
+                        outputStream.write(shortToRegister((short) dateTime.getDayOfMonth()));
+                        outputStream.write(shortToRegister((short) dateTime.getMonthValue()));
+                    } catch (IOException e) {
+                        logger.error("Unable to set nilan time");
+                    }
+                    payload = outputStream.toByteArray();
+                    break;
+                default:
+                    logger.error("ValueClass not found - return null");
+                    return null;
+            }
         }
         if (channel.getValueClass() != ModbusValueClass.Bit) {
             payload = Arrays.copyOfRange((byte[]) payload, 0, ((channel.getValueClass().size() + 1) / 2 * 2));

@@ -31,68 +31,56 @@ public class ModbusProtocolException extends Exception {
 
     private static final long serialVersionUID = -6155136065068974723L;
 
-    ModbusProtocolErrorCode m_code;
-    String m_failMsg;
+    private final ModbusProtocolErrorCode code;
 
-    @SuppressWarnings("unused")
-    private ModbusProtocolException() {
-        super();
-    }
-
-    @SuppressWarnings("unused")
-    private ModbusProtocolException(String message) {
-        super(message);
-    }
-
-    @SuppressWarnings("unused")
-    private ModbusProtocolException(String message, Throwable cause) {
-        super(message, cause);
-    }
-
-    @SuppressWarnings("unused")
-    private ModbusProtocolException(Throwable t) {
-        super(t);
-    }
-
-    /**
+        /**
      * Builds a new EdcException instance based on the supplied EdcErrorCode.
      *
      * @param code
      */
     public ModbusProtocolException(ModbusProtocolErrorCode code) {
-        this.m_code = code;
+        super();
+        this.code = code;
     }
 
     /**
-     * Builds a new EdcException instance based on the supplied EdcErrorCode and an optional complement string
+     * Builds a new EdcException instance based on the supplied EdcErrorCode and a message string
      *
      * @param code
-     * @param complement
+     * @param message
      */
-    public ModbusProtocolException(ModbusProtocolErrorCode code, String complement) {
-        this.m_code = code;
-        this.m_failMsg = complement;
+    public ModbusProtocolException(String message, ModbusProtocolErrorCode code) {
+        super(message);
+        this.code = code;
     }
 
     /**
      * Builds a new EdcException instance based on the supplied EdcErrorCode, an optional Throwable cause, and optional
      * arguments for the associated exception message.
      *
+     * @param message
+     * @param cause
      * @param code
-     * @param arguments
      */
-    public ModbusProtocolException(ModbusProtocolErrorCode code, Throwable cause, Object... arguments) {
-        super(cause);
-
-        this.m_code = code;
+    public ModbusProtocolException(String message, Throwable cause, ModbusProtocolErrorCode code) {
+        super(message, cause);
+        this.code = code;
     }
+
+    /**
+     * Builds a new EdcException instance based on the supplied EdcErrorCode, an optional Throwable cause, and optional
+     * arguments for the associated exception message.
+     *
+     * @param message
+     * @param code
+     */
+    public ModbusProtocolException(Throwable cause, ModbusProtocolErrorCode code) {
+        super(cause);
+        this.code = code;
+    }
+
 
     public ModbusProtocolErrorCode getCode() {
-        return this.m_code;
+        return this.code;
     }
-
-    public String getFailMsg() {
-        return this.m_failMsg;
-    }
-
 }

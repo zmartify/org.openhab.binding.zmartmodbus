@@ -153,7 +153,7 @@ public class ModbusHandler<T> {
                                 // Add it to the action feed
                                 actionSubscriber.modbusAction(modbusAction);
                             } else {
-                                logger.error("Response TimeOut: {}", e.getFailMsg());
+                                logger.error("Response TimeOut: {}", e.getMessage());
                                 getBridgeHandler().getCounters().incrementFailedCounter();
                             }
                             break;
@@ -162,7 +162,7 @@ public class ModbusHandler<T> {
                         case INVALID_DATA_ADDRESS:
                         case INVALID_DATA_LENGTH:
                         case INVALID_DATA_TYPE:
-                            logger.error("Modbus error: {} {}", e.getCause(), e.getMessage());
+                            logger.error("Modbus error: {} {}", e.getCode(), e.getMessage());
                             break;
                         case NOT_CONNECTED:
                             logger.error("Modbus unit ({}) NOT CONNECTED", unitAddress);

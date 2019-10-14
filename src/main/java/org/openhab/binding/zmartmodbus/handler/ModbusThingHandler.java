@@ -245,7 +245,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                     case 6:
                     case 5:
                         start = addressWizard(cfg[cfg.length - 1], channelId, elementId);
-                        logger.info("Offset {} - length {}", start, length);
+                        logger.debug("Offset {} - length {}", start, length);
                         break;
                     default:
                         logger.warn("Thing {}: Illegal number of property parameters", thing.getUID());
@@ -289,7 +289,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             logger.trace("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:",
                     thing.getUID(), elementId, channelId, channel.getUID().getId());
 
-                 logger.info("ValueType {}",properties.get(PROPERTY_CHANNELCFG_VALUETYPE));
             if (properties.containsKey(PROPERTY_CHANNELCFG_INDEX)) {
                 getBridgeHandler().getController().getModbusFactory().getDataSets()
                         .addChannel(new ModbusThingChannel(thing.getUID(), channel.getUID(),

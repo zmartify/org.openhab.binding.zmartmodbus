@@ -524,7 +524,7 @@ public class ModbusBindingClass {
         Jablotron_channelChangeFlags("jablotron_channelChangeFlags", 4),
         Jablotron_packetdataChangeFlags("jablotron_packetdataChangeFlags", 4),
         Nilan_time("nilan_time", 12),
-        Nilan_text("nilan_text",9),
+        Nilan_text("nilan_text", 10),
         Unknown("unknown", 0);
 
         private ModbusValueClass(final String text, final int byteSize) {

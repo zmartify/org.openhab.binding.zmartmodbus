@@ -233,7 +233,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     @Override
     public void handleCommand(ChannelUID channelUID, Command command) {
-        logger.trace("ModbusBridgeHandler.handlecommand: {} {}", channelUID.getIdWithoutGroup(), command);
+        logger.debug("ModbusBridgeHandler.handlecommand: {} {}", channelUID.getIdWithoutGroup(), command);
         // Push it on the queue
         if (command instanceof RefreshType) {
             // We do not support REFRESH

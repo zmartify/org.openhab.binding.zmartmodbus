@@ -58,7 +58,7 @@ public class ModbusActionFeed<T> {
                 }
                 break;
             default:
-                logger.debug("Action FeedRepeat not found {}", action.getDataSetId());
+                logger.error("Action FeedRepeat not found {}", action.getDataSetId());
                 break;
         }
     }

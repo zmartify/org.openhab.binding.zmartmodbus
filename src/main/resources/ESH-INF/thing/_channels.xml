@@ -142,102 +142,6 @@
         <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
-
-    <!-- Channel definition for zwave notification type=0x04/Heat Alarm -->
-    <channel-type id="notification_heat_alarm" advanced="true">
-        <item-type>Number</item-type>
-        <label>Heat Alarm</label>
-        <description>Heat Alarm</description>
-        <state readOnly="true">
-            <options>
-                <option value="0">Previous Events cleared</option>
-                <option value="1">Overheat detected</option>
-                <option value="2">Overheat detected, Unknown Location</option>
-                <option value="3">Rapid Temperature Rise</option>
-                <option value="4">Rapid Temperature Rise, Unknown Location</option>
-                <option value="5">Under heat detected</option>
-                <option value="6">Under heat detected, Unknown Location</option>
-            </options>
-        </state>
-    </channel-type>
-
-    <!-- Channel definition for zwave notification type=0x08/Power Management -->
-    <channel-type id="notification_power_management" advanced="true">
-        <item-type>Number</item-type>
-        <label>Power Management</label>
-        <description>Power Management</description>
-        <state readOnly="true">
-            <options>
-                <option value="0">Previous events cleared</option>
-                <option value="1">Power has been applied</option>
-                <option value="2">AC mains disconnected</option>
-                <option value="3">AC mains re-connected</option>
-                <option value="4">Surge detected</option>
-                <option value="5">Voltage Drop/Drift</option>
-                <option value="6">Over-current detected</option>
-                <option value="7">Over-voltage detected</option>
-                <option value="8">Over-load detected</option>
-                <option value="9">Load error</option>
-                <option value="10">Replace battery soon</option>
-                <option value="11">Replace battery now</option>
-                <option value="12">Battery is charging</option>
-                <option value="13">Battery is fully charged</option>
-                <option value="14">Charge battery soon</option>
-                <option value="15">Charge battery now!</option>
-            </options>
-        </state>
-    </channel-type>
-
-    <!-- Channel definition for zwave notification type=0x09/System -->
-    <channel-type id="notification_system" advanced="true">
-        <item-type>Number</item-type>
-        <label>System</label>
-        <description>System</description>
-        <state readOnly="true">
-            <options>
-                <option value="0">Previous Events cleared</option>
-                <option value="1">System hardware failure</option>
-                <option value="2">System software failure</option>
-                <option value="3">System hardware failure with manufacturer proprietary failure code</option>
-                <option value="4">System software failure with manufacturer proprietary failure code</option>
-            </options>
-        </state>
-    </channel-type>
-
-
-    <!-- Channel definition for zwave notification type=0x0C/Appliance -->
-    <channel-type id="notification_appliance" advanced="true">
-        <item-type>Number</item-type>
-        <label>Appliance</label>
-        <description>Appliance</description>
-        <state readOnly="true">
-            <options>
-                <option value="0">Previous Events cleared</option>
-                <option value="1">Program started</option>
-                <option value="2">Program in progress</option>
-                <option value="3">Program completed</option>
-                <option value="4">Replace main filter</option>
-                <option value="5">Failure to set target temperature</option>
-                <option value="6">Supplying water</option>
-                <option value="7">Water supply failure</option>
-                <option value="8">Boiling</option>
-                <option value="9">Boiling failure</option>
-                <option value="10">Washing</option>
-                <option value="11">Washing failure</option>
-                <option value="12">Rinsing</option>
-                <option value="13">Rinsing failure</option>
-                <option value="14">Draining</option>
-                <option value="15">Draining failure</option>
-                <option value="16">Spinning</option>
-                <option value="17">Spinning failure</option>
-                <option value="18">Drying</option>
-                <option value="19">Drying failure</option>
-                <option value="20">Fan failure</option>
-                <option value="21">Compressor failure</option>
-            </options>
-        </state>
-    </channel-type>
-
     <!-- Channel to send a notification -->
     <channel-type id="notification_send" advanced="true">
         <item-type>Number</item-type>
@@ -309,21 +213,6 @@
         <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
-    <!-- Activate learning mode -->
-    <channel-type id="switch_learning">
-        <item-type>Switch</item-type>
-        <label>Activate learning</label>
-        <description>Enables learning mode on the specified channel</description>
-        <category>Switch</category>
-        <state>
-            <options>
-                <option value="ON">Learning</option>
-                <option value="OFF">Off</option>
-            </options>
-        </state>
-    </channel-type>
-
-
     <!-- General Sensor -->
     <channel-type id="sensor_general">
         <item-type>Number</item-type>
@@ -348,7 +237,16 @@
         <label>Humidity</label>
         <description>Indicates the current relative humidity</description>
         <category>relativehumiditymeasurement</category>
-        <state pattern="%.1f" readOnly="true"></state>
+        <state pattern="%.1f%%" readOnly="true"></state>
+    </channel-type>
+
+    <!-- Humidity Channel -->
+    <channel-type id="setpoint_relhumidity">
+        <item-type>Number</item-type>
+        <label>Humidity</label>
+        <description>Indicates the current relative humidity</description>
+        <category>relativehumiditymeasurement</category>
+        <state pattern="%.1f%%" readOnly="false"></state>
     </channel-type>
 
     <!-- CO2 Channel -->
@@ -358,7 +256,6 @@
         <description>Indicates the current Co2 level in ppm</description>
         <state pattern="%.0f" readOnly="true"></state>
     </channel-type>
-
 
     <!-- Temperature Channel -->
     <channel-type id="sensor_temperature">
@@ -396,7 +293,6 @@
         <state pattern="%.1f" readOnly="true"></state>
     </channel-type>
 
-
     <!-- Switch Channel -->
     <channel-type id="time_interval">
         <item-type>Number</item-type>
@@ -404,46 +300,6 @@
         <description>Time interval in seconds or minutes</description>
         <category>counter</category>
     </channel-type>
-
-
-    <!-- Switch Channel -->
-    <channel-type id="jablotron_syncgroup" advanced="true">
-        <item-type>Number</item-type>
-        <label>SyncGroup</label>
-        <description>Synchronization Group</description>
-        <category>Config</category>
-        <state readOnly="true"></state>
-    </channel-type>
-
-    <!-- Switch Channel -->
-    <channel-type id="jablotron_timerevent" advanced="true">
-        <item-type>Number</item-type>
-        <label>Timer Event</label>
-        <description>Channels current timer event</description>
-        <state>
-            <options>
-                <option value="0">No event</option>
-                <option value="1">Idle timer</option>
-                <option value="2">Cut off</option>
-                <option value="3">Control bypass</option>
-                <option value="4">Start delay timer</option>
-                <option value="5">Output overcurrent</option>
-                <option value="6">Override output Off</option>
-                <option value="7">Output On</option>
-                <option value="8">Freezing</option>
-                <option value="9">DHW output on</option>
-                <option value="10">Stop delay timer</option>
-            </options>
-        </state>
-    </channel-type>
-
-    <!-- Switch Channel -->
-    <channel-type id="jablotron_element" advanced="true">
-        <item-type>Number</item-type>
-        <label>Element (0-47)</label>
-        <description>Element</description>
-    </channel-type>
-
 
     <!-- Switch Channel -->
     <channel-type id="switch_binary">
@@ -455,6 +311,25 @@
 
 
     <!-- Heating Setpoint Channel -->
+    <channel-type id="temp_setpoint">
+        <item-type>Number</item-type>
+        <label>Setpoint</label>
+        <description>Sets the temperature</description>
+        <category>thermostatsetpoint</category>
+        <state pattern="%.1f"></state>
+        <config-description>
+            <parameter name="config_scale" type="text">
+                <label>Scale</label>
+                <description>Select the scale to use for setpoints.</description>
+                <default>0</default>
+                <options>
+                    <option value="0">Celsius</option>
+                    <option value="1">Fahrenheit</option>
+                </options>
+            </parameter>
+        </config-description>
+    </channel-type>
+
     <channel-type id="thermostat_setpoint">
         <item-type>Number</item-type>
         <label>Setpoint</label>
@@ -614,12 +489,14 @@
         <item-type>String</item-type>
         <label>Device info</label>
         <description>Device information</description>
+        <state readOnly="true"></state>
     </channel-type>
 
     <channel-type id="displayText">
         <item-type>String</item-type>
         <label>Display</label>
         <description>Display Text</description>
+        ç
     </channel-type>
 
     <channel-type id="internalFlags" advanced="true">
@@ -634,4 +511,12 @@
         <label>Date and time of day</label>
         <description>Date and time down to seconds</description>
     </channel-type>
+
+    <channel-type id="minutes">
+        <item-type>Number</item-type>
+        <label>Minutes</label>
+        <description>Number of minutes (0-60)</description>
+        <state min="0" max="60"></state>
+    </channel-type>
+
 </thing:thing-descriptions>
