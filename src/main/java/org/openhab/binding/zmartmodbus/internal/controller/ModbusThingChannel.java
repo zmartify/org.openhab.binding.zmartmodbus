@@ -12,12 +12,15 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
+import java.math.BigDecimal;
+
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusUnitsOfMeasure;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 
 /**
@@ -33,19 +36,23 @@ public class ModbusThingChannel {
     private int index;
     private ModbusValueClass valueClass;
     private ModbusDataType dataType;
+    private ModbusUnitsOfMeasure unitsOfMeasure;
+    private int scale;
     private State state = null;
     private State oldState = null;
     private ModbusReportOn reportOn;
     private boolean internal = false; // True if channel is only used internally by controller
 
     public ModbusThingChannel(ThingUID thingUID, ChannelUID uid, String dataSetKey, ModbusValueClass valueClass, int index,
-            ModbusReportOn reportOn) {
+            ModbusUnitsOfMeasure unitsOfMeasure, int scale, ModbusReportOn reportOn) {
         this.thingUID = thingUID;
         this.uid = uid;
         this.dataSetKey = dataSetKey;
         this.valueClass = valueClass;
         this.dataType = ModbusDataType.Unknown;
         this.index = index;
+        this.unitsOfMeasure = unitsOfMeasure;
+        this.scale = scale;
         this.state = UnDefType.UNDEF;
         this.oldState = UnDefType.UNDEF;
         this.reportOn = reportOn;
@@ -118,6 +125,14 @@ public class ModbusThingChannel {
      */
     public ModbusValueClass getValueClass() {
         return valueClass;
+    }
+
+    public int getScale() {
+        return scale;
+    }
+
+    public ModbusUnitsOfMeasure getUnitsOfMeasure() {
+        return unitsOfMeasure;
     }
 
     public boolean isLast() {

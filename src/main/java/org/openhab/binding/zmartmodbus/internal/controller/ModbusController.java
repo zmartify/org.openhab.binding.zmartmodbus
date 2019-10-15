@@ -148,7 +148,7 @@ public class ModbusController {
         /*
          * if (nodeId != CONTROLLER_NODE_ID) {
          * ModbusAction action = new ModbusAction(nodeId, 0, ModbusMessageClass.GetDeviceInfo, ModbusActionClass.Read,
-         * ModbusFeedRepeat.Once, 0, 0, 0, ModbusReportOn.Allways);
+         * ModbusFeedRepeat.Once, 0, 0, 0, ModbusReportOn.Always);
          * getActionFeed().addAction(action);
          * }
          */

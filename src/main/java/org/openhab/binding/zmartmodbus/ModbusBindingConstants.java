@@ -149,6 +149,8 @@ public class ModbusBindingConstants {
         public static final String PROPERTY_CHANNELCFG_VALUETYPE = "valuetype";
         public static final String PROPERTY_CHANNELCFG_INDEX = "index";
         public static final String PROPERTY_CHANNELCFG_REPORTON = "reportOn";
+        public static final String PROPERTY_CHANNELCFG_UOM = "unit";
+        public static final String PROPERTY_CHANNELCFG_SCALE = "scale";
 
         public final static String OFFLINE_CTLR_OFFLINE = "@text/modbus.thingstate.controller_offline";
         public final static String OFFLINE_CTLR_ONLINE = "@text/modbus.thingstate.controller_online";

@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0" xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 org.eclipse.smarthome.thing-description.xsd">
 
+    <!-- Program functions -->
+    <channel-type id="nilan_programselect">
+        <item-type>Number</item-type>
+        <label>Program.Select</label>
+        <description>Week program nb. select</description>
+        <state>
+            <options>
+                <option value="0">None</option>
+                <option value="1">Program 1</option>
+                <option value="2">Program 2</option>
+                <option value="3">Program 3</option>
+                <option value="4">Erase</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <channel-type id="nilan_programuserfuncset">
+        <item-type>Number</item-type>
+        <label>Program.UserFuncSet</label>
+        <description>User function select</description>
+        <state>
+            <options>
+                <option value="0">None</option>
+                <option value="1">Extend</option>
+                <option value="2">Inlet</option>
+                <option value="3">Exhaust</option>
+                <option value="4">Exhaust heater offset</option>
+                <option value="5">Ventilate</option>
+                <option value="6">Cooker Hood</option>
+            </options>
+        </state>
+    </channel-type>
+
     <!-- Switch Channel NILAN -->
     <channel-type id="nilan_runset">
         <item-type>Number</item-type>
@@ -25,6 +58,25 @@
                 <option value="2">Cool (no heating active)</option>
                 <option value="3">Auto </option>
                 <option value="4">Service (read only)</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <channel-type id="nilan_controlservicemode" advanced="true">
+        <item-type>Number</item-type>
+        <label>Control.ServiceMode</label>
+        <description>Service mode select</description>
+        <state>
+            <options>
+                <option value="0">Off</option>
+                <option value="1">Defrost</option>
+                <option value="2">Flaps</option>
+                <option value="3">Inlet</option>
+                <option value="4">Exhaust</option>
+                <option value="5">Compressor</option>
+                <option value="6">Heating</option>
+                <option value="7">Hot water</option>
+                <option value="8">Central heat</option>
             </options>
         </state>
     </channel-type>
@@ -59,13 +111,13 @@
     </channel-type>
 
     <channel-type id="nilan_coolset">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Cool setpoint</label>
         <description>Cooling temperature setpoint select</description>
-        <state>
+        <state pattern="%.0f %unit%">
             <options>
                 <option value="0">Off (No cooling allowed)</option>
-                <option value="1">Set +0 ˚C (User setpoint plus 0 degrees)</option>
+                <option value="1">Set  +0 ˚C (User setpoint plus 0 degrees)</option>
                 <option value="2">Set  +1 ˚C</option>
                 <option value="3">Set  +2 ˚C</option>
                 <option value="4">Set  +3 ˚C</option>
@@ -78,10 +130,10 @@
     </channel-type>
 
     <channel-type id="nilan_nightdaylim">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Night Day limit</label>
         <description>Outdoor day temperature for night cooling activation</description>
-        <state>
+        <state pattern="%.0f %unit%">
             <options>
                 <option value="0">Off</option>
                 <option value="20">20</option>
@@ -110,10 +162,10 @@
     </channel-type>
 
     <channel-type id="nilan_nightset">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Free energy setpoint</label>
         <description>Free energy night cooling room setpoint</description>
-        <state>
+        <state pattern="%.0f %unit%">
             <options>
                 <option value="10">10</option>
                 <option value="11">11</option>
@@ -161,11 +213,11 @@
     </channel-type>
 
     <channel-type id="nilan_airflowwintertemp">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>AirFlow.WinterTemp</label>
         <description>Low outdoor temperature</description>
         <category>thermostatsetpoint</category>
-        <state min="-20" max="10"></state>
+        <state min="-20" max="10" pattern="%.0f %unit%"></state>
     </channel-type>
 
     <channel-type id="nilan_airflowwintervent">
@@ -197,44 +249,44 @@
     </channel-type>
 
     <channel-type id="nilan_tempminsum">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>AirTemp.TempMinSum</label>
         <description>Summer minimum supply air temperature</description>
-        <state min="5" max="14" pattern="%.2f" readOnly="false"></state>
+        <state min="5" max="14" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
     <channel-type id="nilan_tempmaxsum">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>AirTemp.TempMaxSum</label>
         <description>Summer maximum supply air temperature</description>
-        <state min="5" max="25" pattern="%.2f" readOnly="false"></state>
+        <state min="5" max="25" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
     <channel-type id="nilan_tempminwin">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>AirTemp.MinWin</label>
         <description>Winter minimum supply air temperature</description>
-        <state min="5" max="16" pattern="%.2f" readOnly="false"></state>
+        <state min="5" max="16" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
     <channel-type id="nilan_tempmaxwin">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>AirTemp.TempMaxWin</label>
         <description>Winter maximum supply air temperature</description>
-        <state min="5" max="35" pattern="%.2f" readOnly="false"></state>
+        <state min="5" max="35" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
     <channel-type id="nilan_temproomnz">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>AirTemp.RoomNZ</label>
         <description>Room temperature regulation deadband</description>
-        <state min="0.20" max="10" pattern="%.2f" readOnly="false"></state>
+        <state min="0.20" max="10" pattern="%.2f %unit%" readOnly="false"></state>
     </channel-type>
 
     <channel-type id="nilan_temproomlow">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Low room</label>
-        <state min="1" max="20" pattern="%.2f" readOnly="false"></state>
+        <state min="1" max="20" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
 </thing:thing-descriptions>

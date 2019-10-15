@@ -282,7 +282,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         for (int elementId = 0; elementId < 48; elementId++) {
             // Add channel for the element index
             ModbusDataSet dataSet = new ModbusDataSet(thingUID, ModbusMessageClass.Holding,
-                    Jablotron.getAddress(0x01, 0, elementId), 0x0C, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
+                    Jablotron.getAddress(0x01, 0, elementId), 0x0C, 0, ModbusReportOn.Always, ModbusFeedRepeat.Once);
             dataSet.setInternal(true);
             String dataSetKey = String.format("%s-%d-discovery1", thingUID.getAsString(), elementId);
             bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);
@@ -298,7 +298,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
     public void getDeviceInfo(ThingUID thingUID) {
         logger.debug("Jablotron: getDeviceInfo {}", thingUID);
         ModbusDataSet dataSet = new ModbusDataSet(thingUID, ModbusMessageClass.Input, Jablotron.getAddress(0x07, 0, 0),
-                0x05, 0, ModbusReportOn.Allways, ModbusFeedRepeat.Once);
+                0x05, 0, ModbusReportOn.Always, ModbusFeedRepeat.Once);
         dataSet.setInternal(true);
         String dataSetKey = "get-device-info";
         bridgeHandler.getController().getModbusFactory().getDataSets().addDataSet(dataSetKey, dataSet);

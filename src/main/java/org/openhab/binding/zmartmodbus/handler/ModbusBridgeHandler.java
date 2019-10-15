@@ -183,6 +183,10 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Starting action feeds");
 
+        // Make an initial slow run to get data filled in
+        getController().getActionFeed().execSlowActions();
+ 
+        // Hereafter we schedule it with SlowPool delay
         slowPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
@@ -190,6 +194,10 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
             }
         }, 0, modbusBridgeConfig.getSlowPoll(), TimeUnit.SECONDS);
 
+        // Make an initial fast run to get data filled in
+        getController().getActionFeed().execFastActions();
+
+        // Hereafter we schedule it with FastPoll delay
         fastPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
             @Override
             public void run() {
@@ -238,11 +246,11 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
         if (command instanceof RefreshType) {
             // We do not support REFRESH
         } else {
-            // switch (channelUID.getIdWithoutGroup()) {
             stateSubscriber.modbusState(new ModbusState(channelUID, (State) command));
         }
     }
 
+    
     @Override
     public void handleUpdate(ChannelUID uid, State state) {
         updateState(uid, state);

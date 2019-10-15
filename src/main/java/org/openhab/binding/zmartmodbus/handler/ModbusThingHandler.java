@@ -12,15 +12,7 @@
  */
 package org.openhab.binding.zmartmodbus.handler;
 
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.META_HEATUNITID;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.META_THERMOSTATID;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_CHANNELCFG_DATASET;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_CHANNELCFG_INDEX;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_CHANNELCFG_REPORTON;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.PROPERTY_CHANNELCFG_VALUETYPE;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_TYPE_JABLOTRON_ACTUATOR;
-import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_TYPE_JABLOTRON_TP150;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -51,6 +43,7 @@ import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusUnitsOfMeasure;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusThingConfiguration;
@@ -286,6 +279,13 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                 channel.getConfiguration().put(META_HEATUNITID, channelId);
             }
 
+            // If using units of measure
+            ModbusUnitsOfMeasure unitsOfMeasure = ModbusUnitsOfMeasure.fromString(properties.get(PROPERTY_CHANNELCFG_UOM));
+
+            // If multiplier defined set it, otherwise set it as 0
+            String scaleStr = properties.get(PROPERTY_CHANNELCFG_SCALE);
+            int scale = (scaleStr != null) ? Integer.decode(scaleStr) : 0;
+
             logger.trace("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:",
                     thing.getUID(), elementId, channelId, channel.getUID().getId());
 
@@ -295,6 +295,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                                 makeDataSetKey(properties.get(PROPERTY_CHANNELCFG_DATASET), thing.getUID()),
                                 ModbusValueClass.fromString(properties.get(PROPERTY_CHANNELCFG_VALUETYPE)),
                                 addressWizard(properties.get(PROPERTY_CHANNELCFG_INDEX), channelId, elementId),
+                                unitsOfMeasure, scale,
                                 ModbusReportOn.fromString(properties.get(PROPERTY_CHANNELCFG_REPORTON))));
             }
         }

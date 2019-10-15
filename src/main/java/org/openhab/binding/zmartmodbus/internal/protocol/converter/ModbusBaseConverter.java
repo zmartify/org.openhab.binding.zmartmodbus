@@ -30,11 +30,15 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.unsignedByt
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
+
+import javax.measure.Unit;
+import javax.measure.quantity.Temperature;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -44,8 +48,12 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.core.library.types.DateTimeType;
 import org.eclipse.smarthome.core.library.types.DecimalType;
 import org.eclipse.smarthome.core.library.types.OnOffType;
+import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.types.StringType;
+import org.eclipse.smarthome.core.library.unit.ImperialUnits;
+import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.thing.ChannelUID;
+import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
@@ -64,13 +72,13 @@ public class ModbusBaseConverter {
 
     private final static Logger logger = LoggerFactory.getLogger(ModbusBaseConverter.class);
 
-    public static State fromModbusToState(ModbusValueClass valueClass, Object payload, int channelIndex) {
-        int index = channelIndex * valueClass.size();
+    public static State fromModbusToState(ModbusThingChannel channel, Object payload) {
+        int index = channel.getIndex() * channel.getValueClass().size();
         State state = UnDefType.UNDEF;
-
-        switch (valueClass) {
+        // logger.info("State = {} {}", state.getClass(), channel.getUID().getClass());
+        switch (channel.getValueClass()) {
             case Bit:
-                if (((BitVector) payload).getBit(channelIndex) == true) {
+                if (((BitVector) payload).getBit(channel.getIndex()) == true) {
                     state = OnOffType.ON;
                 } else {
                     state = OnOffType.OFF;
@@ -111,10 +119,10 @@ public class ModbusBaseConverter {
             case Float32_swap:
                 state = new DecimalType(registersToFloatSwap((byte[]) payload, index));
                 break;
-            case Custom16_power:
+            case Jablotron_power16:
                 state = new DecimalType((float) registerToUnsignedShort((byte[]) payload, index) * 24 / 0.54);
                 break;
-            case Custom32_power:
+            case Jablotron_power32:
                 state = new DecimalType((float) registersToIntSwap((byte[]) payload, index) * 24 / 0.54);
                 break;
             case Custom8_4bit:
@@ -125,6 +133,9 @@ public class ModbusBaseConverter {
                 break;
             case Custom8_6bit:
                 state = new DecimalType(unsignedByteToInt(((byte[]) payload)[index]) & 0x3F);
+                break;
+            case Custom8_7bit:
+                state = new DecimalType(unsignedByteToInt(((byte[]) payload)[index]) & 0x7F);
                 break;
             case Jablotron_RSSI:
                 state = new DecimalType(unsignedByteToInt(((byte[]) payload)[index]) * 0.5 - 74);
@@ -193,131 +204,168 @@ public class ModbusBaseConverter {
                 state = new DateTimeType(
                         LocalDateTime.of(year, month, day, hour, minute, second).atZone(ZoneId.of("Europe/Paris")));
                 break;
+            case DOS_time:
+                long dosTime = registersToUnsignedInt((byte[]) payload, index);
+                state = new DateTimeType(LocalDateTime
+                        .of((int) (((dosTime >> 25) & 0x7f) + 1980), (int) (((dosTime >> 21) & 0x0f) - 1),
+                                (int) ((dosTime >> 16) & 0x1f), (int) ((dosTime >> 11) & 0x1f),
+                                (int) ((dosTime >> 5) & 0x3f), (int) ((dosTime << 1) & 0x3e))
+                        .atZone(ZoneId.of("Europe/Paris")));
+                break;
             default:
                 break;
         }
-        return state;
+        if ((channel.getUnitsOfMeasure() != null) && (state instanceof Number)) {
+            return new QuantityType<>(
+                    BigDecimal.valueOf(((Number) state).longValue()).movePointLeft(channel.getScale()),
+                    channel.getUnitsOfMeasure().getApi());
+        } else {
+            return state;
+        }
     }
 
     @Nullable
-    public static Object fromStateToModbus(ChannelUID uid, State state, ModbusThingChannel channel) {
+    public static Object fromStateToModbus(State state, ModbusThingChannel channel) {
         Object payload = null;
+        BigDecimal value;
+
         if (state.getClass().equals(org.eclipse.smarthome.core.library.types.OnOffType.class)) {
-            DecimalType onOffAsDecimalType = new DecimalType((((OnOffType) state) == OnOffType.ON) ? 0xFF : 0);
-            switch (channel.getValueClass()) {
-                case Bit:
-                    payload = (boolean) (((OnOffType) state) == OnOffType.ON);
-                    break;
-                case Int8:
-                    payload = onOffAsDecimalType.byteValue();
-                    break;
-                case Uint16:
-                case Int16:
-                    payload = shortToRegister((short) onOffAsDecimalType.intValue());
-                    break;
-                case Int16dec:
-                    payload = shortToRegister((short) (onOffAsDecimalType.floatValue() * 10));
-                    break;
-                case Int16cen:
-                    payload = shortToRegister((short) (onOffAsDecimalType.floatValue() * 100));
-                    break;
-                case Uint32:
-                case Int32:
-                    payload = intToRegisters(onOffAsDecimalType.intValue());
-                    break;
-                case Float32:
-                    payload = floatToRegisters(onOffAsDecimalType.floatValue());
-                    break;
-                case Int32_swap:
-                case Uint32_swap:
-                    payload = intToRegistersSwap(onOffAsDecimalType.intValue());
-                    break;
-                default:
-                    logger.error("ValueClass not found - return null");
-                    return null;
-            }
+            value = new BigDecimal((((OnOffType) state) == OnOffType.ON) ? 0xFF : 0);
         } else {
-            switch (channel.getValueClass()) {
-                case Bit:
-                    payload = (boolean) (((OnOffType) state) == OnOffType.ON);
-                    break;
-                case Int8:
-                    payload = ((DecimalType) state).byteValue();
-                    break;
-                case Uint16:
-                    payload = shortToRegister((short) ((DecimalType) state).intValue());
-                    break;
-                case Int16:
-                    payload = shortToRegister((short) ((DecimalType) state).intValue());
-                    break;
-                case Int16dec:
-                    payload = shortToRegister((short) (((DecimalType) state).floatValue() * 10));
-                    break;
-                case Int16cen:
-                    payload = shortToRegister((short) (((DecimalType) state).floatValue() * 100));
-                    break;
-                case Uint32:
-                    payload = intToRegisters(((DecimalType) state).intValue());
-                    break;
-                case Int32:
-                    payload = intToRegisters(((DecimalType) state).intValue());
-                    break;
-                case Float32:
-                    payload = floatToRegisters(((DecimalType) state).floatValue());
-                    break;
-                case Int32_swap:
-                    payload = intToRegistersSwap(((DecimalType) state).intValue());
-                    break;
-                case Uint32_swap:
-                    payload = intToRegistersSwap(((DecimalType) state).intValue());
-                    break;
-                case Float32_swap:
-                    payload = floatToRegistersSwap(((DecimalType) state).floatValue());
-                    break;
-                case Custom16_power:
-                    logger.warn("'Custom16_power' - write not supported, read-only channel");
-                    return null;
-                case Custom8_4bit:
-                    payload = ((DecimalType) state).byteValue() & 0x0F;
-                    break;
-                case Custom8_5bit:
-                    payload = ((DecimalType) state).byteValue() & 0x1F;
-                    break;
-                case Custom8_6bit:
-                    payload = ((DecimalType) state).byteValue() & 0x3F;
-                    break;
-                case Jablotron_schedule:
-                    JsonParser parser = new JsonParser();
-                    JsonObject schedule = parser.parse(state.toFullString()).getAsJsonObject();
-                    payload = shortToRegister(schedule.get("kind").getAsShort());
-                    for (WeekDayClass day : WeekDayClass.values()) {
-                        BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
-                        payload = ArrayUtils.addAll((byte[]) payload, bv.getBytes());
-                    }
-                    break;
-                case Nilan_time:
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    ZonedDateTime dateTime = ((DateTimeType) state).getZonedDateTime();
-                    try {
-                        outputStream.write(shortToRegister((short) dateTime.getSecond()));
-                        outputStream.write(shortToRegister((short) dateTime.getMinute()));
-                        outputStream.write(shortToRegister((short) dateTime.getHour()));
-                        outputStream.write(shortToRegister((short) dateTime.getDayOfMonth()));
-                        outputStream.write(shortToRegister((short) dateTime.getMonthValue()));
-                    } catch (IOException e) {
-                        logger.error("Unable to set nilan time");
-                    }
-                    payload = outputStream.toByteArray();
-                    break;
-                default:
-                    logger.error("ValueClass not found - return null");
-                    return null;
+            // Handle Units of Measure channels
+            if ((state instanceof QuantityType) && (channel.getUnitsOfMeasure() != null)) {
+                QuantityType<?> quantity = (QuantityType<?>) state;
+                value = quantity.toUnit(channel.getUnitsOfMeasure().getApi()).toBigDecimal()
+                        .movePointRight(channel.getScale());
+            } else {
+                if (state instanceof Number) {
+                    // Normal channel with numeric value
+                    value = BigDecimal.valueOf(((Number) state).doubleValue());
+                } else {
+                    value = null;
+                }
             }
+        }
+
+        switch (channel.getValueClass()) {
+            case Bit:
+                payload = (boolean) (((OnOffType) state) == OnOffType.ON);
+                break;
+            case Int8:
+                payload = value.byteValue();
+                break;
+            case Uint16:
+            case Int16:
+                payload = shortToRegister(value.shortValue());
+                break;
+            case Int16dec:
+                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 10));
+                break;
+            case Int16cen:
+                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 100));
+                break;
+            case Uint32:
+            case Int32:
+                payload = intToRegisters(value.intValue());
+                break;
+            case Float32:
+                payload = floatToRegisters(value.floatValue());
+                break;
+            case Int32_swap:
+            case Uint32_swap:
+                payload = intToRegistersSwap(value.intValue());
+                break;
+            case Float32_swap:
+                payload = floatToRegistersSwap(value.floatValue());
+                break;
+            case Jablotron_power16:
+            case Jablotron_power32:
+                logger.warn("'Jablotron_power16 and Jablotron_power32' - write not supported, read-only channel");
+                return null;
+            case Custom8_4bit:
+                payload = value.byteValue() & 0x0F;
+                break;
+            case Custom8_5bit:
+                payload = value.byteValue() & 0x1F;
+                break;
+            case Custom8_6bit:
+                payload = value.byteValue() & 0x3F;
+                break;
+            case Custom8_7bit:
+                payload = value.byteValue() & 0x7F;
+                break;
+            case Jablotron_schedule:
+                JsonParser parser = new JsonParser();
+                JsonObject schedule = parser.parse(state.toFullString()).getAsJsonObject();
+                payload = shortToRegister(schedule.get("kind").getAsShort());
+                for (WeekDayClass day : WeekDayClass.values()) {
+                    BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
+                    payload = ArrayUtils.addAll((byte[]) payload, bv.getBytes());
+                }
+                break;
+            case Nilan_time:
+                ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+                ZonedDateTime dateTime = ((DateTimeType) state).getZonedDateTime();
+                try {
+                    outputStream.write(shortToRegister((short) dateTime.getSecond()));
+                    outputStream.write(shortToRegister((short) dateTime.getMinute()));
+                    outputStream.write(shortToRegister((short) dateTime.getHour()));
+                    outputStream.write(shortToRegister((short) dateTime.getDayOfMonth()));
+                    outputStream.write(shortToRegister((short) dateTime.getMonthValue()));
+                } catch (IOException e) {
+                    logger.error("Unable to set nilan time");
+                }
+                payload = outputStream.toByteArray();
+                break;
+            default:
+                logger.error("ValueClass not found - return null");
+                return null;
+
         }
         if (channel.getValueClass() != ModbusValueClass.Bit) {
             payload = Arrays.copyOfRange((byte[]) payload, 0, ((channel.getValueClass().size() + 1) / 2 * 2));
         }
         return payload;
+    }
+
+    /**
+     * Converts an integer value into a {@link QuantityType}. The temperature as an integer is assumed to be multiplied
+     * by 100 as per the ZigBee standard format.
+     *
+     * @param value the integer value to convert
+     * @return the {@link QuantityType}
+     */
+    protected QuantityType<?> valueToTemperature(int value, Unit<?> api) {
+        return new QuantityType<>(BigDecimal.valueOf(value, 2), api);
+    }
+
+    /**
+     * Converts a {@link Command} to a Modbus temperature integer
+     *
+     * @param state the {@link Command} to convert
+     * @return the {@link Command} or null if the conversion was not possible
+     */
+    protected Integer temperatureToValue(State state, int scale) {
+        BigDecimal value = null;
+        if (state instanceof QuantityType) {
+            QuantityType<?> quantity = (QuantityType<?>) state;
+            if (quantity.getUnit() == SIUnits.CELSIUS) {
+
+                value = quantity.toBigDecimal();
+            } else if (quantity.getUnit() == ImperialUnits.FAHRENHEIT) {
+                QuantityType<?> celsius = quantity.toUnit(SIUnits.CELSIUS);
+                if (celsius == null) {
+                    return null;
+                }
+                value = celsius.toBigDecimal();
+            } else {
+                return null;
+            }
+        } else if (state instanceof Number) {
+            // No scale, so assumed to be Celsius
+            value = BigDecimal.valueOf(((Number) state).doubleValue());
+        }
+        return value.setScale(2, RoundingMode.CEILING).scaleByPowerOfTen(scale).intValue();
     }
 
 }

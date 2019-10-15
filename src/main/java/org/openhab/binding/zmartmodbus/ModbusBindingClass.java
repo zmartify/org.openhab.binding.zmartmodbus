@@ -18,8 +18,22 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLO
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLOTRON_TP150;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_NILAN_COMFORT300;
 
+import java.util.Optional;
+
+import javax.measure.Unit;
+import javax.measure.quantity.Angle;
+import javax.measure.quantity.Dimensionless;
+import javax.measure.quantity.Length;
+import javax.measure.quantity.Pressure;
+import javax.measure.quantity.Speed;
+import javax.measure.quantity.Temperature;
+
+import org.eclipse.smarthome.core.library.unit.SIUnits;
+import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
+
+import tec.uom.se.unit.Units;
 
 /**
  * supported modbus commands
@@ -180,7 +194,7 @@ public class ModbusBindingClass {
      * Defines the maximum value of the transaction identifier.
      */
     public static final int MAX_TRANSACTION_ID = (Short.MAX_VALUE * 2) - 1;
-    
+
     public enum DataType {
         DecimalType,
         HSBType,
@@ -236,7 +250,7 @@ public class ModbusBindingClass {
     }
 
     public static enum ModbusReportOn {
-        Allways("allways"),
+        Always("always"),
         Change("change"),
         Never("never"),
         Unknown("unknown");
@@ -490,6 +504,48 @@ public class ModbusBindingClass {
 
     }
 
+    // Units of measurement of the data delivered by the API
+    public static final Unit<Temperature> API_TEMPERATURE_UNIT = SIUnits.CELSIUS;
+    public static final Unit<Dimensionless> API_HUMIDITY_UNIT = SmartHomeUnits.PERCENT;
+    public static final Unit<Dimensionless> API_CO2_UNIT = SmartHomeUnits.PARTS_PER_MILLION;
+    public static final Unit<Dimensionless> API_NOISE_UNIT = SmartHomeUnits.DECIBEL;
+    public static final Unit<Dimensionless> API_PERCENT_UNIT = SmartHomeUnits.PERCENT;
+
+    public static enum ModbusUnitsOfMeasure {
+        Temperature("temperature", API_TEMPERATURE_UNIT),
+        Humidity("humidity", API_HUMIDITY_UNIT),
+        Co2("co2", API_CO2_UNIT),
+        Noise("noise", API_NOISE_UNIT),
+        Percent("percent", API_PERCENT_UNIT);
+
+        private ModbusUnitsOfMeasure(final String text, final Unit<?> api) {
+            this.text = text;
+            this.api = api;
+        }
+
+        private final String text;
+        private final Unit<?> api;
+
+        public String getLabel() {
+            return text;
+        }
+
+        public Unit<?> getApi() {
+            return api;
+        }
+
+        public static ModbusUnitsOfMeasure fromString(String text) {
+            if (text != null) {
+                for (ModbusUnitsOfMeasure c : ModbusUnitsOfMeasure.values()) {
+                    if (text.equalsIgnoreCase(c.name())) {
+                        return c;
+                    }
+                }
+            }
+            return null;
+        }
+    }
+
     /**
      * Value type, primary for "input" type
      */
@@ -510,12 +566,16 @@ public class ModbusBindingClass {
          * Custom value class - used for special conversion
          */
 
-        // JABLOTRON AC-116
-        Custom16_power("custom16_power", 2), // 16-bit register Current consumption P = 24 x Int16 / 0,54 [mW]
-        Custom32_power("custom32_power", 4), // 32-bit register Current consumption P = 24 x Int32 / 0,54 [mW]
+        // VARIOUS
+        DOS_time("dos_time", 4), // 32-bit register with time in DOS format
         Custom8_4bit("custom8_4bit", 1), // 8-bit register, use only first 4 bits
         Custom8_5bit("custom8_5bit", 1), // 8-bit register, use only first 5 bits
         Custom8_6bit("custom8_6bit", 1), // 8-bit register, use only first 6 bits
+        Custom8_7bit("custom8_7bit", 1), // 8-bit register, use only first 7 bits
+
+        // JABLOTRON AC-116
+        Jablotron_power16("jablotron_power16", 2), // 16-bit register Current consumption P = 24 x Int16 / 0,54 [mW]
+        Jablotron_power32("jablotron_power32", 4), // 32-bit register Current consumption P = 24 x Int32 / 0,54 [mW]
         Jablotron_RSSI("jablotron_rssi", 1), // 8-bit register, for signal strength in 0.5 dBm - base -74 dBm
         Jablotron_battery("jablotron_battery", 1), // 4-bit register, for battery level in 10% units
         Jablotron_discovery("jablotron_discovery", 2), // Used for Jablotron auto-discovery
@@ -523,6 +583,8 @@ public class ModbusBindingClass {
         Jablotron_elementChangeFlags("jablotron_elementChangeFlags", 8),
         Jablotron_channelChangeFlags("jablotron_channelChangeFlags", 4),
         Jablotron_packetdataChangeFlags("jablotron_packetdataChangeFlags", 4),
+
+        // NILAN COMFORT
         Nilan_time("nilan_time", 12),
         Nilan_text("nilan_text", 10),
         Unknown("unknown", 0);

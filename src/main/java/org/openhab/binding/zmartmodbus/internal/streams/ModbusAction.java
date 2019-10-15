@@ -72,7 +72,7 @@ public class ModbusAction {
     }
 
     public ModbusAction(ThingUID thingUID, ModbusMessageClass messageClass) {
-        this(thingUID,0,messageClass, ModbusActionClass.Read, ModbusFeedRepeat.Once, 0, 0 , 0, ModbusReportOn.Allways);
+        this(thingUID,0,messageClass, ModbusActionClass.Read, ModbusFeedRepeat.Once, 0, 0 , 0, ModbusReportOn.Always);
     }
 
     public ModbusAction(ModbusDataSet dataSet, ModbusActionClass actionClass) {

@@ -12,8 +12,10 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x00</property>
-                    <property name="valuetype">int16dec</property>
-                    <property name="reportOn">allways</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
+                    <property name="reportOn">always</property>
                 </properties>
             </channel>
             <channel id="AirTemperature" typeId="sensor_airtemperature">
@@ -22,8 +24,10 @@
                 <properties>
                     <property name="dataset">sensors</property>
                     <property name="index">0x00</property>
-                    <property name="valuetype">int16dec</property>
-                    <property name="reportOn">allways</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
+                    <property name="reportOn">always</property>
                 </properties>
             </channel>
             <channel id="FloorTemperature" typeId="sensor_floortemperature">
@@ -32,8 +36,10 @@
                 <properties>
                     <property name="dataset">sensors</property>
                     <property name="index">0x01</property>
-                    <property name="valuetype">int16dec</property>
-                    <property name="reportOn">allways</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
+                    <property name="reportOn">always</property>
                 </properties>
             </channel>
             <channel id="DewPointTemperature" typeId="sensor_dewpoint">
@@ -124,7 +130,7 @@
                     <property name="dataset">misc</property>
                     <property name="index">0x03</property>
                     <property name="valuetype">jablotron_battery</property>
-                    <property name="reportOn">allways</property>
+                    <property name="reportOn">always</property>
                 </properties>
             </channel>
             <channel id="FloorSensor" typeId="sensor_binary">
@@ -196,7 +202,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x01</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="EcoTemp" typeId="thermostat_heatingsetpoint">
@@ -205,7 +213,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x02</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="HolidayTemp" typeId="thermostat_heatingsetpoint">
@@ -214,7 +224,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x03</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="StandbyTemp" typeId="thermostat_heatingsetpoint">
@@ -223,7 +235,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x04</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="PartyTemp" typeId="thermostat_heatingsetpoint">
@@ -232,10 +246,12 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x05</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="ThermostatMode" typeId="thermostat_mode">
+            <channel id="ThermostatMode" typeId="jablotron_thermostat_mode">
                 <label>Thermostat Mode</label>
                 <description>Sets the mode of the thermostat</description>
                 <properties>
@@ -250,7 +266,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x08</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="MaxTemp" typeId="thermostat_heatingsetpoint">
@@ -259,7 +277,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x09</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="FloorMinTemp" typeId="thermostat_heatingsetpoint">
@@ -268,7 +288,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0A</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="FloorMaxTemp" typeId="thermostat_heatingsetpoint">
@@ -277,7 +299,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0B</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="AlarmMinTemp" typeId="thermostat_heatingsetpoint">
@@ -286,7 +310,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0C</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="AlarmMaxTemp" typeId="thermostat_heatingsetpoint">
@@ -295,7 +321,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0D</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="Hysteresis" typeId="thermostat_heatingsetpoint">
@@ -304,7 +332,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0E</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="DesiredTemp" typeId="sensor_temperature">
@@ -313,7 +343,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x10</property>
-                    <property name="valuetype">int16dec</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="RSSIElementSide" typeId="system.signal-strength">

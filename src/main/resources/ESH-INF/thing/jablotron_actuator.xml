@@ -93,7 +93,7 @@
                 <properties>
                     <property name="dataset">channel</property>
                     <property name="index">0x01</property>
-                    <property name="valuetype">Custom8_4bit</property>
+                    <property name="valuetype">custom8_4bit</property>
                 </properties>
             </channel>
             <channel id="PowerConsumption" typeId="meter_watts">
@@ -102,7 +102,7 @@
                 <properties>
                     <property name="dataset">channel</property>
                     <property name="index">0x01</property>
-                    <property name="valuetype">custom16_power</property>
+                    <property name="valuetype">jablotron_power16</property>
                 </properties>
             </channel>
             <channel id="PrimaryElement" typeId="jablotron_element">
@@ -114,7 +114,9 @@
                     <property name="valuetype">custom8_6bit</property>
                 </properties>
             </channel>
-		</channels>
+        </channels>
+        
+        <!-- DATATYPE:SLOWorFAST:REPORTON:LENGTH:CATEGORY:INDEX:PAGE -->
 
         <properties>
             <property name="dataset_teventstatus">coil:slow:change:0x10:0x03:0x00:channel</property>

@@ -115,7 +115,7 @@ public class ModbusFactory<T> {
                     if (channel != null) {
                         actionSubscriber.modbusAction(new ModbusAction(dataSets.getDataSet(channel.getDataSetKey()),
                                 channel.getIndex(), ModbusActionClass.Write, ModbusFeedRepeat.Once, ModbusBaseConverter
-                                        .fromStateToModbus(modbusState.getUid(), modbusState.getState(), channel)));
+                                        .fromStateToModbus(modbusState.getState(), channel)));
                     }
                 }
 
@@ -215,9 +215,9 @@ public class ModbusFactory<T> {
 
                     default:
                         // Handle normal situations
-                        channel.updateState(ModbusBaseConverter.fromModbusToState(channel.getValueClass(),
-                                modbusMessage.getPayload(), channel.getIndex()));
-                        if (channel.stateChanged() || channel.getReportOn().equals(ModbusReportOn.Allways)) {
+                        channel.updateState(ModbusBaseConverter.fromModbusToState(channel,
+                                modbusMessage.getPayload()));
+                        if (channel.stateChanged() || channel.getReportOn().equals(ModbusReportOn.Always)) {
                             stateSubscriber.modbusState(new ModbusState(uid, channel.getState()));
                         }
                 }
