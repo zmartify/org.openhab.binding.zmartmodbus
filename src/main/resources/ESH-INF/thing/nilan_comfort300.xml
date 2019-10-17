@@ -13,51 +13,51 @@
 		<channels>
 
 			<!-- Channels from Input registers -->
-			<channel id="Input_AirFilter" typeId="sensor_binary">
+			<channel id="Input_AirFilter" typeId="alarm_general">
 				<label>Input.AirFilter</label>
 				<description>Air filter alarm</description>
 				<properties>
 					<property name="dataset">IInput1</property>
 					<property name="index">1</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="Input_Smoke" typeId="alarm_general">
+			<channel id="Input_Smoke" typeId="alarm_general_advanced">
 				<label>Input.Smoke</label>
 				<description>Fire/smoke alarm</description>
 				<properties>
 					<property name="dataset">IInput1</property>
 					<property name="index">3</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="Input_MotorThermo" typeId="alarm_general">
+			<channel id="Input_MotorThermo" typeId="alarm_general_advanced">
 				<label>Input.MotorThermo</label>
 				<description>Motor thermo fuse</description>
 				<properties>
 					<property name="dataset">IInput1</property>
 					<property name="index">4</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
 
-			<channel id="Input_DamperClosed" typeId="sensor_binary">
+			<channel id="Input_DamperClosed" typeId="sensor_binary_advanced">
 				<label>Input.DamperClosed</label>
 				<description>Air damper closed position</description>
 				<properties>
 					<property name="dataset">IInput1</property>
 					<property name="index">14</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			
-			<channel id="Input_DamperOpen" typeId="sensor_binary">
+
+			<channel id="Input_DamperOpen" typeId="sensor_binary_advanced">
 				<label>Input.DamperOpen</label>
 				<description>Air damper open position</description>
 				<properties>
 					<property name="dataset">IInput1</property>
 					<property name="index">15</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
 
@@ -72,22 +72,26 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="Input_T1_Intake" typeId="sensor_temperature">
+			<channel id="Input_T1_Intake" typeId="sensor_temperature_advanced">
 				<label>Input.T1_Intake</label>
 				<description>Fresh air intake temperature</description>
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">1</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="Input_T2_Inlet" typeId="sensor_temperature">
+			<channel id="Input_T2_Inlet" typeId="sensor_temperature_advanced">
 				<label>Input.T2_Inlet</label>
 				<description>Inlet temperature (before heater)</description>
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">2</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
 			<channel id="Input_T3_Exhaust" typeId="sensor_temperature">
@@ -96,7 +100,9 @@
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">3</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
 			<channel id="Input_T4_Outlet" typeId="sensor_temperature">
@@ -105,25 +111,31 @@
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">4</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="Input_T5_Cond" typeId="sensor_temperature">
+			<channel id="Input_T5_Cond" typeId="sensor_temperature_advanced">
 				<label>Input.T5_Cond</label>
 				<description>Condenser temperature</description>
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">5</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="Input_T6_Evap" typeId="sensor_temperature">
+			<channel id="Input_T6_Evap" typeId="sensor_temperature_advanced">
 				<label>Input.T6_Evap</label>
 				<description>Evaporator temperature</description>
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">6</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
 			<channel id="Input_T7_Inlet" typeId="sensor_temperature">
@@ -132,7 +144,9 @@
 				<properties>
 					<property name="dataset">IInput2</property>
 					<property name="index">7</property>
-					<property name="valuetype">int16cen</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
 				</properties>
 			</channel>
 			<channel id="Input_T8_Outdoor" typeId="sensor_temperature">
@@ -146,7 +160,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="Input_T9_Heater" typeId="sensor_temperature">
+			<channel id="Input_T9_Heater" typeId="sensor_temperature_advanced">
 				<label>Input.T9_Heater</label>
 				<description>Heating surface temperature</description>
 				<properties>
@@ -157,7 +171,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="Input_T10_Extern" typeId="sensor_temperature">
+			<channel id="Input_T10_Extern" typeId="sensor_temperature_advanced">
 				<label>Input.T10_Extern</label>
 				<description>External room temperature</description>
 				<properties>
@@ -202,6 +216,63 @@
 				</properties>
 			</channel>
 
+			<!-- Alarm -->
+			<channel id="Alarm_L1_ID" typeId="nilan_alarmlist">
+				<label>Alarm.L1_ID</label>
+				<description>User panel room temperature</description>
+				<properties>
+					<property name="dataset">IAlarm</property>
+					<property name="index">1</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="Alarm_L1_Time" typeId="timeofday">
+				<label>Alarm.L1_Time</label>
+				<description>Alarm 1 date and time</description>
+				<properties>
+					<property name="dataset">IAlarm</property>
+					<property name="index">2</property>
+					<property name="valuetype">dos_time</property>
+				</properties>
+			</channel>
+			<channel id="Alarm_L2_ID" typeId="nilan_alarmlist">
+				<label>Alarm.L2_ID</label>
+				<description>Alarm 2 - code</description>
+				<properties>
+					<property name="dataset">IAlarm</property>
+					<property name="index">4</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="Alarm_L2_Time" typeId="timeofday">
+				<label>Alarm.L2_Time</label>
+				<description>Alarm 2 date and time</description>
+				<properties>
+					<property name="dataset">IAlarm</property>
+					<property name="index">5</property>
+					<property name="valuetype">dos_time</property>
+				</properties>
+			</channel>
+			<channel id="Alarm_L3_ID" typeId="nilan_alarmlist">
+				<label>Alarm.L3_ID</label>
+				<description>Alarm 3 - code</description>
+				<properties>
+					<property name="dataset">IAlarm</property>
+					<property name="index">7</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="Alarm_L3_Time" typeId="timeofday">
+				<label>Alarm.L3_Time</label>
+				<description>Alarm 3 date and time</description>
+				<properties>
+					<property name="dataset">IAlarm</property>
+					<property name="index">8</property>
+					<property name="valuetype">dos_time</property>
+				</properties>
+			</channel>
+
+			<!-- Display -->
 			<channel id="Text1" typeId="displayText">
 				<label>Display.Text1</label>
 				<description>1st line of display</description>
@@ -223,58 +294,58 @@
 			</channel>
 
 			<!-- Output -->
-			<channel id="HOutput_AirFlap" typeId="switch_binary">
+			<channel id="HOutput_AirFlap" typeId="switch_binary_advanced">
 				<label>Output.AirFlap</label>
 				<description>Air flap</description>
 				<properties>
 					<property name="dataset">HOutput1</property>
 					<property name="index">0</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="HOutput_SmokeFlap" typeId="switch_binary">
+			<channel id="HOutput_SmokeFlap" typeId="switch_binary_advanced">
 				<label>Output.SmokeFlap</label>
 				<description>Fire/Smoke flap</description>
 				<properties>
 					<property name="dataset">HOutput1</property>
 					<property name="index">1</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="HOutput_BypassOpen" typeId="switch_binary">
+			<channel id="HOutput_BypassOpen" typeId="switch_binary_advanced">
 				<label>Output.BypassOpen</label>
 				<description>Bypass flap open</description>
 				<properties>
 					<property name="dataset">HOutput1</property>
 					<property name="index">2</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="HOutput_BypassClose" typeId="switch_binary">
+			<channel id="HOutput_BypassClose" typeId="switch_binary_advanced">
 				<label>Output.BypassClose</label>
 				<description>Bypass flap close</description>
 				<properties>
 					<property name="dataset">HOutput1</property>
 					<property name="index">3</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="HOutput_CondOpen" typeId="switch_binary">
+			<channel id="HOutput_CondOpen" typeId="switch_binary_advanced">
 				<label>Output.CondOpen</label>
 				<description>Air condenser active</description>
 				<properties>
 					<property name="dataset">HOutput1</property>
 					<property name="index">14</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-			<channel id="HOutput_CondClose" typeId="switch_binary">
+			<channel id="HOutput_CondClose" typeId="switch_binary_advanced">
 				<label>Output.CondClose</label>
 				<description>Air condenser inactive</description>
 				<properties>
 					<property name="dataset">HOutput1</property>
 					<property name="index">15</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
 
@@ -335,13 +406,13 @@
 					<property name="valuetype">nilan_time</property>
 				</properties>
 			</channel>
-			<channel id="HControlRunSet" typeId="nilan_runset">
+			<channel id="HControlRunSet" typeId="switch_binary">
 				<label>Control.RunSet</label>
 				<description>User on/off</description>
 				<properties>
 					<property name="dataset">HControl</property>
 					<property name="index">1</property>
-					<property name="valuetype">int16</property>
+					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
 			<channel id="HControlModeSet" typeId="nilan_modeset">
@@ -383,7 +454,7 @@
 				</properties>
 			</channel>
 
-			<channel id="HAirTempTempMinSummer" typeId="thermostat_setpoint">
+			<channel id="HAirTempTempMinSummer" typeId="thermostat_setpoint_advanced">
 				<label>AirTemp.TempMinSummer</label>
 				<description>Inlet temperature min summer</description>
 				<properties>
@@ -394,7 +465,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="HAirTempTempMinWinter" typeId="thermostat_setpoint">
+			<channel id="HAirTempTempMinWinter" typeId="thermostat_setpoint_advanced">
 				<label>AirTemp.TempMinWinter</label>
 				<description>Inlet temperature min winter</description>
 				<properties>
@@ -405,7 +476,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="HAirTempTempMaxSummer" typeId="thermostat_setpoint">
+			<channel id="HAirTempTempMaxSummer" typeId="thermostat_setpoint_advanced">
 				<label>AirTemp.TempMaxSummer</label>
 				<description>Inlet temperature max summer</description>
 				<properties>
@@ -416,7 +487,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="HAirTempTempMaxWinter" typeId="thermostat_setpoint">
+			<channel id="HAirTempTempMaxWinter" typeId="thermostat_setpoint_advanced">
 				<label>AirTemp.TempMaxWinter</label>
 				<description>Inlet temperature max winter</description>
 				<properties>
@@ -427,7 +498,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="HAirTempTempSummer" typeId="thermostat_setpoint">
+			<channel id="HAirTempTempSummer" typeId="thermostat_setpoint_advanced">
 				<label>AirTemp.TempSummer</label>
 				<description>Summer/winter limit</description>
 				<properties>
@@ -458,7 +529,7 @@
 			</channel>
 
 			<!-- AirQualRH - Relative Humidity -->
-			<channel id="HAirQualRHVentLo" typeId="nilan_step">
+			<channel id="HAirQualRHVentLo" typeId="nilan_step_advanced">
 				<label>AirQual.RH_VentLo</label>
 				<description>Relative Humidity low winter step select</description>
 				<properties>
@@ -467,7 +538,7 @@
 					<property name="valuetype">int16</property>
 				</properties>
 			</channel>
-			<channel id="HAirQualRHVentHi" typeId="nilan_step">
+			<channel id="HAirQualRHVentHi" typeId="nilan_step_advanced">
 				<label>AirQual.RH_VentHi</label>
 				<description>Relative Humidity high step select</description>
 				<properties>
@@ -476,7 +547,7 @@
 					<property name="valuetype">int16</property>
 				</properties>
 			</channel>
-			<channel id="HAirQualRHLimLo" typeId="setpoint_relhumidity">
+			<channel id="HAirQualRHLimLo" typeId="setpoint_relhumidity_advanced">
 				<label>AirQual.RH_LimLo</label>
 				<description>Relative Humidity limit for low ventilation</description>
 				<properties>
@@ -487,7 +558,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
-			<channel id="HAirQualRHTimeOut" typeId="nilan_step">
+			<channel id="HAirQualRHTimeOut" typeId="nilan_step_advanced">
 				<label>AirQual.RH_TimeOut</label>
 				<description>Relative Humidity max time on high ventilation</description>
 				<properties>
@@ -548,6 +619,8 @@
 			</channel>
 
 			<channel id="DAirTempTempMinSum" typeId="nilan_tempminsum">
+				<label>AirTemp.TempMinSum</label>
+				<description>Summer minimum supply air temperature</description>
 				<properties>
 					<property name="dataset">DAirTemp</property>
 					<property name="index">0</property>
@@ -558,6 +631,8 @@
 			</channel>
 
 			<channel id="DAirTempTempMaxSum" typeId="nilan_tempmaxsum">
+				<label>AirTemp.TempMaxSum</label>
+				<description>Summer maximum supply air temperature</description>
 				<properties>
 					<property name="dataset">DAirTemp</property>
 					<property name="index">1</property>
@@ -568,6 +643,8 @@
 			</channel>
 
 			<channel id="DAirTempTempMinWin" typeId="nilan_tempminwin">
+				<label>AirTemp.TempMinWin</label>
+				<description>Winter minimum supply air temperature</description>
 				<properties>
 					<property name="dataset">DAirTemp</property>
 					<property name="index">2</property>
@@ -578,6 +655,8 @@
 			</channel>
 
 			<channel id="DAirTempTempMaxWin" typeId="nilan_tempmaxwin">
+				<label>AirTemp.TempMaxWin</label>
+				<description>Winter maximum supply air temperature</description>
 				<properties>
 					<property name="dataset">DAirTemp</property>
 					<property name="index">3</property>
@@ -588,6 +667,8 @@
 			</channel>
 
 			<channel id="DAirTempTempRoomNZ" typeId="nilan_temproomnz">
+				<label>AirTemp.TempRoomNZ</label>
+				<description>Room temperature regulation deadband</description>
 				<properties>
 					<property name="dataset">DAirTemp</property>
 					<property name="index">4</property>
@@ -598,12 +679,96 @@
 			</channel>
 
 			<channel id="DAirTempTempRoomLow" typeId="nilan_temproomlow">
+				<label>AirTemp.TempRoomLow</label>
+				<description>Low room temperature for stepwise reduced ventilation</description>
 				<properties>
 					<property name="dataset">DAirTemp</property>
 					<property name="index">5</property>
 					<property name="valuetype">int16</property>
 					<property name="unit">temperature</property>
 					<property name="scale">2</property>
+				</properties>
+			</channel>
+
+			<!-- Program -->
+			<channel id="DProgramEditIndex" typeId="sensor_general_advanced">
+				<label>Program.EditIndex</label>
+				<description>Week program index 0-41 (7 days x 6 functions each day)</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">0</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+
+			<channel id="DProgramEditPeriod" typeId="nilan_weekday">
+				<label>Program.EditPeriod</label>
+				<description>Week program - day index</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">1</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="DProgramEditPeriodNx" typeId="nilan_weekday">
+				<label>Program.EditPeriodNx</label>
+				<description>Week program - next day index</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">2</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="DProgramEditFunc" typeId="nilan_weekdayfunction">
+				<label>Program.EditFunc</label>
+				<description>Week program - day function</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">3</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="DProgramEditTimeStar" typeId="sensor_general_advanced">
+				<label>Program.EditTimeStar</label>
+				<description>Week program - start time</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">4</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+
+			<channel id="DProgramEditVent" typeId="nilan_ventset_advanced">
+				<label>Program.EditVent</label>
+				<description>Week program - fan settings</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">5</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+
+			<channel id="DProgramEditTemp" typeId="thermostat_setpoint_advanced">
+				<label>Program.EditTemp</label>
+				<description>Week program - temperature 5 °C -</description>
+				<properties>
+					<property name="dataset">DProgram</property>
+					<property name="index">6</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">0</property>
+				</properties>
+			</channel>
+
+
+			<!-- Alarm -->
+			<channel id="DAalarmLogIndex" typeId="sensor_general_advanced">
+				<label>Alarm.LogIndex</label>
+				<description>Alarm log index 0 - 15</description>
+				<properties>
+					<property name="dataset">DAlarm</property>
+					<property name="index">0</property>
+					<property name="valuetype">int16</property>
 				</properties>
 			</channel>
 		</channels>
@@ -616,6 +781,7 @@
 			<property name="dataset_IInput1">input:fast:change:16:100</property>
 			<property name="dataset_IInput2">input:fast:change:23:200</property>
 			<property name="dataset_IDisplay">input:fast:change:12:2000</property>
+			<property name="dataset_IAlarm">input:slow:change:10:400</property>
 
 			<!-- Holding registers, prefixed with H -->
 			<property name="dataset_HOutput1">holding:slow:change:28:100</property>

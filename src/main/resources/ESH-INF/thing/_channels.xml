@@ -7,8 +7,8 @@
         <label>Low battery alarm</label>
         <description>Indicates if the low battery alarm is triggered
         </description>
-        <category>batteryAlarm</category>
-        <state readOnly="true">
+        <category>Alarm</category>
+        <state readOnly="true" pattern="%s">
             <options>
                 <option value="OFF">Ok</option>
                 <option value="ON">Alarm</option>
@@ -19,19 +19,20 @@
 
     <!-- General Alarm Channel -->
     <channel-type id="alarm_general">
-        <item-type>Contact</item-type>
+        <item-type>Switch</item-type>
         <label>General alarm</label>
-        <description>Indicates if an alarm is triggered
-        </description>
+        <description>Indicates if an alarm is triggered</description>
         <category>Alarm</category>
-        <state readOnly="true">
-            <options>
-                <option value="OFF">Ok</option>
-                <option value="ON">Alarm</option>
-            </options>
-        </state>
+        <state readOnly="true"></state>
     </channel-type>
-
+    <channel-type id="alarm_general_advanced" advanced="true">
+            <item-type>Switch</item-type>
+            <label>General alarm</label>
+            <description>Indicates if an alarm is triggered</description>
+            <category>Alarm</category>
+            <state readOnly="true"></state>
+        </channel-type>
+    
     <!-- Heat Alarm Channel -->
     <channel-type id="alarm_heat">
         <item-type>Contact</item-type>
@@ -51,8 +52,7 @@
     <channel-type id="alarm_power">
         <item-type>Contact</item-type>
         <label>Power alarm</label>
-        <description>Indicates if a power alarm is triggered
-        </description>
+        <description>Indicates if a power alarm is triggered</description>
         <category>Alarm</category>
         <state readOnly="true">
             <options>
@@ -126,20 +126,20 @@
 
     <!-- Energy - Voltage -->
     <channel-type id="meter_voltage">
-        <item-type>Number</item-type>
+        <item-type>Number:ElectricPotential</item-type>
         <label>Voltage</label>
         <description>Indicates the instantaneous voltage</description>
         <category>energyMeterVolt</category>
-        <state pattern="%.1f" readOnly="true"></state>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
     <!-- Energy - Power Consumption -->
     <channel-type id="meter_watts">
-        <item-type>Number</item-type>
+        <item-type>Number:Power</item-type>
         <label>Electric Power Consumption</label>
         <description>Indicates the instantaneous power consumption</description>
         <category>energyMeterWatt</category>
-        <state pattern="%.1f" readOnly="true"></state>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
     <!-- Channel to send a notification -->
@@ -192,16 +192,18 @@
 
     <!-- Binary Sensor -->
     <channel-type id="sensor_binary">
-        <item-type>Contact</item-type>
+        <item-type>Switch</item-type>
         <label>Binary Sensor</label>
         <description>Indicates if a sensor has triggered</description>
-        <category>button</category>
-        <state readOnly="true">
-            <options>
-                <option value="ON">ON</option>
-                <option value="OFF">OFF</option>
-            </options>
-        </state>
+        <category>sensor</category>
+        <state readOnly="true"></state>
+    </channel-type>
+    <channel-type id="sensor_binary_advanced" advanced="true">
+        <item-type>Switch</item-type>
+        <label>Binary Sensor</label>
+        <description>Indicates if a sensor has triggered</description>
+        <category>sensor</category>
+        <state readOnly="true"></state>
     </channel-type>
 
     <!-- Dewpoint Channel -->
@@ -231,13 +233,21 @@
         <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
+    <channel-type id="sensor_general_advanced" advanced="true">
+        <item-type>Number:Dimensionless</item-type>
+        <label>Sensor</label>
+        <description></description>
+        <category>counter</category>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
+    </channel-type>
+
     <!-- Sensor - Power -->
     <channel-type id="sensor_power">
-        <item-type>Number</item-type>
+        <item-type>Number:Power</item-type>
         <label>Energy Consumption</label>
         <description>Indicates the energy consumption (kWh)</description>
         <category>Energy</category>
-        <state pattern="%.1f" readOnly="true"></state>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
     <!-- Humidity Channel -->
@@ -248,9 +258,23 @@
         <category>relativehumiditymeasurement</category>
         <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
+    <channel-type id="sensor_relhumidity_advanced" advanced="true">
+        <item-type>Number:Dimensionless</item-type>
+        <label>Humidity</label>
+        <description>Indicates the current relative humidity</description>
+        <category>relativehumiditymeasurement</category>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
+    </channel-type>
 
     <!-- Humidity Channel -->
     <channel-type id="setpoint_relhumidity">
+        <item-type>Number:Dimensionless</item-type>
+        <label>Humidity</label>
+        <description>Indicates the current relative humidity</description>
+        <category>relativehumiditymeasurement</category>
+        <state pattern="%.1f %unit%" readOnly="false"></state>
+    </channel-type>
+    <channel-type id="setpoint_relhumidity_advanced" advanced="true">
         <item-type>Number:Dimensionless</item-type>
         <label>Humidity</label>
         <description>Indicates the current relative humidity</description>
@@ -275,20 +299,28 @@
         <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
+    <channel-type id="sensor_temperature_advanced" advanced="true">
+        <item-type>Number:Temperature</item-type>
+        <label>Temperature</label>
+        <description>Indicates the current temperature</description>
+        <category>Temperature</category>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
+    </channel-type>
+
     <channel-type id="sensor_airtemperature">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Air temperature</label>
         <description>Indicates the current air temperature</description>
         <category>Temperature</category>
-        <state pattern="%.1f" readOnly="true"></state>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
     <channel-type id="sensor_floortemperature">
-        <item-type>Number</item-type>
+        <item-type>Number:Temperature</item-type>
         <label>Floor temperature</label>
         <description>Indicates the current floor temperature</description>
         <category>floortemperature</category>
-        <state pattern="%.1f" readOnly="true"></state>
+        <state pattern="%.1f %unit%" readOnly="true"></state>
     </channel-type>
 
     <!-- Switch Channel -->
@@ -301,6 +333,13 @@
 
     <!-- Switch Channel -->
     <channel-type id="switch_binary">
+        <item-type>Switch</item-type>
+        <label>Switch</label>
+        <description>Switch the power on and off</description>
+        <category>Switch</category>
+    </channel-type>
+
+    <channel-type id="switch_binary_advanced" advanced="true">
         <item-type>Switch</item-type>
         <label>Switch</label>
         <description>Switch the power on and off</description>
@@ -335,6 +374,15 @@
         <category>thermostatsetpoint</category>
         <state pattern="%.1f %unit%"></state>
     </channel-type>
+
+    <channel-type id="thermostat_setpoint_advanced" advanced="true">
+        <item-type>Number:Temperature</item-type>
+        <label>Setpoint</label>
+        <description>Sets the thermostate setpoint</description>
+        <category>thermostatsetpoint</category>
+        <state pattern="%.1f %unit%"></state>
+    </channel-type>
+
 
     <!-- Heating Setpoint Channel -->
     <channel-type id="thermostat_heatingsetpoint">
@@ -445,7 +493,20 @@
         <description>Date and time down to seconds</description>
     </channel-type>
 
+    <channel-type id="timeofday_advanced" advanced="true">
+        <item-type>DateTime</item-type>
+        <label>Date and time of day</label>
+        <description>Date and time down to seconds</description>
+    </channel-type>
+
     <channel-type id="minutes">
+        <item-type>Number</item-type>
+        <label>Minutes</label>
+        <description>Number of minutes (0-60)</description>
+        <state min="0" max="60"></state>
+    </channel-type>
+
+    <channel-type id="minutes_advanced" advanced="true">
         <item-type>Number</item-type>
         <label>Minutes</label>
         <description>Number of minutes (0-60)</description>

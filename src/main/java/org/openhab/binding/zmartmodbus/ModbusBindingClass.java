@@ -18,22 +18,15 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLO
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLOTRON_TP150;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_NILAN_COMFORT300;
 
-import java.util.Optional;
-
 import javax.measure.Unit;
-import javax.measure.quantity.Angle;
 import javax.measure.quantity.Dimensionless;
-import javax.measure.quantity.Length;
-import javax.measure.quantity.Pressure;
-import javax.measure.quantity.Speed;
+import javax.measure.quantity.Power;
 import javax.measure.quantity.Temperature;
 
 import org.eclipse.smarthome.core.library.unit.SIUnits;
 import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
-
-import tec.uom.se.unit.Units;
 
 /**
  * supported modbus commands
@@ -510,13 +503,15 @@ public class ModbusBindingClass {
     public static final Unit<Dimensionless> API_CO2_UNIT = SmartHomeUnits.PARTS_PER_MILLION;
     public static final Unit<Dimensionless> API_NOISE_UNIT = SmartHomeUnits.DECIBEL;
     public static final Unit<Dimensionless> API_PERCENT_UNIT = SmartHomeUnits.PERCENT;
+    public static final Unit<Power> API_POWER_UNIT = SmartHomeUnits.WATT;
 
     public static enum ModbusUnitsOfMeasure {
         Temperature("temperature", API_TEMPERATURE_UNIT),
         Humidity("humidity", API_HUMIDITY_UNIT),
         Co2("co2", API_CO2_UNIT),
         Noise("noise", API_NOISE_UNIT),
-        Percent("percent", API_PERCENT_UNIT);
+        Percent("percent", API_PERCENT_UNIT),
+        Power("power", API_POWER_UNIT);
 
         private ModbusUnitsOfMeasure(final String text, final Unit<?> api) {
             this.text = text;
@@ -553,8 +548,6 @@ public class ModbusBindingClass {
         Bit("bit", 1),
         Int8("int8", 1),
         Int16("int16", 2), // Big Endian byte order
-        Int16dec("int16dec", 2), // - value in 10th -> divided by 10 when reading and multiplied by 10 when writing
-        Int16cen("int16cen", 2), // - value in 100th -> divided by 100 when reading and multiplied by 100 when writing
         Uint16("uint16", 2), // Big Endian byte order
         Int32("int32", 4),
         Uint32("uint32", 4),
@@ -567,11 +560,12 @@ public class ModbusBindingClass {
          */
 
         // VARIOUS
-        DOS_time("dos_time", 4), // 32-bit register with time in DOS format
+        DOS_time("dos_time", 2), // 32-bit register with time in DOS format
         Custom8_4bit("custom8_4bit", 1), // 8-bit register, use only first 4 bits
         Custom8_5bit("custom8_5bit", 1), // 8-bit register, use only first 5 bits
         Custom8_6bit("custom8_6bit", 1), // 8-bit register, use only first 6 bits
         Custom8_7bit("custom8_7bit", 1), // 8-bit register, use only first 7 bits
+        OnOff16("onoff16", 2), // 16-bit register used as on(1)/off(0) switch
 
         // JABLOTRON AC-116
         Jablotron_power16("jablotron_power16", 2), // 16-bit register Current consumption P = 24 x Int16 / 0,54 [mW]

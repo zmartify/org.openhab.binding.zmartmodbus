@@ -76,10 +76,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     protected ModbusFunction modbusFunction;
 
-    // Special configuration parameters needed for jablotron
-    private int channelId = ID_NOT_USED; // Used for Jablotron special addressing
-    private int elementId = ID_NOT_USED; // Used for Jablotron special addressing
-
     private boolean configured = false;
 
     public ModbusThingHandler(Thing modbusDevice) {
@@ -91,7 +87,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     @Override
     public void initialize() {
-        logger.info("Initializing modbus thing handler {}", getThing().getUID());
+        logger.debug("Initializing modbus thing handler {}", getThing().getUID());
 
         // Get slave id from thing configuration
         modbusThingConfig = getConfigAs(ModbusThingConfiguration.class);
@@ -157,7 +153,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     }
 
     private int getIdStrAsInt(String idProperty) {
-        String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_ELEMENTID);
+        String idStr = this.getThing().getProperties().get(idProperty);
         if (idStr == null) {
             return ID_NOT_USED;
         } else {
@@ -170,11 +166,11 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
         nodeClass = ModbusNodeClass.fromString(getThing().getThingTypeUID().getId());
 
-        channelId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_CHANNELID);
-        elementId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_ELEMENTID);
+        int channelId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_CHANNELID);
+        int elementId = getIdStrAsInt(ModbusBindingConstants.PROPERTY_ELEMENTID);
 
-        initializeDataSets();
-        initializeChannels();
+        initializeDataSets(channelId, elementId);
+        initializeChannels(channelId, elementId);
 
         if (nodeClass.equals(ModbusNodeClass.JablotronAC116)) {
             logger.debug("Registering JablotronAC116 to receive internal messages i.e. discovery information");
@@ -202,7 +198,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         return String.format("%s:%s", thingUID.getAsString(), key);
     }
 
-    private void initializeDataSets() {
+    private void initializeDataSets(int channelId, int elementId) {
         String dataSetKey;
 
         Map<String, String> properties = getThing().getProperties();
@@ -261,8 +257,8 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         }
     }
 
-    private void initializeChannels() {
-        logger.debug("Thing {}: Initializing channels", thing.getUID());
+    private void initializeChannels(int channelId, int elementId) {
+        logger.debug("Thing {}: Initializing channels {} {}", thing.getUID(), channelId, elementId);
         Map<String, String> properties = new HashMap<String, String>();
 
         for (Channel channel : getThing().getChannels()) {
@@ -285,9 +281,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             // If multiplier defined set it, otherwise set it as 0
             String scaleStr = properties.get(PROPERTY_CHANNELCFG_SCALE);
             int scale = (scaleStr != null) ? Integer.decode(scaleStr) : 0;
-
-            logger.trace("Thing {}: CONFIG: ElementId {} ChannelId {} added to channel '{}' configuration:",
-                    thing.getUID(), elementId, channelId, channel.getUID().getId());
 
             if (properties.containsKey(PROPERTY_CHANNELCFG_INDEX)) {
                 getBridgeHandler().getController().getModbusFactory().getDataSets()
@@ -378,12 +371,12 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                             lowestChannel = i;
                         }
                         // We have discovered an actuator
-                        getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
+                        getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR,THING_JABLOTRON_ACTUATOR_NAME, thing.getUID(), i,
                                 ID_NOT_USED);
                     }
                 }
                 // We have discovered a thermostat
-                getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel, Jablotron
+                getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_TP150,THING_JABLOTRON_TP150_NAME, thing.getUID(), lowestChannel, Jablotron
                         .getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId).getStart()));
             }
         }
@@ -415,14 +408,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
         } else {
             return new ThingUID(idStr);
         }
-    }
-
-    public int getChannelId() {
-        return channelId;
-    }
-
-    public int getElementId() {
-        return elementId;
     }
 
     @Nullable

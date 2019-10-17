@@ -123,18 +123,18 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * 
      * @return String
      */
-    private String makeLabel(ThingTypeUID thingTypeUID, int channelId, int elementId) {
+    private String makeLabel(String name, int channelId, int elementId) {
         String subAddress;
         if (channelId != ID_NOT_USED) {
             if (elementId != ID_NOT_USED) {
-                subAddress = String.format("channel %d element %d", channelId, elementId);
+                subAddress = String.format("Channel %d Element %d", channelId, elementId);
             } else {
-                subAddress = String.format("channel %d", channelId);
+                subAddress = String.format("Channel %d", channelId);
             }
         } else {
             subAddress = "(sub-slave)";
         }
-        return thingTypeUID + " "  + subAddress;
+        return name + " "  + subAddress;
     }
     /**
      * Get called when a device is discovered
@@ -144,7 +144,7 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * @param channelId    (ID_NOT_USED if not Jablotron)
      * @param elementId    (ID_NOT_USED if not Jablotron)
      */
-    public void deviceDiscovered(ThingTypeUID thingTypeUID, ThingUID parentThingUID, int channelId, int elementId) {
+    public void deviceDiscovered(ThingTypeUID thingTypeUID, String name, ThingUID parentThingUID, int channelId, int elementId) {
         logger.debug("DeviceDiscovered: {} - parentNodeId {}", thingTypeUID, parentThingUID);
 
         try {
@@ -152,9 +152,7 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
    
             // Initialize it (create if absent)
             ThingUID thingUID = makeThingUID(thingTypeUID, channelId, elementId);
-            String label = makeLabel(thingTypeUID, channelId, elementId);
-
-            logger.debug("Adding new Modbus Slave Thing {} to smarthome inbox", thingUID);
+            String label = makeLabel(name, channelId, elementId);
 
             DiscoveryResult discoveryResult = DiscoveryResultBuilder.create(thingUID)
                     .withProperty(PROPERTY_NODECLASS, nodeClassLabel)
@@ -174,8 +172,8 @@ public class ModbusSlaveDiscoveryService extends AbstractDiscoveryService {
      * @param thingType
      * @param unitAddress
      */
-    public void deviceDiscovered(ThingTypeUID thingType, ThingUID parentThingUID) {
-        deviceDiscovered(thingType, parentThingUID, ID_NOT_USED, ID_NOT_USED);
+    public void deviceDiscovered(ThingTypeUID thingType, String name, ThingUID parentThingUID) {
+        deviceDiscovered(thingType, name, parentThingUID, ID_NOT_USED, ID_NOT_USED);
     }
 
     private synchronized void discoverModbus() {

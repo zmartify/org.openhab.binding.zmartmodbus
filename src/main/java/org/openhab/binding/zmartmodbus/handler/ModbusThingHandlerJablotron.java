@@ -14,7 +14,9 @@ package org.openhab.binding.zmartmodbus.handler;
 
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.ID_NOT_USED;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_TYPE_JABLOTRON_ACTUATOR;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLOTRON_ACTUATOR_NAME;
 import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_TYPE_JABLOTRON_TP150;
+import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.THING_JABLOTRON_TP150_NAME;
 import static org.openhab.binding.zmartmodbus.internal.util.Register.registerToUnsignedShort;
 
 import java.util.Arrays;
@@ -105,12 +107,12 @@ public class ModbusThingHandlerJablotron extends ModbusThingHandler {
                                     lowestChannel = i;
                                 }
                                 // We have discovered an actuator
-                                getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, thing.getUID(), i,
+                                getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_ACTUATOR, THING_JABLOTRON_ACTUATOR_NAME,thing.getUID(), i,
                                         ID_NOT_USED);
                             }
                         }
                         // We have discover a thermostat
-                        getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_TP150, thing.getUID(), lowestChannel,
+                        getDiscoveryService().deviceDiscovered(THING_TYPE_JABLOTRON_TP150,THING_JABLOTRON_TP150_NAME, thing.getUID(), lowestChannel,
                                 Jablotron.getPage(getController().getModbusFactory().getDataSets().getDataSet(dataSetId)
                                         .getStart()));
                     }

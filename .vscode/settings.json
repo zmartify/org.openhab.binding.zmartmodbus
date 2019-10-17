@@ -26,6 +26,7 @@
         "getcommeventlog",
         "getdeviceinfo",
         "jablotron",
+        "onoff",
         "packetdata",
         "readexceptionstatus",
         "reporton",

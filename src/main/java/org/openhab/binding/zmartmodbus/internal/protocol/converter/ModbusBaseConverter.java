@@ -32,13 +32,13 @@ import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.charset.StandardCharsets;
+import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 
 import javax.measure.Unit;
-import javax.measure.quantity.Temperature;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
@@ -52,7 +52,6 @@ import org.eclipse.smarthome.core.library.types.QuantityType;
 import org.eclipse.smarthome.core.library.types.StringType;
 import org.eclipse.smarthome.core.library.unit.ImperialUnits;
 import org.eclipse.smarthome.core.library.unit.SIUnits;
-import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.types.Command;
 import org.eclipse.smarthome.core.types.State;
 import org.eclipse.smarthome.core.types.UnDefType;
@@ -84,6 +83,9 @@ public class ModbusBaseConverter {
                     state = OnOffType.OFF;
                 }
                 break;
+            case OnOff16:
+                state = (OnOffType) ((registerToShort((byte[]) payload, index) == 0) ? OnOffType.OFF : OnOffType.ON);
+                break;
             case Int8:
                 state = new DecimalType(unsignedByteToInt(((byte[]) payload)[index]));
                 break;
@@ -92,14 +94,6 @@ public class ModbusBaseConverter {
                 break;
             case Int16:
                 state = new DecimalType(registerToShort((byte[]) payload, index));
-                break;
-            case Int16dec:
-                state = new DecimalType(new BigDecimal(registerToShort((byte[]) payload, index)).divide(BigDecimal.TEN,
-                        1, BigDecimal.ROUND_HALF_UP));
-                break;
-            case Int16cen:
-                state = new DecimalType(new BigDecimal(registerToShort((byte[]) payload, index))
-                        .divide(new BigDecimal(100), 1, BigDecimal.ROUND_HALF_UP));
                 break;
             case Uint32:
                 state = new DecimalType(registersToUnsignedInt((byte[]) payload, index));
@@ -201,16 +195,24 @@ public class ModbusBaseConverter {
                 int day = registerToShort((byte[]) payload, index + 6);
                 int month = registerToShort((byte[]) payload, index + 8);
                 int year = registerToShort((byte[]) payload, index + 10);
+                try {
                 state = new DateTimeType(
                         LocalDateTime.of(year, month, day, hour, minute, second).atZone(ZoneId.of("Europe/Paris")));
+                } catch (DateTimeException e) {
+                    state = UnDefType.UNDEF;
+                }
                 break;
             case DOS_time:
                 long dosTime = registersToUnsignedInt((byte[]) payload, index);
+                try {
                 state = new DateTimeType(LocalDateTime
                         .of((int) (((dosTime >> 25) & 0x7f) + 1980), (int) (((dosTime >> 21) & 0x0f) - 1),
                                 (int) ((dosTime >> 16) & 0x1f), (int) ((dosTime >> 11) & 0x1f),
                                 (int) ((dosTime >> 5) & 0x3f), (int) ((dosTime << 1) & 0x3e))
                         .atZone(ZoneId.of("Europe/Paris")));
+                } catch (DateTimeException e) {
+                    state = UnDefType.UNDEF;
+                }
                 break;
             default:
                 break;
@@ -230,7 +232,7 @@ public class ModbusBaseConverter {
         BigDecimal value;
 
         if (state.getClass().equals(org.eclipse.smarthome.core.library.types.OnOffType.class)) {
-            value = new BigDecimal((((OnOffType) state) == OnOffType.ON) ? 0xFF : 0);
+            value = new BigDecimal((((OnOffType) state) == OnOffType.ON) ? 1 : 0);
         } else {
             // Handle Units of Measure channels
             if ((state instanceof QuantityType) && (channel.getUnitsOfMeasure() != null)) {
@@ -242,6 +244,7 @@ public class ModbusBaseConverter {
                     // Normal channel with numeric value
                     value = BigDecimal.valueOf(((Number) state).doubleValue());
                 } else {
+                    logger.warn("QuantityType is not Number: {}", channel.getUID());
                     value = null;
                 }
             }
@@ -251,18 +254,15 @@ public class ModbusBaseConverter {
             case Bit:
                 payload = (boolean) (((OnOffType) state) == OnOffType.ON);
                 break;
+            case OnOff16:
+                payload = shortToRegister((short) ((((OnOffType) state) == OnOffType.ON) ? 1 : 0));
+                break;
             case Int8:
                 payload = value.byteValue();
                 break;
             case Uint16:
             case Int16:
                 payload = shortToRegister(value.shortValue());
-                break;
-            case Int16dec:
-                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 10));
-                break;
-            case Int16cen:
-                payload = shortToRegister((short) (((DecimalType) state).floatValue() * 100));
                 break;
             case Uint32:
             case Int32:

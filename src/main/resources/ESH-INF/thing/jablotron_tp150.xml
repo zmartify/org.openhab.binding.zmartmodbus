@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0" xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
-    
+
     <thing-type id="jablotron_tp150" listed="false">
         <label>Wavin TP-150</label>
         <description>Wavin TP-150 thermostat</description>
-        
+
         <channels>
             <channel id="ManualTemp" typeId="thermostat_heatingsetpoint">
                 <label>Set temperature</label>
@@ -12,9 +12,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x00</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                     <property name="reportOn">always</property>
                 </properties>
             </channel>
@@ -24,9 +24,9 @@
                 <properties>
                     <property name="dataset">sensors</property>
                     <property name="index">0x00</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                     <property name="reportOn">always</property>
                 </properties>
             </channel>
@@ -36,9 +36,9 @@
                 <properties>
                     <property name="dataset">sensors</property>
                     <property name="index">0x01</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                     <property name="reportOn">always</property>
                 </properties>
             </channel>
@@ -48,7 +48,9 @@
                 <properties>
                     <property name="dataset">sensors</property>
                     <property name="index">0x02</property>
-                    <property name="valuetype">int16dec</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
+                    <property name="reportOn">always</property>
                 </properties>
             </channel>
             <channel id="RelHumidity" typeId="sensor_relhumidity">
@@ -58,6 +60,8 @@
                     <property name="dataset">sensors</property>
                     <property name="index">0x03</property>
                     <property name="valuetype">int16</property>
+                    <property name="unit">humidity</property>
+                    <property name="scale">0</property>
                 </properties>
             </channel>
             <channel id="Alive" typeId="sensor_binary">
@@ -78,7 +82,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="ThermostatDetected" typeId="sensor_binary">
+            <channel id="ThermostatDetected" typeId="sensor_binary_advanced">
                 <label>Thermostat</label>
                 <description>Thermostat detected on this element</description>
                 <properties>
@@ -87,7 +91,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="ThermostatActive" typeId="sensor_binary">
+            <channel id="ThermostatActive" typeId="sensor_binary_advanced">
                 <label>Thermostat Active</label>
                 <description>Thermostat output is active</description>
                 <properties>
@@ -151,7 +155,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="CoolMode" typeId="switch_binary">
+            <channel id="CoolMode" typeId="switch_binary_advanced">
                 <label>Cool Mode</label>
                 <description>Enables cooling mode instead of heating.</description>
                 <properties>
@@ -160,7 +164,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="AdaptiveMode" typeId="switch_binary">
+            <channel id="AdaptiveMode" typeId="switch_binary_advanced">
                 <label>Adaptive Mode</label>
                 <description>Enables adaptive mode for the room thermostats</description>
                 <properties>
@@ -169,7 +173,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="IntLock" typeId="switch_binary">
+            <channel id="IntLock" typeId="switch_binary_advanced">
                 <label>Service Menu Lock</label>
                 <description>When set, a user is prevented to enter the service menu of the room thermostats</description>
                 <properties>
@@ -178,7 +182,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="CtrlLock" typeId="switch_binary">
+            <channel id="CtrlLock" typeId="switch_binary_advanced">
                 <label>Controller Lock</label>
                 <description>When set, a user is prevented to make any changes on the room thermostats</description>
                 <properties>
@@ -187,7 +191,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="HotelMode" typeId="switch_binary">
+            <channel id="HotelMode" typeId="switch_binary_advanced">
                 <label>Hotel Mode</label>
                 <description>When set, the room thermostats are switched to the Hotel Mode</description>
                 <properties>
@@ -196,59 +200,59 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="ComfortTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="ComfortTemp" typeId="thermostat_setpoint_advanced">
                 <label>Comfort Temperature</label>
                 <description>Compfort Temperature</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x01</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="EcoTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="EcoTemp" typeId="thermostat_setpoint_advanced">
                 <label>Eco Temperature</label>
                 <description>Economic Temperature</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x02</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="HolidayTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="HolidayTemp" typeId="thermostat_setpoint_advanced">
                 <label>Holiday Temperature</label>
                 <description>Holiday Temperature</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x03</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="StandbyTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="StandbyTemp" typeId="thermostat_setpoint_advanced">
                 <label>Standby Temperature</label>
                 <description>Override temperature in Standby mode</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x04</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="PartyTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="PartyTemp" typeId="thermostat_setpoint_advanced">
                 <label>Party Temperature</label>
                 <description>Temperature increment for Party mode</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x05</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="ThermostatMode" typeId="jablotron_thermostat_mode">
@@ -260,81 +264,81 @@
                     <property name="valuetype">Custom8_4bit</property>
                 </properties>
             </channel>
-            <channel id="MinTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="MinTemp" typeId="thermostat_setpoint_advanced">
                 <label>Minimum Temperature</label>
                 <description>Minimum temperature the user can set on a room thermostat</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x08</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="MaxTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="MaxTemp" typeId="thermostat_setpoint_advanced">
                 <label>Maximum Temperature</label>
                 <description>Maximum temperature the user can set on a room thermostat</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x09</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="FloorMinTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="FloorMinTemp" typeId="thermostat_setpoint_advanced">
                 <label>Floor Minimum Temperature</label>
                 <description>Minimum allowed floor temperature</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0A</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="FloorMaxTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="FloorMaxTemp" typeId="thermostat_setpoint_advanced">
                 <label>Floor Maximum Temperature</label>
                 <description>Maximum allowed floor temperature</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0B</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="AlarmMinTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="AlarmMinTemp" typeId="thermostat_setpoint_advanced">
                 <label>Alarm Low Temperature</label>
                 <description>Minimum allowed air temperature.</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0C</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="AlarmMaxTemp" typeId="thermostat_heatingsetpoint">
+            <channel id="AlarmMaxTemp" typeId="thermostat_setpoint_advanced">
                 <label>Alarm High Temperature</label>
                 <description>Maximum allowed air temperature</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0D</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="Hysteresis" typeId="thermostat_heatingsetpoint">
+            <channel id="Hysteresis" typeId="thermostat_setpoint_advanced">
                 <label>Hysteresis</label>
                 <description>Temperature control loop hysteresis</description>
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x0E</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="DesiredTemp" typeId="sensor_temperature">
@@ -343,9 +347,9 @@
                 <properties>
                     <property name="dataset">packetdata</property>
                     <property name="index">0x10</property>
-					<property name="valuetype">int16</property>
-					<property name="unit">temperature</property>
-					<property name="scale">1</property>
+                    <property name="valuetype">int16</property>
+                    <property name="unit">temperature</property>
+                    <property name="scale">1</property>
                 </properties>
             </channel>
             <channel id="RSSIElementSide" typeId="system.signal-strength">
@@ -375,7 +379,7 @@
                     <property name="valuetype">byte</property>
                 </properties>
             </channel>
-            <channel id="Schedule" typeId="schedule">
+            <channel id="Schedule" typeId="jablotron_schedule">
                 <label>Schedule</label>
                 <description>Channel week schedule</description>
                 <properties>
@@ -384,8 +388,10 @@
                     <property name="valuetype">jablotron_schedule</property>
                 </properties>
             </channel>
-            
         </channels>
+
+        <!-- DATATYPE:SLOWorFAST:REPORTON:LENGTH:CATEGORY:INDEX:PAGE -->
+
         <properties>
             <property name="dataset_status">coil:slow:change:0x10:0x01:0x08:element</property>
             <property name="dataset_sensors">input:slow:change:0x04:0x01:0x04:element</property>

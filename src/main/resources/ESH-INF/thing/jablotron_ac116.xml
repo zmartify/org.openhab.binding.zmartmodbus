@@ -104,9 +104,11 @@
                     <property name="dataset">mainsensors</property>
                     <property name="index">0x01</property>
                     <property name="valuetype">jablotron_power32</property>
+   					<property name="unit">power</property>
+					<property name="scale">3</property>
                 </properties>
             </channel>
-            <channel id="DHWComfortTemperature" typeId="thermostat_heatingsetpoint">
+            <channel id="DHWComfortTemperature" typeId="thermostat_setpoint">
                 <label>DHW Comfort Temperature</label>
                 <description>District Heating Water Comfort temperature</description>
                 <properties>
@@ -117,7 +119,7 @@
 					<property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="DHWEcoTemperature" typeId="thermostat_heatingsetpoint">
+            <channel id="DHWEcoTemperature" typeId="thermostat_setpoint">
                 <label>DHW Eco Temperature</label>
                 <description>District Heating Water Eco temperature</description>
                 <properties>
@@ -128,7 +130,7 @@
 					<property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="DHWClearningTemperature" typeId="thermostat_heatingsetpoint">
+            <channel id="DHWClearningTemperature" typeId="thermostat_setpoint">
                 <label>DHW Cleaning Temperature</label>
                 <description>District Heating Water Cleaning temperature</description>
                 <properties>
@@ -139,7 +141,7 @@
 					<property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="DHWStandbyTemperature" typeId="thermostat_heatingsetpoint">
+            <channel id="DHWStandbyTemperature" typeId="thermostat_setpoint">
                 <label>DHW Standby Temperature</label>
                 <description>District Heating Standby temperature</description>
                 <properties>
@@ -150,7 +152,7 @@
 					<property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="HighTempCutoffTemperature" typeId="thermostat_heatingsetpoint">
+            <channel id="HighTempCutoffTemperature" typeId="thermostat_setpoint">
                 <label>High Temp Cut-off Temperaure</label>
                 <description>High Temperature safety cutoff temperature</description>
                 <properties>
@@ -161,7 +163,7 @@
 					<property name="scale">1</property>
                 </properties>
             </channel>
-            <channel id="AutoKickinTemperature" typeId="thermostat_heatingsetpoint">
+            <channel id="AutoKickinTemperature" typeId="thermostat_setpoint">
                 <label>Auto Kick-in Temperature</label>
                 <description>High Temperature safety cutoff automatic recovery temperature</description>
                 <properties>
@@ -217,7 +219,7 @@
                     <property name="valuetype">int16</property>
                 </properties>
             </channel>
-            <channel id="CircPumpStopDelay" typeId="nilan_time_interval">
+            <channel id="CircPumpStopDelay" typeId="time_interval">
                 <label>CircPump Stop Delay</label>
                 <description>Circulation Pump stop delay in seconds</description>
                 <properties>

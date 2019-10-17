@@ -2,7 +2,7 @@
 <thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0" xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 org.eclipse.smarthome.thing-description.xsd">
 
 <!-- Thermostat Mode Channel -->
-    <channel-type id="jablotron_thermostat_mode">
+    <channel-type id="jablotron_thermostat_mode" advanced="true">
         <item-type>Number</item-type>
         <label>Thermostat Mode</label>
         <description>Sets the thermostat
@@ -58,7 +58,7 @@
     </channel-type>
 
     <!-- Activate learning mode -->
-    <channel-type id="switch_learning">
+    <channel-type id="switch_learning" advanced="true">
         <item-type>Switch</item-type>
         <label>Activate learning</label>
         <description>Enables learning mode on the specified channel</description>

@@ -17,7 +17,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_programuserfuncset">
+    <channel-type id="nilan_programuserfuncset" advanced="true">
         <item-type>Number</item-type>
         <label>Program.UserFuncSet</label>
         <description>User function select</description>
@@ -81,7 +81,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_controlpreset">
+    <channel-type id="nilan_controlpreset" advanced="true">
         <item-type>Number</item-type>
         <label>Preset</label>
         <description>Request preset to factory settings</description>
@@ -96,6 +96,21 @@
     </channel-type>
 
     <channel-type id="nilan_ventset">
+            <item-type>Number</item-type>
+            <label>Vent. step</label>
+            <description>User ventilation step</description>
+            <state>
+                <options>
+                    <option value="0">Off</option>
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                </options>
+            </state>
+        </channel-type>
+    
+    <channel-type id="nilan_ventset_advanced" advanced="true">
         <item-type>Number</item-type>
         <label>Vent. step</label>
         <description>User ventilation step</description>
@@ -110,7 +125,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_coolset">
+    <channel-type id="nilan_coolset" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>Cool setpoint</label>
         <description>Cooling temperature setpoint select</description>
@@ -129,7 +144,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_nightdaylim">
+    <channel-type id="nilan_nightdaylim" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>Night Day limit</label>
         <description>Outdoor day temperature for night cooling activation</description>
@@ -161,7 +176,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_nightset">
+    <channel-type id="nilan_nightset" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>Free energy setpoint</label>
         <description>Free energy night cooling room setpoint</description>
@@ -198,7 +213,13 @@
         <state readOnly="false"></state>
     </channel-type>
 
-    <channel-type id="nilan_airflowcoolvent">
+    <channel-type id="nilan_step_advanced" advanced="true">
+        <item-type>Number</item-type>
+        <label>Step</label>
+        <state readOnly="false"></state>
+    </channel-type>
+
+    <channel-type id="nilan_airflowcoolvent" advanced="true">
         <item-type>Number</item-type>
         <label>AirFlow.CoolVent</label>
         <description>High fan speed at high indoor temp (cooling demand) Level</description>
@@ -212,7 +233,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_airflowwintertemp">
+    <channel-type id="nilan_airflowwintertemp" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>AirFlow.WinterTemp</label>
         <description>Low outdoor temperature</description>
@@ -220,7 +241,7 @@
         <state min="-20" max="10" pattern="%.0f %unit%"></state>
     </channel-type>
 
-    <channel-type id="nilan_airflowwintervent">
+    <channel-type id="nilan_airflowwintervent" advanced="true">
         <item-type>Number</item-type>
         <label>AirFlow.WinterVent</label>
         <description>Fan speed at low outdoor temperature</description>
@@ -234,7 +255,7 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_airheattype">
+    <channel-type id="nilan_airheattype" advanced="true">
         <item-type>Number</item-type>
         <label>AirHeat.Type</label>
         <description>After heating type</description>
@@ -248,45 +269,138 @@
         </state>
     </channel-type>
 
-    <channel-type id="nilan_tempminsum">
+    <channel-type id="nilan_alarmlist">
+        <item-type>Number</item-type>
+        <label>Alarm list</label>
+        <description>Nilan alarms</description>
+        <state>
+            <options>
+                <option value="0">NONE</option>
+                <option value="1">HARDWARE</option>
+                <option value="2">TIMEOUT</option>
+                <option value="3">FIRE</option>
+                <option value="4">PRESSURE</option>
+                <option value="5">DOOR</option>
+                <option value="6">DEFROST</option>
+                <option value="7">FROST</option>
+                <option value="8">FROST</option>
+                <option value="9">OVERTEMP</option>
+                <option value="10">OVERHEAT</option>
+                <option value="11">AIRFLOW</option>
+                <option value="12">THERMO</option>
+                <option value="13">BOILING</option>
+                <option value="14">SENSOR</option>
+                <option value="15">ROOM_LOW</option>
+                <option value="16">SOFTWARE</option>
+                <option value="17">WATCHDOG</option>
+                <option value="18">CONFIG</option>
+                <option value="19">FILTER</option>
+                <option value="20">LEGIONEL</option>
+                <option value="21">POWER</option>
+                <option value="22">T_AIR</option>
+                <option value="23">T_WATER</option>
+                <option value="24">T_HEAT</option>
+                <option value="25">MODEM</option>
+                <option value="26">INSTABUS</option>
+                <option value="70">ANODE</option>
+                <option value="71">EXCH__INFO</option>
+                <option value="72">EVAP_LOW</option>
+                <option value="90">SLAVE_IO</option>
+                <option value="91">OPT_IO</option>
+                <option value="92">PRESET</option>
+                <option value="95">SW_RJECT</option>
+                <option value="96">DAMPTEST</option>
+            </options>
+        </state>
+    </channel-type>
+
+    <channel-type id="nilan_tempminsum" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>AirTemp.TempMinSum</label>
         <description>Summer minimum supply air temperature</description>
         <state min="5" max="14" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
-    <channel-type id="nilan_tempmaxsum">
+    <channel-type id="nilan_tempmaxsum" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>AirTemp.TempMaxSum</label>
         <description>Summer maximum supply air temperature</description>
         <state min="5" max="25" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
-    <channel-type id="nilan_tempminwin">
+    <channel-type id="nilan_tempminwin" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>AirTemp.MinWin</label>
         <description>Winter minimum supply air temperature</description>
         <state min="5" max="16" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
-    <channel-type id="nilan_tempmaxwin">
+    <channel-type id="nilan_tempmaxwin" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>AirTemp.TempMaxWin</label>
         <description>Winter maximum supply air temperature</description>
         <state min="5" max="35" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
 
-    <channel-type id="nilan_temproomnz">
+    <channel-type id="nilan_temproomnz" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>AirTemp.RoomNZ</label>
         <description>Room temperature regulation deadband</description>
         <state min="0.20" max="10" pattern="%.2f %unit%" readOnly="false"></state>
     </channel-type>
 
-    <channel-type id="nilan_temproomlow">
+    <channel-type id="nilan_temproomlow" advanced="true">
         <item-type>Number:Temperature</item-type>
         <label>Low room</label>
         <state min="1" max="20" pattern="%.1f %unit%" readOnly="false"></state>
     </channel-type>
+
+    <channel-type id="nilan_weekday" advanced="true">
+        <item-type>Number</item-type>
+        <label>EditPeriod</label>
+        <description>Week program day index</description>
+        <state>
+            <options>
+                <option value="0">Monday</option>
+                <option value="1">Tuesday</option>
+                <option value="2">Wednesday</option>
+                <option value="3">Thursday</option>
+                <option value="4">Friday</option>
+                <option value="5">Saturday</option>
+                <option value="6">Sunday</option>
+            </options>
+        </state>
+    </channel-type>
+    <channel-type id="nilan_weekdayfunction" advanced="true">
+        <item-type>Number</item-type>
+        <label>EditFunc</label>
+        <description>Week program day function</description>
+        <state min="0" max="5">
+            <options>
+                <option value="0">Function 1</option>
+                <option value="1">Function 2</option>
+                <option value="2">Function 3</option>
+                <option value="3">Function 4</option>
+                <option value="4">Function 5</option>
+                <option value="5">Function 6</option>
+            </options>
+        </state>
+    </channel-type>
+
+
+    <channel-type id="nilan_restartmode" advanced="true">
+        <item-type>Number</item-type>
+        <label>Control.RestartMode</label>
+        <description>External fire alarm auto reset</description>
+        <state>
+            <options>
+                <option value="0">OFF</option>
+                <option value="1">HPLP</option>
+                <option value="2">CONTINUE</option>
+                <option value="3">SELF_CLEAR</option>
+            </options>
+        </state>
+    </channel-type>
+
 
 </thing:thing-descriptions>

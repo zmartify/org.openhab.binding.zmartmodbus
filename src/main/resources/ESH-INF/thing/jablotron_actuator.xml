@@ -8,7 +8,7 @@
 		<description>Wavin Actuator</description>
 
 		<channels>
-            <channel id="OverCurrentAlarm" typeId="sensor_binary">
+            <channel id="OverCurrentAlarm" typeId="sensor_binary_advanced">
             <label>Overcurrent Alarm</label>
             <description>Overcurrent alarm when excessive current is drawn from actuator output</description>
                 <properties>
@@ -17,7 +17,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="FrostAlarm" typeId="sensor_binary">
+            <channel id="FrostAlarm" typeId="sensor_binary_advanced">
             <label>Frost Alarm</label>
             <description>Freezing alarm when air temperature drops below low alarm temperature</description>
                 <properties>
@@ -35,7 +35,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="Blocked" typeId="switch_binary">
+            <channel id="Blocked" typeId="switch_binary_advanced">
             <label>Blocked</label>
             <description>Output is blocked by magnetic contact</description>
                 <properties>
@@ -62,7 +62,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="AllThermostatsLost" typeId="sensor_binary">
+            <channel id="AllThermostatsLost" typeId="sensor_binary_advanced">
             <label>All Thermostats Lost</label>
             <description>All Thermostats in the channel are lost</description>
                 <properties>
@@ -71,7 +71,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="AlarmHigh" typeId="sensor_binary">
+            <channel id="AlarmHigh" typeId="sensor_binary_advanced">
             <label>Alarm High</label>
             <description>Indicates that any Thermostat in the channel reached ALARM HIGH temperature</description>
                 <properties>
@@ -80,7 +80,7 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-            <channel id="AlarmLow" typeId="sensor_binary">
+            <channel id="AlarmLow" typeId="sensor_binary_advanced">
             <label>Alarm Low</label>
             <description>Indicates that any Thermostat in the channel reached ALARM LOW temperature</description>
                 <properties>
@@ -89,29 +89,15 @@
                     <property name="valuetype">bit</property>
                 </properties>
             </channel>
-			<channel id="TimerEvent" typeId="jablotron_timerevent">
-                <properties>
-                    <property name="dataset">channel</property>
-                    <property name="index">0x01</property>
-                    <property name="valuetype">custom8_4bit</property>
-                </properties>
-            </channel>
             <channel id="PowerConsumption" typeId="meter_watts">
             <label>Power Consumption</label>
             <description>Current consumption in watts of an actuator connected to the channel</description>
                 <properties>
-                    <property name="dataset">channel</property>
-                    <property name="index">0x01</property>
+                    <property name="dataset">consumption</property>
+                    <property name="index">0x00</property>
                     <property name="valuetype">jablotron_power16</property>
-                </properties>
-            </channel>
-            <channel id="PrimaryElement" typeId="jablotron_element">
-            <label>Primary Element</label>
-            <description>The index+1 of the first element (thermostat) learned into the channel</description>
-                <properties>
-                    <property name="dataset">channel</property>
-                    <property name="index">0x04</property>
-                    <property name="valuetype">custom8_6bit</property>
+   					<property name="unit">power</property>
+					<property name="scale">3</property>
                 </properties>
             </channel>
         </channels>
@@ -120,9 +106,8 @@
 
         <properties>
             <property name="dataset_teventstatus">coil:slow:change:0x10:0x03:0x00:channel</property>
+            <property name="dataset_consumption">holding:slow:change:0x01:0x03:0x01:channel</property>
             <property name="dataset_pelementstatus">coil:slow:change:0x10:0x03:0x02:channel</property>
-            <property name="dataset_channel">holding:slow:change:0x03:0x03:0x00:channel</property>
-            <property name="dataset_packetdata">holding:slow:change:0x11:0x02:0x00:channel</property>
         </properties>
 	</thing-type>
 </thing:thing-descriptions>
