@@ -29,9 +29,8 @@
 
 			<parameter name="port" type="text" required="true">
 				<label>Serial port</label>
-				<context>serial-port</context>
+				<!-- context>serial-port</!-->
 				<description>Serial port to use, for example /dev/ttyS0 or COM1</description>
-				<default>/dev/cu.SLAB_USBtoUART</default>
 			</parameter>
 
 			<parameter name="id" type="integer">
