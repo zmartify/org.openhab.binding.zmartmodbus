@@ -11,7 +11,7 @@ _If possible, provide some resources like pictures, a YouTube video, etc. to giv
 Currently it supports
 
  * Wavin Hydronic floor heating controller
- * Nilan Comfort 300 Air Ventilation controller
+ * Nilan Air Ventilation controller
  
 _Please describe the different supported things / devices within this section._
 _Which different types are supported, which models were tested etc.?_
