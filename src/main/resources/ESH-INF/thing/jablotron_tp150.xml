@@ -260,7 +260,7 @@
                 <description>Sets the mode of the thermostat</description>
                 <properties>
                     <property name="dataset">packetdata</property>
-                    <property name="index">0x07</property>
+                    <property name="index">0x0E</property>
                     <property name="valuetype">Custom8_4bit</property>
                 </properties>
             </channel>
