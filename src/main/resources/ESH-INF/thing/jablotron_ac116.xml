@@ -246,7 +246,7 @@
                     <property name="valuetype">int16</property>
                 </properties>
             </channel>
-            <channel id="ElementChangeFlags" typeId="internal_flags">
+            <channel id="ElementChangeFlags" typeId="internal_flags_advanced">
                 <label>ElementChangeFlags</label>
                 <properties>
                     <property name="dataset">elementchangeflags</property>
@@ -254,7 +254,7 @@
                     <property name="valuetype">jablotron_elementChangeFlags</property>
                 </properties>
             </channel>
-            <channel id="ChannelChangeFlags" typeId="internal_flags">
+            <channel id="ChannelChangeFlags" typeId="internal_flags_advanced">
                 <label>ChannelChangeFlags</label>
                 <properties>
                     <property name="dataset">channelchangeflags</property>
@@ -262,7 +262,7 @@
                     <property name="valuetype">jablotron_channelChangeFlags</property>
                 </properties>
             </channel>
-            <channel id="PacketdataChangeFlags" typeId="internal_flags">
+            <channel id="PacketdataChangeFlags" typeId="internal_flags_advanced">
                 <label>PacketdataChangeFlags</label>
                 <properties>
                     <property name="dataset">packetdatachangeflags</property>

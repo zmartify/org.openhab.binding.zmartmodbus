@@ -80,12 +80,9 @@ public class ModbusFunctionJablotron extends ModbusFunction {
     @Override
     public void writeMultipleCoils(int unitAddr, int dataAddress, int offset, BitVector data)
             throws ModbusProtocolException {
-        logger.debug("unitAddr={}, dataAddress={}, offset={}, data={} ({})", unitAddr, dataAddress, offset, data, data.size());
 
         BitVector dataAdjusted = new BitVector(data.size() + offset);
         BitVector dataMask = new BitVector(dataAdjusted.size());
-
-        logger.debug("BitVectors created");
 
         if (offset > 0) {
             dataAdjusted.add(new BitVector(offset), data);
@@ -209,7 +206,6 @@ public class ModbusFunctionJablotron extends ModbusFunction {
             throw new ModbusProtocolException(ModbusProtocolErrorCode.INVALID_DATA_TYPE);
         }
 
-        logger.debug("jablotronWriteRegisterMaskedToIndex");
         // Make sure we have an even number of bytes
         int forceSize = ((data.size() + 15) / 16) * 16;
 
@@ -220,7 +216,6 @@ public class ModbusFunctionJablotron extends ModbusFunction {
          * construct the command, issue and verify response
          */
 
-        logger.debug("construct the command, issue and verify response");
         byte[] cmd = new byte[data.byteSize() * 2 + 6];
         cmd[0] = (byte) unitAddr;
         cmd[1] = (byte) ModbusBindingClass.WRITE_REGISTER_MASKED_TO_INDEX & 0x00FF;
@@ -240,7 +235,6 @@ public class ModbusFunctionJablotron extends ModbusFunction {
         /*
          * send the message and get the response
          */
-        logger.debug("send the message and get the response");
         byte[] resp = msgTransaction(cmd, CUSTOMCODE_JABLOTRON);
 
         /*

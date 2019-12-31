@@ -255,6 +255,15 @@
                     <property name="scale">1</property>
                 </properties>
             </channel>
+            <channel id="ModeLength" typeId="internal_flags_advanced">
+                <label>Mode length</label>
+                <description>Override mode duration. One LSB equals 2 minutes</description>
+                <properties>
+                    <property name="dataset">packetdata</property>
+                    <property name="index">0x06</property>
+                    <property name="valuetype">int16</property>
+                </properties>
+            </channel>
             <channel id="ThermostatMode" typeId="jablotron_thermostat_mode">
                 <label>Thermostat Mode</label>
                 <description>Sets the mode of the thermostat</description>

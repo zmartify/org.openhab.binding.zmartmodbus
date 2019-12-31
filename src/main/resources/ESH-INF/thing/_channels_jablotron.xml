@@ -17,7 +17,6 @@
                 <option value="4">Party on manual mode</option>
                 <option value="5">Holiday on manual mode</option>
                 <option value="8">Week schedule</option>
-                <option value="9">Temporary standby (do not use)</option>
                 <option value="10">Temporary Eco</option>
                 <option value="11">Temporary comfort</option>
                 <option value="12">Party with week schedule</option>
@@ -27,7 +26,7 @@
     </channel-type>
 
   	<!-- Internal Flags Channel -->
-	<channel-type id="internal_flags">
+	<channel-type id="internal_flags_advanced" advanced="true">
 		<item-type>Number</item-type>
 		<label>Internal flags</label>
 		<category>Counter</category>
@@ -60,6 +59,9 @@
                 <option value="8">Freezing</option>
                 <option value="9">DHW output on</option>
                 <option value="10">Stop delay timer</option>
+                <option value="11">DHW cleaning timer</option>
+                <option value="12">Override output On</option>
+                <option value="13">Periodic Cycle Timer</option>
             </options>
         </state>
     </channel-type>
