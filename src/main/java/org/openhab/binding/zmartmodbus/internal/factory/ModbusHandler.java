@@ -10,7 +10,7 @@
  *
  * SPDX-License-Identifier: EPL-2.0
  */
-package org.openhab.binding.zmartmodbus.internal;
+package org.openhab.binding.zmartmodbus.internal.factory;
 
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Read;
 import static org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass.Status;
@@ -27,6 +27,7 @@ import org.openhab.binding.zmartmodbus.internal.protocol.ModbusCommEvent;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusMessage;
+import org.openhab.binding.zmartmodbus.internal.util.BitVector;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,7 +39,7 @@ import io.reactivex.disposables.Disposable;
  *
  */
 
-public class ModbusHandler<T> {
+public class ModbusHandler {
 
     private Logger logger = LoggerFactory.getLogger(ModbusHandler.class);
 
@@ -52,7 +53,7 @@ public class ModbusHandler<T> {
     public ModbusHandler() {
     }
 
-    public Observer<ModbusAction> ModbusCommunicator() {
+    public Observer<ModbusAction> modbusCommunicator() {
         return new Observer<ModbusAction>() {
             // Set listening flag - can be turned off to stop listening
 
@@ -63,6 +64,7 @@ public class ModbusHandler<T> {
 
             @Override
             public void onNext(ModbusAction modbusAction) {
+                logger.trace("Received modbusAction: {}", modbusAction);
                 if (bridgeHandler == null) {
                     logger.error("BridgeHandler not set");
                     return;
@@ -82,24 +84,24 @@ public class ModbusHandler<T> {
                     } else {
                         if (modbusAction.getActionClass().equals(Read)) {
                             switch (modbusAction.getMessageClass()) {
-                                case Coil:
-                                    payload = modbusFunction.readCoils(unitAddress, modbusAction.getStart(),
-                                            modbusAction.getOffset(), modbusAction.getLength());
-                                    break;
-                                case Discrete:
-                                    payload = modbusFunction.readDiscreteInputs(unitAddress, modbusAction.getStart(),
-                                            modbusAction.getOffset(), modbusAction.getLength());
-                                    break;
-                                case Holding:
-                                    payload = modbusFunction.readHoldingRegisters(unitAddress, modbusAction.getStart(),
-                                            modbusAction.getLength());
-                                    break;
-                                case Input:
-                                    payload = modbusFunction.readInputRegisters(unitAddress, modbusAction.getStart(),
-                                            modbusAction.getLength());
-                                    break;
-                                default:
-                                    break;
+                            case Coil:
+                                payload = modbusFunction.readCoils(unitAddress, modbusAction.getStart(),
+                                        modbusAction.getOffset(), modbusAction.getLength());
+                                break;
+                            case Discrete:
+                                payload = modbusFunction.readDiscreteInputs(unitAddress, modbusAction.getStart(),
+                                        modbusAction.getOffset(), modbusAction.getLength());
+                                break;
+                            case Holding:
+                                payload = modbusFunction.readHoldingRegisters(unitAddress, modbusAction.getStart(),
+                                        modbusAction.getLength());
+                                break;
+                            case Input:
+                                payload = modbusFunction.readInputRegisters(unitAddress, modbusAction.getStart(),
+                                        modbusAction.getLength());
+                                break;
+                            default:
+                                break;
                             }
                             if (payload != null) {
                                 messageSubscriber.modbusMessage(new ModbusMessage(modbusAction.getDataSetId(), payload,
@@ -107,74 +109,81 @@ public class ModbusHandler<T> {
                             }
                         } else if (modbusAction.getActionClass().equals(Write)) {
                             switch (modbusAction.getMessageClass()) {
-                                case Coil:
+                            case Coil:
+                                if (modbusAction.getLength() <= 1) {
                                     modbusFunction.writeSingleCoil(unitAddress, modbusAction.getStart(),
                                             modbusAction.getOffset(), (boolean) modbusAction.getPayload());
-                                    break;
-                                case Holding:
-                                    modbusFunction.writeMultipleRegisters(unitAddress,
-                                            modbusAction.getStart() + modbusAction.getOffset(),
-                                            ((byte[]) modbusAction.getPayload()));
-                                    break;
-                                case SetLogicalAddress:
-                                    modbusFunction.setLogicalAddress(unitAddress);
-                                    break;
-                                default:
-                                    logger.warn("NODE {}: Wrong messageClass for writing {} ({})",
-                                            modbusAction.getThingUID(), modbusAction.getMessageClass(),
-                                            modbusAction.getDataSetId());
-                                    break;
+                                } else {
+                                    BitVector b = new BitVector(modbusAction.getLength());
+                                    b.setByte(0, ((byte[]) modbusAction.getPayload())[1]);
+                                    modbusFunction.writeMultipleCoils(unitAddress, modbusAction.getStart(),
+                                            modbusAction.getOffset(), b);
+                                }
+                                break;
+                            case Holding:
+                                modbusFunction.writeMultipleRegisters(unitAddress,
+                                        modbusAction.getStart() + modbusAction.getOffset(),
+                                        ((byte[]) modbusAction.getPayload()));
+                                break;
+                            case SetLogicalAddress:
+                                modbusFunction.setLogicalAddress(unitAddress);
+                                break;
+                            default:
+                                logger.warn("NODE {}: Wrong messageClass for writing {} ({})",
+                                        modbusAction.getThingUID(), modbusAction.getMessageClass(),
+                                        modbusAction.getDataSetId());
+                                break;
                             }
                         } else if (modbusAction.getActionClass().equals(Status)) {
                             switch (modbusAction.getMessageClass()) {
-                                case GetCommEventCounter:
-                                    commEvent = modbusFunction.getCommEventCounter(unitAddress);
-                                    break;
-                                case GetCommEventLog:
-                                    commEvent = modbusFunction.getCommEventLog(unitAddress);
-                                    break;
-                                case ReadExceptionStatus:
-                                    payload = modbusFunction.readExceptionStatus(unitAddress);
-                                    break;
-                                default:
-                                    logger.warn("Unsupported ModbusFunction function");
-                                    break;
+                            case GetCommEventCounter:
+                                commEvent = modbusFunction.getCommEventCounter(unitAddress);
+                                break;
+                            case GetCommEventLog:
+                                commEvent = modbusFunction.getCommEventLog(unitAddress);
+                                break;
+                            case ReadExceptionStatus:
+                                payload = modbusFunction.readExceptionStatus(unitAddress);
+                                break;
+                            default:
+                                logger.warn("Unsupported ModbusFunction function");
+                                break;
                             }
                         }
                     }
 
                 } catch (ModbusProtocolException e) {
                     switch (e.getCode()) {
-                        case RESPONSE_TIMEOUT:
-                            // Check for possible retries (automatically counts # of retries)
-                            if (modbusAction.retry()) {
-                                // As this is a retry, only run once
-                                modbusAction.setFeedRepeat(Once);
-                                // Add it to the action feed
-                                actionSubscriber.modbusAction(modbusAction);
-                            } else {
-                                logger.error("Response TimeOut: {}", e.getMessage());
-                                getBridgeHandler().getCounters().incrementFailedCounter();
-                            }
-                            break;
-                        case TRANSACTION_FAILURE:
-                        case INVALID_CONFIGURATION:
-                        case INVALID_DATA_ADDRESS:
-                        case INVALID_DATA_LENGTH:
-                        case INVALID_DATA_TYPE:
-                            logger.error("Modbus error: {} {}", e.getCode(), e.getMessage());
-                            break;
-                        case NOT_CONNECTED:
-                            logger.error("Modbus unit ({}) NOT CONNECTED", unitAddress);
-                            break;
-                        case CONNECTION_FAILURE:
-                            logger.error("Connection failure: {} {}", e.getCause(), e.getMessage());
-                            getBridgeHandler().getTransceiver().disconnect();
-                            break;
-                        default:
-                            logger.error("We got an exception in ModbusCommunicator ({}) {}", e.getCode(),
-                                    e.getCode().name());
-                            break;
+                    case RESPONSE_TIMEOUT:
+                        // Check for possible retries (automatically counts # of retries)
+                        if (modbusAction.retry()) {
+                            // As this is a retry, only run once
+                            modbusAction.setFeedRepeat(Once);
+                            // Add it to the action feed
+                            actionSubscriber.modbusAction(modbusAction);
+                        } else {
+                            logger.error("Response TimeOut: {}", e.getMessage());
+                            getBridgeHandler().getCounters().incrementFailedCounter();
+                        }
+                        break;
+                    case TRANSACTION_FAILURE:
+                    case INVALID_CONFIGURATION:
+                    case INVALID_DATA_ADDRESS:
+                    case INVALID_DATA_LENGTH:
+                    case INVALID_DATA_TYPE:
+                        logger.error("Modbus error: {} {}", e.getCode(), e.getMessage());
+                        break;
+                    case NOT_CONNECTED:
+                        logger.error("Modbus unit ({}) NOT CONNECTED", unitAddress);
+                        break;
+                    case CONNECTION_FAILURE:
+                        logger.error("Connection failure: {} {}", e.getCause(), e.getMessage());
+                        getBridgeHandler().getTransceiver().disconnect();
+                        break;
+                    default:
+                        logger.error("We got an exception in ModbusCommunicator ({}) {}", e.getCode(),
+                                e.getCode().name());
+                        break;
                     }
                 } catch (Exception e) {
                     logger.error("EXCEPTION: {} {}", e.getMessage(), e.getStackTrace());
@@ -204,9 +213,6 @@ public class ModbusHandler<T> {
 
     public void register(ActionListener listener) {
         actionSubscriber = listener;
-    }
-
-    public void terminate() {
     }
 
     public ModbusBridgeHandler getBridgeHandler() {

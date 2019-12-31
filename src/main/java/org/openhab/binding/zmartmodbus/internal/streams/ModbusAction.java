@@ -96,7 +96,7 @@ public class ModbusAction {
 
     /**
      * Get the node id - internal reference
-     * 
+     *
      * @return
      */
     public ThingUID getThingUID() {
@@ -105,7 +105,7 @@ public class ModbusAction {
 
     /**
      * Get Id of this dataset
-     * 
+     *
      * @return id
      */
     public int getDataSetId() {
@@ -114,7 +114,7 @@ public class ModbusAction {
 
     /**
      * Get start address of dataset
-     * 
+     *
      * @return the address
      */
     public int getStart() {
@@ -127,11 +127,21 @@ public class ModbusAction {
 
     /**
      * Get length of dataset (in words or coils)
-     * 
+     *
      * @return the length
      */
     public int getLength() {
         return length;
+    }
+
+    /**
+     * Set length of dataset (in words or coils)
+     * - used for writing multiple coils
+     *
+     * @return void
+     */
+    public void setLength(int  length) {
+        this.length = length;
     }
 
     public ModbusReportOn getReportOn() {
@@ -184,7 +194,8 @@ public class ModbusAction {
         }
     }
 
+    @Override
     public String toString() {
-        return "modbusAction = " + thingUID.getAsString();
+        return "modbusAction = " + thingUID.getAsString() + ", " + messageClass + ", " + actionClass;
     }
 }

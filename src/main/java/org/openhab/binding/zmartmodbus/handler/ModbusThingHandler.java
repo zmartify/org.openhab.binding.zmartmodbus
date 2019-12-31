@@ -80,9 +80,10 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     public ModbusThingHandler(Thing modbusDevice) {
         super(modbusDevice);
+
         this.nodeClass = ModbusNodeClass.fromString(modbusDevice.getThingTypeUID().getId());
         this.modbusFunction = new ModbusFunction();
-        logger.debug("ModbusThingHandler loaded...");
+        logger.debug("ModbusThingHandler {} loaded...", modbusDevice.getUID());
     }
 
     @Override
@@ -234,7 +235,6 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                     case 6:
                     case 5:
                         start = addressWizard(cfg[cfg.length - 1], channelId, elementId);
-                        logger.debug("Offset {} - length {}", start, length);
                         break;
                     default:
                         logger.warn("Thing {}: Illegal number of property parameters", thing.getUID());
@@ -345,7 +345,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
 
     /**
      * Received discovery message from Message Listener ThingHandler
-     * 
+     *
      * @param modbusMessage
      */
     public void handleInternalMsg(ModbusMessage modbusMessage) {

@@ -12,9 +12,8 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
-import org.openhab.binding.zmartmodbus.internal.ModbusHandler;
+import org.openhab.binding.zmartmodbus.internal.factory.ModbusHandler;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusActionFeed;
 import org.openhab.binding.zmartmodbus.internal.factory.ModbusFactory;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
@@ -51,8 +50,8 @@ public class ModbusController {
     static final String PROTOCOL_NAME = "modbusFunction";
 
     private ModbusActionFeed<ModbusAction> actionFeed = new ModbusActionFeed<ModbusAction>();
-    private ModbusHandler<ModbusMessage> modbusHandler = new ModbusHandler<ModbusMessage>();
-    private ModbusFactory<ModbusState> modbusFactory = new ModbusFactory<ModbusState>();
+    private ModbusHandler modbusHandler = new ModbusHandler();
+    private ModbusFactory modbusFactory = new ModbusFactory();
 
     private ConnectableFlowable<ModbusAction> hotAction;
     private ConnectableFlowable<ModbusMessage> hotMessage;
@@ -140,10 +139,10 @@ public class ModbusController {
      *
      */
     public ModbusController(ModbusBridgeHandler bridgeHandler) {
-        logger.info("Starting ModbusFunction controller {} - {}", bridgeHandler);
+        logger.debug("Starting ModbusFunction controller {} - {}", bridgeHandler);
         this.bridgeHandler = bridgeHandler;
         this.modbusHandler.setBridgeHandler(bridgeHandler);
- 
+
         // If we are not the controller, then get device information populated
         /*
          * if (nodeId != CONTROLLER_NODE_ID) {
@@ -152,7 +151,6 @@ public class ModbusController {
          * getActionFeed().addAction(action);
          * }
          */
-
     }
 
     public ModbusBridgeHandler getBridgeHandler() {
@@ -176,14 +174,14 @@ public class ModbusController {
     }
 
     public void startListening() {
-        logger.debug("Controller start listening");
-        
+        logger.debug("Controller start listening....");
+
         if (!this.listening) {
 
             logger.debug("Start listening ModbusActionQueue");
             hotAction = modbusActionQueue.publish();
             hotAction.connect();
-            hotAction.subscribe(modbusAction -> getModbusHandler().ModbusCommunicator().onNext(modbusAction));
+            hotAction.subscribe(modbusAction -> getModbusHandler().modbusCommunicator().onNext(modbusAction));
 
             logger.debug("Start listening ModbusMessageQueue");
             hotMessage = modbusMessageQueue.publish();
@@ -206,32 +204,34 @@ public class ModbusController {
     }
 
     public void updateChannelFromModbus(ModbusThingChannel channel) {
-        logger.debug("Controller received update Channel {} {} {}", channel.getUID(), channel.getDataSetKey(),
-                channel.getState());
+        // logger.debug("Controller received update Channel {} {} {}", channel.getUID(), channel.getDataSetKey(), channel.getState());
         bridgeHandler.handleUpdate(channel.getUID(), channel.getState());
     }
 
     public void stopListening() {
         // Signal to listener to stop
-        logger.debug("Stop listening for actions");
+        logger.debug("Stop listening...");
 
+        logger.debug("Stop listening for actions");
         hotAction.connect().dispose();
         hotAction.subscribe().dispose();
 
+        logger.debug("Stop listening for messages");
         hotMessage.connect().dispose();
         hotMessage.subscribe().dispose();
 
+        logger.debug("Stop listening for stateFromModbus");
         hotStateFromModbus.connect().dispose();
         hotStateFromModbus.subscribe().dispose();
 
+        logger.debug("Stop listening for stateToModbus");
         hotStateToModbus.connect().dispose();
         hotStateToModbus.subscribe().dispose();
 
-        getModbusHandler().terminate();
         setListening(false);
     }
 
-    public ModbusFactory<ModbusState> getModbusFactory() {
+    public ModbusFactory getModbusFactory() {
         return modbusFactory;
     }
 
@@ -239,10 +239,12 @@ public class ModbusController {
         return actionFeed;
     }
 
-    public ModbusHandler<ModbusMessage> getModbusHandler() {
+    public ModbusHandler getModbusHandler() {
         return modbusHandler;
     }
-    @Nullable public ConnectableFlowable<ModbusMessage> getHotMessage() {
+
+    public ConnectableFlowable<ModbusMessage> getHotMessage() {
         return hotMessage;
     }
+
 }

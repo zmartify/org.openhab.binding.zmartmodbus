@@ -137,7 +137,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     @Override
     public void dispose() {
-        logger.info("Dispose Bridge called : {}", thing.getBridgeUID());
+        logger.debug("Dispose Bridge called : {}", thing.getBridgeUID());
 
         // Cancel all slow running Modbus actions
         if (slowPollTask != null && !slowPollTask.isDone()) {
@@ -185,7 +185,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
         // Make an initial slow run to get data filled in
         getController().getActionFeed().execSlowActions();
- 
+
         // Hereafter we schedule it with SlowPool delay
         slowPollTask = scheduler.scheduleWithFixedDelay(new Runnable() {
             @Override
@@ -250,7 +250,7 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
         }
     }
 
-    
+
     @Override
     public void handleUpdate(ChannelUID uid, State state) {
         updateState(uid, state);

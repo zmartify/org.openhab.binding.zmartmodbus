@@ -12,8 +12,6 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import java.math.BigDecimal;
-
 import org.eclipse.smarthome.core.thing.ChannelUID;
 import org.eclipse.smarthome.core.thing.ThingUID;
 import org.eclipse.smarthome.core.types.State;

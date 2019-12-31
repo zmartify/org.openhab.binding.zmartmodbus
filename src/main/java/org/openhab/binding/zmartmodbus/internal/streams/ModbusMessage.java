@@ -35,14 +35,14 @@ public class ModbusMessage {
     public ModbusMessage() {
     }
 
-    public ModbusMessage(int dataSetId, Object payload, boolean internal) {
+    public ModbusMessage(final int dataSetId, final Object payload, final boolean internal) {
         super();
         this.dataSetId = dataSetId;
         this.payload = payload;
         this.internal = internal;
     }
 
-    public ModbusMessage(int dataSetId, Object payload) {
+    public ModbusMessage(final int dataSetId, final Object payload) {
         this(dataSetId, payload, false);
     }
 
@@ -58,11 +58,16 @@ public class ModbusMessage {
         return internal;
     }
 
-    public void setInternal(boolean internal) {
+    public void setInternal(final boolean internal) {
         this.internal = internal;
     }
 
     public boolean isLast() {
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return "ModbusMessage id = (" + dataSetId + ") " +(internal ? "internal" : "");
     }
 }

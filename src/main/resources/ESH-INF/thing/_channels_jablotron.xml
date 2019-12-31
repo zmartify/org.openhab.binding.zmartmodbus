@@ -26,6 +26,13 @@
         </state>
     </channel-type>
 
+  	<!-- Internal Flags Channel -->
+	<channel-type id="internal_flags">
+		<item-type>Number</item-type>
+		<label>Internal flags</label>
+		<category>Counter</category>
+	</channel-type>
+
     <!-- Switch Channel -->
     <channel-type id="jablotron_syncgroup" advanced="true">
         <item-type>Number</item-type>

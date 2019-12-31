@@ -70,26 +70,6 @@ public class ModbusBindingClass {
     public static final int WRITE_REGISTER_MASKED_TO_ADDRESS = CUSTOMCODE_JABLOTRON | 0x46;
 
     /**
-     * Defines the byte representation of the coil state <b>on</b>.
-     */
-    public static final int COIL_ON = (byte) 255;
-
-    /**
-     * Defines the byte representation of the coil state <b>pos</b>.
-     */
-    public static final int COIL_OFF = 0;
-
-    /**
-     * Defines the word representation of the coil state <b>on</b>.
-     */
-    public static final byte[] COIL_ON_BYTES = { (byte) COIL_ON, (byte) COIL_OFF };
-
-    /**
-     * Defines the word representation of the coil state <b>pos</b>.
-     */
-    public static final byte[] COIL_OFF_BYTES = { (byte) COIL_OFF, (byte) COIL_OFF };
-
-    /**
      * Defines the maximum number of bits in multiple read/write
      * of input discretes or coils (<b>2000</b>).
      */
@@ -568,6 +548,7 @@ public class ModbusBindingClass {
         OnOff16("onoff16", 2), // 16-bit register used as on(1)/off(0) switch
 
         // JABLOTRON AC-116
+        Jablotron_modeset("jablotron_modeset", 1), // lowest 4 bit in coil
         Jablotron_power16("jablotron_power16", 2), // 16-bit register Current consumption P = 24 x Int16 / 0,54 [mW]
         Jablotron_power32("jablotron_power32", 4), // 32-bit register Current consumption P = 24 x Int32 / 0,54 [mW]
         Jablotron_RSSI("jablotron_rssi", 1), // 8-bit register, for signal strength in 0.5 dBm - base -74 dBm

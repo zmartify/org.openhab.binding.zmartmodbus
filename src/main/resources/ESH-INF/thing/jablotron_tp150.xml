@@ -259,9 +259,9 @@
                 <label>Thermostat Mode</label>
                 <description>Sets the mode of the thermostat</description>
                 <properties>
-                    <property name="dataset">packetdata</property>
-                    <property name="index">0x0E</property>
-                    <property name="valuetype">Custom8_4bit</property>
+                    <property name="dataset">packetstatus</property>
+                    <property name="index">0x00</property>
+                    <property name="valuetype">Jablotron_modeset</property>
                 </properties>
             </channel>
             <channel id="MinTemp" typeId="thermostat_setpoint_advanced">

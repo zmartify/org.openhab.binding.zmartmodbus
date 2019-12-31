@@ -18,6 +18,7 @@ import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
+import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.listener.StateListener;
@@ -39,21 +40,22 @@ import io.reactivex.disposables.Disposable;
  * @param <T>
  */
 
+public class ModbusFactory {
 
-public class ModbusFactory<T> {
+    private final Logger logger = LoggerFactory.getLogger(ModbusFactory.class);
 
-    private Logger logger = LoggerFactory.getLogger(ModbusFactory.class);
+    private final ModbusDataSets dataSets = new ModbusDataSets();
 
-    private ModbusDataSets dataSets = new ModbusDataSets();
-
-    @Nullable private StateListener stateSubscriber = null;
-    @Nullable private ActionListener actionSubscriber = null;
+    @Nullable
+    private StateListener stateSubscriber = null;
+    @Nullable
+    private ActionListener actionSubscriber = null;
 
     public ModbusFactory() {
     }
 
-    public void requestDataSetUpdateByElementId(int elementId) {
-        for (ModbusDataSet dataSet : dataSets.getDataSets()) {
+    public void requestDataSetUpdateByElementId(final int elementId) {
+        for (final ModbusDataSet dataSet : dataSets.getDataSets()) {
             if (dataSet.getElementId() == elementId) {
                 // Initiate a read of all the dataSet information to check for updates
                 actionSubscriber.modbusAction(new ModbusAction(dataSet, ModbusActionClass.Read, ModbusFeedRepeat.Once));
@@ -61,8 +63,8 @@ public class ModbusFactory<T> {
         }
     }
 
-    public void requestDataSetUpdateByChannelId(int channelId) {
-        for (ModbusDataSet dataSet : dataSets.getDataSets()) {
+    public void requestDataSetUpdateByChannelId(final int channelId) {
+        for (final ModbusDataSet dataSet : dataSets.getDataSets()) {
             if (dataSet.getChannelId() == channelId) {
                 // only update pure channels, elements will get update anyway via ElementID
                 if (dataSet.getElementId() == ID_NOT_USED) {
@@ -75,8 +77,9 @@ public class ModbusFactory<T> {
     }
 
     public void requestDataSetUpdateController() {
-        // Update all channels, which are not linked to element or channel ---> controller
-        for (ModbusDataSet dataSet : dataSets.getDataSets()) {
+        // Update all channels, which are not linked to element or channel --->
+        // controller
+        for (final ModbusDataSet dataSet : dataSets.getDataSets()) {
             if (dataSet.getChannelId() == ID_NOT_USED) {
                 // only update pure channels, elements will get update anyway via ElementID
                 if (dataSet.getElementId() == ID_NOT_USED) {
@@ -92,7 +95,7 @@ public class ModbusFactory<T> {
         return new Observer<ModbusState>() {
 
             @Override
-            public void onSubscribe(Disposable d) {
+            public void onSubscribe(final Disposable d) {
                 logger.debug("StateListener onSubscribe : {}", d.isDisposed());
             }
 
@@ -102,20 +105,30 @@ public class ModbusFactory<T> {
             }
 
             @Override
-            public void onError(Throwable arg0) {
+            public void onError(final Throwable arg0) {
                 logger.error("StateListener caught an error : {}", arg0.getMessage());
             }
 
             @Override
-            public void onNext(ModbusState modbusState) {
-                logger.debug("Factory received state change {}", modbusState.getState());
+            public void onNext(final ModbusState modbusState) {
+                logger.debug("Factory received state change {} {}", modbusState.getState());
 
                 synchronized (dataSets.getChannels()) {
-                    ModbusThingChannel channel = dataSets.getChannel(modbusState.getUid());
+                    final ModbusThingChannel channel = dataSets.getChannel(modbusState.getUid());
                     if (channel != null) {
-                        actionSubscriber.modbusAction(new ModbusAction(dataSets.getDataSet(channel.getDataSetKey()),
-                                channel.getIndex(), ModbusActionClass.Write, ModbusFeedRepeat.Once, ModbusBaseConverter
-                                        .fromStateToModbus(modbusState.getState(), channel)));
+                        ModbusAction action;
+
+                        action = new ModbusAction(dataSets.getDataSet(channel.getDataSetKey()), channel.getIndex(),
+                                ModbusActionClass.Write, ModbusFeedRepeat.Once,
+                                ModbusBaseConverter.fromStateToModbus(modbusState.getState(), channel));
+
+                        if (ModbusValueClass.Jablotron_modeset.equals(channel.getValueClass())) {
+                            // In case modeset we need to write 4 bits as coils
+                            // - work around, not the most clever way to do it ;-)
+                            action.setLength(4);
+                        }
+
+                        actionSubscriber.modbusAction(action);
                     }
                 }
 
@@ -124,7 +137,8 @@ public class ModbusFactory<T> {
     }
 
     /**
-     * Observer - handles all modbusMessages and decides, whether there is a need to initiate updates within the dataset
+     * Observer - handles all modbusMessages and decides, whether there is a need to
+     * initiate updates within the dataset
      *
      * @return
      */
@@ -132,8 +146,8 @@ public class ModbusFactory<T> {
         return new Observer<ModbusMessage>() {
 
             @Override
-            public void onSubscribe(Disposable d) {
-                logger.info("MessageListener onSubscribe : {}", d.isDisposed());
+            public void onSubscribe(final Disposable d) {
+                logger.debug("MessageListener onSubscribe : {}", d.isDisposed());
             }
 
             @Override
@@ -142,13 +156,13 @@ public class ModbusFactory<T> {
             }
 
             @Override
-            public void onError(Throwable arg0) {
-                logger.debug("MessageListener caught an error : {}", arg0.getMessage());
+            public void onError(final Throwable arg0) {
+                logger.error("MessageListener caught an error : {}", arg0.getMessage());
             }
 
             @Override
-            public void onNext(ModbusMessage modbusMessage) {
-                int dataSetId = modbusMessage.getDataSetId();
+            public void onNext(final ModbusMessage modbusMessage) {
+                final int dataSetId = modbusMessage.getDataSetId();
                 if (dataSets.getDataSet(dataSetId).getReportOn().equals(ModbusReportOn.Change)) {
                     if (!dataSets.getDataSet(dataSetId).getPayload().equals(modbusMessage.getPayload())) {
                         // Update as there is a change
@@ -163,63 +177,60 @@ public class ModbusFactory<T> {
     }
 
     /**
-     * updateDataSet - performs the actual update of datasets received by the Observer from Modbus
+     * updateDataSet - performs the actual update of datasets received by the
+     * Observer from Modbus
      *
      * @param modbusMessage
      */
-    public void updateDataSet(ModbusMessage modbusMessage) {
-        synchronized (dataSets) {
-           dataSets.getDataSet(modbusMessage.getDataSetId()).getChannels().forEach(uid -> {
-                ModbusThingChannel channel = dataSets.getChannel(uid);
-                BitVector payload = null;
+    public void updateDataSet(final ModbusMessage modbusMessage) {
 
+        synchronized (dataSets) {
+            dataSets.getDataSet(modbusMessage.getDataSetId()).getChannels().forEach(uid -> {
+                final ModbusThingChannel channel = dataSets.getChannel(uid);
+                BitVector payload = null;
                 // Handle special datasets
                 switch (channel.getValueClass()) {
-                    case Jablotron_elementChangeFlags:
-                        payload = (BitVector) modbusMessage.getPayload();
-                        // logger.debug("elementChangeFlags: {}", payload.toString());
-                        for (int elementId = 0; elementId < 48; elementId++) {
-                            if (payload.getBit(elementId)) {
-                                requestDataSetUpdateByElementId(elementId);
-                            }
+                case Jablotron_elementChangeFlags:
+                    payload = (BitVector) modbusMessage.getPayload();
+                    logger.debug("elementChangeFlags: {}", payload.toString());
+                    for (int elementId = 0; elementId < 48; elementId++) {
+                        if (payload.getBit(elementId)) {
+                            requestDataSetUpdateByElementId(elementId);
+                        }
+                    }
+                    break;
+                case Jablotron_channelChangeFlags:
+                    payload = (BitVector) modbusMessage.getPayload();
+                    logger.debug("channelChangeFlags: {}", payload.toString());
+                    for (int channelId = 0; channelId < 16; channelId++) {
+                        if (payload.getBit(channelId)) {
+                            requestDataSetUpdateByChannelId(channelId);
+                        }
+                    }
+                    if (payload.getBit(16)) {
+                        requestDataSetUpdateController();
+                    }
+                    break;
+                case Jablotron_packetdataChangeFlags:
+                    payload = (BitVector) modbusMessage.getPayload();
+                    logger.debug("packetdataChangeFlags: {}", payload.toString());
+                    for (int channelId = 0; channelId < 16; channelId++) {
+                        if (payload.getBit(channelId)) {
+                            // requestDataSetUpdateByChannelId(channelId);
+                        }
+                    }
+                    if (payload.getBit(16)) {
+                        logger.info("*** PACKETDATA CHANGE ON CONTROLLER SIDE ***");
+                    }
 
-                        }
-                        break;
-                    case Jablotron_channelChangeFlags:
-                        payload = (BitVector) modbusMessage.getPayload();
-                        // logger.debug("channelChangeFlags: {}", payload.toString());
-                        for (int channelId = 0; channelId < 16; channelId++) {
-                            if (payload.getBit(channelId)) {
-                                requestDataSetUpdateByChannelId(channelId);
-                            }
-                        }
+                    break;
 
-                        if (payload.getBit(16)) {
-                            requestDataSetUpdateController();
-                        }
-
-                        break;
-                    case Jablotron_packetdataChangeFlags:
-                        payload = (BitVector) modbusMessage.getPayload();
-                        // logger.debug("packetdataChangeFlags: {}", payload.toString());
-                        for (int channelId = 0; channelId < 16; channelId++) {
-                            if (payload.getBit(channelId)) {
-                                // requestDataSetUpdateByChannelId(channelId);
-                            }
-                        }
-                        if (payload.getBit(16)) {
-                            logger.info("*** PACKETDATA CHANGE ON CONTROLLER SIDE ***");
-                        }
-
-                        break;
-
-                    default:
-                        // Handle normal situations
-                        channel.updateState(ModbusBaseConverter.fromModbusToState(channel,
-                                modbusMessage.getPayload()));
-                        if (channel.stateChanged() || channel.getReportOn().equals(ModbusReportOn.Always)) {
-                            stateSubscriber.modbusState(new ModbusState(uid, channel.getState()));
-                        }
+                default:
+                    // Handle normal situations
+                    channel.updateState(ModbusBaseConverter.fromModbusToState(channel, modbusMessage.getPayload()));
+                    if (channel.stateChanged() || channel.getReportOn().equals(ModbusReportOn.Always)) {
+                        stateSubscriber.modbusState(new ModbusState(uid, channel.getState()));
+                    }
                 }
             });
             // Save payload for change control
@@ -227,7 +238,7 @@ public class ModbusFactory<T> {
         }
     }
 
-    public int getDataSetId(String dataSetKey) {
+    public int getDataSetId(final String dataSetKey) {
         return dataSets.getDataSetList().getOrDefault(dataSetKey, -1);
     }
 
@@ -239,12 +250,12 @@ public class ModbusFactory<T> {
      * register ModbusMessages to listen for
      *
      */
-    public void register(StateListener listener) {
+    public void register(final StateListener listener) {
         logger.debug("Factory register State listener registered");
         stateSubscriber = listener;
     }
 
-    public void register(ActionListener listener) {
+    public void register(final ActionListener listener) {
         logger.debug("Factory register Action listener registered");
         actionSubscriber = listener;
     }

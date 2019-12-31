@@ -14,12 +14,9 @@ package org.openhab.binding.zmartmodbus.internal.util;
 
 import java.util.Arrays;
 
-
 /**
- * Class that implements a collection for
- * bits, storing them packed into bytes.
- * Per default the access operations will index from
- * the LSB (rightmost) bit.
+ * Class that implements a collection for bits, storing them packed into bytes.
+ * Per default the access operations will index from the LSB (rightmost) bit.
  *
  * @author Peter Kristensen - Initial contribution
  *
@@ -34,12 +31,10 @@ public final class BitVector {
     private boolean m_MSBAccess = false;
 
     /**
-     * Constructs a new <tt>BitVector</tt> instance
-     * with a given size.
+     * Constructs a new <tt>BitVector</tt> instance with a given size.
      * <p>
      *
-     * @param size the number of bits the <tt>BitVector</tt>
-     *            should be able to hold.
+     * @param size the number of bits the <tt>BitVector</tt> should be able to hold.
      */
     public BitVector(int size) {
         // store bits
@@ -51,9 +46,8 @@ public final class BitVector {
     }// constructor
 
     /**
-     * Toggles the flag deciding whether the LSB
-     * or the MSB of the byte corresponds to the
-     * first bit (index=0).
+     * Toggles the flag deciding whether the LSB or the MSB of the byte corresponds
+     * to the first bit (index=0).
      *
      * @param b true if LSB=0 up to MSB=7, false otherwise.
      */
@@ -62,8 +56,7 @@ public final class BitVector {
     }// toggleAccess
 
     /**
-     * Set the flag to the MSB of the byte corresponds to the
-     * first bit (index=0).
+     * Set the flag to the MSB of the byte corresponds to the first bit (index=0).
      *
      * LSB=0 up to MSB=7
      */
@@ -72,8 +65,7 @@ public final class BitVector {
     }// toggleAccess
 
     /**
-     * Set the flag to the MSB of the byte corresponds to the
-     * first bit (index=0).
+     * Set the flag to the MSB of the byte corresponds to the first bit (index=0).
      *
      * LSB=0 up to MSB=7
      */
@@ -82,8 +74,7 @@ public final class BitVector {
     }// toggleAccess
 
     /**
-     * Tests if this <tt>BitVector</tt> has
-     * the LSB (rightmost) as the first bit
+     * Tests if this <tt>BitVector</tt> has the LSB (rightmost) as the first bit
      * (i.e. at index 0).
      *
      * MSB=0 up to LSB=7
@@ -93,8 +84,7 @@ public final class BitVector {
     }// isLSBAccess
 
     /**
-     * Tests if this <tt>BitVector</tt> has
-     * the MSB (leftmost) as the first bit
+     * Tests if this <tt>BitVector</tt> has the MSB (leftmost) as the first bit
      * (i.e. at index 0).
      *
      * @return true if LSB=0 up to MSB=7, false otherwise.
@@ -104,8 +94,8 @@ public final class BitVector {
     }// isMSBAccess
 
     /**
-     * Returns the <tt>byte[]</tt> which is used to store
-     * the bits of this <tt>BitVector</tt>.
+     * Returns the <tt>byte[]</tt> which is used to store the bits of this
+     * <tt>BitVector</tt>.
      * <p>
      *
      * @return the <tt>byte[]</tt> used to store the bits.
@@ -115,8 +105,8 @@ public final class BitVector {
     }// getBytes
 
     /**
-     * Returns the <tt>byte[]</tt> which is used to store
-     * the bits of this <tt>BitVector</tt>.
+     * Returns the <tt>byte[]</tt> which is used to store the bits of this
+     * <tt>BitVector</tt>.
      * <p>
      *
      * @return the <tt>byte[]</tt> used to store the bits.
@@ -157,8 +147,7 @@ public final class BitVector {
     }
 
     /**
-     * Sets the <tt>byte[]</tt> which stores
-     * the bits of this <tt>BitVector</tt>.
+     * Sets the <tt>byte[]</tt> which stores the bits of this <tt>BitVector</tt>.
      * <p>
      *
      * @param data a <tt>byte[]</tt>.
@@ -172,8 +161,7 @@ public final class BitVector {
     }// setBytes
 
     /**
-     * Sets the <tt>byte[]</tt> which stores
-     * the bits of this <tt>BitVector</tt>.
+     * Sets the <tt>byte[]</tt> which stores the bits of this <tt>BitVector</tt>.
      * <p>
      *
      * @param data a <tt>byte[]</tt>.
@@ -183,8 +171,7 @@ public final class BitVector {
     }// setBytes
 
     /**
-     * Sets the <tt>byte[]</tt> which stores
-     * the bits of this <tt>BitVector</tt>.
+     * Sets the <tt>byte[]</tt> which stores the bits of this <tt>BitVector</tt>.
      * <p>
      *
      * @param data a <tt>byte[]</tt>.
@@ -195,14 +182,12 @@ public final class BitVector {
     }// setBytes
 
     /**
-     * Returns the state of the bit at the given index of this
-     * <tt>BitVector</tt>.
+     * Returns the state of the bit at the given index of this <tt>BitVector</tt>.
      * <p>
      *
      * @param index the index of the bit to be returned.
      *
-     * @return true if the bit at the specified index is set,
-     *         false otherwise.
+     * @return true if the bit at the specified index is set, false otherwise.
      *
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
@@ -212,15 +197,32 @@ public final class BitVector {
     }// getBit
 
     /**
-     * Returns a range of a BitVector
+     * Returns the state of the bits as an array of booleans give the state of this
      * <tt>BitVector</tt>.
      * <p>
      *
-     * @param start where the range starts (incusive)
-     * @param stop where the range stops (exclusive)
      *
-     * @return true if the bit at the specified index is set,
-     *         false otherwise.
+     * @return true if the bit at the specified index is set, false otherwise.
+     *
+     * @throws IndexOutOfBoundsException if the index is out of bounds.
+     */
+    public final boolean[] getBits() throws IndexOutOfBoundsException {
+        boolean[] bits = new boolean[m_Size];
+        for (int i = 0; i < m_Size; i++) {
+            int index = translateIndex(i);
+            bits[i] = ((m_Data[byteIndex(index)] & (0x01 << bitIndex(index))) != 0) ? true : false;
+        }
+        return bits;
+    }// getBits
+
+    /**
+     * Returns a range of a BitVector <tt>BitVector</tt>.
+     * <p>
+     *
+     * @param start where the range starts (inclusive)
+     * @param stop  where the range stops (exclusive)
+     *
+     * @return true if the bit at the specified index is set, false otherwise.
      *
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
@@ -237,12 +239,11 @@ public final class BitVector {
     }// rangeOf
 
     /**
-     * Sets the state of the bit at the given index of
-     * this <tt>BitVector</tt>.
+     * Sets the state of the bit at the given index of this <tt>BitVector</tt>.
      * <p>
      *
      * @param index the index of the bit to be set.
-     * @param b true if the bit should be set, false if it should be reset.
+     * @param b     true if the bit should be set, false if it should be reset.
      *
      * @throws IndexOutOfBoundsException if the index is out of bounds.
      */
@@ -255,8 +256,7 @@ public final class BitVector {
     }// setBit
 
     /**
-     * Returns the number of bits in this <tt>BitVector</tt>
-     * as <tt>int</tt>.
+     * Returns the number of bits in this <tt>BitVector</tt> as <tt>int</tt>.
      * <p>
      *
      * @return the number of bits in this <tt>BitVector</tt>.
@@ -269,8 +269,8 @@ public final class BitVector {
      * Forces the number of bits in this <tt>BitVector</tt>.
      *
      * @param size
-     * @throws IllegalArgumentException if the size exceeds
-     *             the byte[] store size multiplied by 8.
+     * @throws IllegalArgumentException if the size exceeds the byte[] store size
+     *                                  multiplied by 8.
      */
     public final void forceSize(int size) {
         if (size > m_Data.length * 8) {
@@ -281,8 +281,29 @@ public final class BitVector {
     }// forceSize
 
     /**
-     * Returns the number of bytes used to store the
-     * collection of bits as <tt>int</tt>.
+     * Forces the number of bits in this <tt>BitVector</tt>, if the size exceeds the
+     * byte[] store size multiplied by 8, it will be extended.
+     *
+     * @param size
+     */
+    public final void forceSizeOrExtent(int size) {
+        if (size > m_Data.length * 8) {
+            // store bits
+            byte[] new_Data = new byte[(size + 7) / 8];
+            // make sure its all zeros
+            Arrays.fill(new_Data, (byte) 0x00);
+            // store bits
+            for (int i = 0; i < m_Data.length; i++) {
+                new_Data[i] = m_Data[i];
+            }
+            m_Data = new_Data;
+        }
+        m_Size = size;
+    }// forceSizeOrExtent
+
+    /**
+     * Returns the number of bytes used to store the collection of bits as
+     * <tt>int</tt>.
      * <p>
      *
      * @return the number of bytes in this <tt>BitVector</tt>.
@@ -292,8 +313,8 @@ public final class BitVector {
     }// byteSize
 
     /**
-     * Returns the number of registers used to store the
-     * collection of bits as <tt>int</tt>.
+     * Returns the number of registers used to store the collection of bits as
+     * <tt>int</tt>.
      * <p>
      *
      * @return the number of registers (16 bit) in this <tt>BitVector</tt>.
@@ -303,13 +324,11 @@ public final class BitVector {
     }// regSize
 
     /**
-     * Returns a <tt>String</tt> representing the
-     * contents of the bit collection in a way that
-     * can be printed to a screen or log.
+     * Returns a <tt>String</tt> representing the contents of the bit collection in
+     * a way that can be printed to a screen or log.
      * <p>
-     * Note that this representation will <em>ALLWAYS</em>
-     * show the MSB to the left and the LSB to the right
-     * in each byte.
+     * Note that this representation will <em>ALWAYS</em> show the MSB to the left
+     * and the LSB to the right in each byte.
      *
      * @return a <tt>String</tt> representing this <tt>BitVector</tt>.
      */
@@ -340,16 +359,15 @@ public final class BitVector {
     }
 
     /**
-     * Returns the index of the byte in the the byte array
-     * that contains the given bit.
+     * Returns the index of the byte in the the byte array that contains the given
+     * bit.
      * <p>
      *
      * @param index the index of the bit.
      *
      * @return the index of the byte where the given bit is stored.
      *
-     * @throws IndexOutOfBoundsException if index is
-     *             out of bounds.
+     * @throws IndexOutOfBoundsException if index is out of bounds.
      */
     private final int byteIndex(int index) throws IndexOutOfBoundsException {
 
@@ -361,17 +379,15 @@ public final class BitVector {
     }// byteIndex
 
     /**
-     * Returns the index of the given bit in the byte
-     * where it it stored.
+     * Returns the index of the given bit in the byte where it it stored.
      * <p>
      *
      * @param index the index of the bit.
      *
-     * @return the bit index relative to the position in the byte
-     *         that stores the specified bit.
+     * @return the bit index relative to the position in the byte that stores the
+     *         specified bit.
      *
-     * @throws IndexOutOfBoundsException if index is
-     *             out of bounds.
+     * @throws IndexOutOfBoundsException if index is out of bounds.
      */
     private final int bitIndex(int index) throws IndexOutOfBoundsException {
 
@@ -414,8 +430,8 @@ public final class BitVector {
     }// translateIndex
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data.
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * byte data.
      *
      * @param data a byte[] containing packed bits.
      * @return the newly created <tt>BitVector</tt> instance.
@@ -427,8 +443,8 @@ public final class BitVector {
     }// createBitVector
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data.
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * byte data.
      *
      * @param data a byte containing packed bits to replicated.
      * @return the newly created <tt>BitVector</tt> instance.
@@ -440,9 +456,8 @@ public final class BitVector {
     }// createBitVector
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data. Swapping each pair of bytes
-     * to accommodate for LittleBigEndian
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * byte data. Swapping each pair of bytes to accommodate for LittleBigEndian
      *
      * @param data a byte[] containing packed bits.
      * @return the newly created <tt>BitVector</tt> instance.
@@ -454,8 +469,8 @@ public final class BitVector {
     }// createBitVector
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data.
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * byte data.
      *
      * @param data a byte[] containing packed bits.
      * @return the newly created <tt>BitVector</tt> instance.
@@ -467,9 +482,8 @@ public final class BitVector {
     }// createBitVector
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given byte data. Swapping each pair of bytes
-     * to accommodate for LittleBigEndian
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * byte data. Swapping each pair of bytes to accommodate for LittleBigEndian
      *
      * @param data a byte[] containing packed bits.
      * @return the newly created <tt>BitVector</tt> instance.
@@ -481,8 +495,8 @@ public final class BitVector {
     }// createBitVector
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given int data.
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * int data.
      *
      * @param data a int[] containing packed bits.
      * @return the newly created <tt>BitVector</tt> instance.
@@ -492,8 +506,8 @@ public final class BitVector {
     }// createBitVector
 
     /**
-     * Factory method for creating a <tt>BitVector</tt> instance
-     * wrapping the given int data.
+     * Factory method for creating a <tt>BitVector</tt> instance wrapping the given
+     * int data.
      *
      * @param data a int[] containing packed bits.
      * @return the newly created <tt>BitVector</tt> instance.

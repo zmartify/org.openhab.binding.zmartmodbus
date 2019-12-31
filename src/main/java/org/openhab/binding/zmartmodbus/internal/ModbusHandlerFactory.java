@@ -53,9 +53,9 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 @Component(immediate = true, service = ThingHandlerFactory.class, configurationPid = CONFIGURATION_PID)
 public class ModbusHandlerFactory extends BaseThingHandlerFactory {
-    private Logger logger = LoggerFactory.getLogger(BaseThingHandlerFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(BaseThingHandlerFactory.class);
 
-    private Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
+    private final Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
     private @NonNullByDefault({}) SerialPortManager serialPortManager;
 
@@ -72,7 +72,7 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
      * The things this factory supports creating
      */
     @Override
-    public boolean supportsThingType(ThingTypeUID thingTypeUID) {
+    public boolean supportsThingType(final ThingTypeUID thingTypeUID) {
         return SUPPORTED_BRIDGE_TYPES_UIDS.contains(thingTypeUID) ? true
                 : SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID);
     }
@@ -83,12 +83,12 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
      */
     @Override
     @Nullable
-    public ThingHandler createHandler(Thing thing) {
+    public ThingHandler createHandler(final Thing thing) {
         logger.debug("CreateHandler for Thing {}", thing.getUID());
 
         ModbusBridgeHandler controller = null;
 
-        ThingTypeUID thingTypeUID = thing.getThingTypeUID();
+        final ThingTypeUID thingTypeUID = thing.getThingTypeUID();
 
         if (SUPPORTED_BRIDGE_TYPES_UIDS.contains(thingTypeUID)) {
             // Handle Bridge controllers here
@@ -97,7 +97,7 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
             }
 
             if (controller != null) {
-                ModbusSlaveDiscoveryService discoveryService = new ModbusSlaveDiscoveryService(controller, 60);
+                final ModbusSlaveDiscoveryService discoveryService = new ModbusSlaveDiscoveryService(controller, 60);
                 discoveryService.activate();
 
                 discoveryServiceRegs.put(controller.getThing().getUID(), bundleContext.registerService(

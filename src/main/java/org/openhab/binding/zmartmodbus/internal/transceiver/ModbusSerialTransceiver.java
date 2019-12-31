@@ -17,7 +17,6 @@ import java.io.IOException;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
-import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
 import org.eclipse.smarthome.io.transport.serial.PortInUseException;
 import org.eclipse.smarthome.io.transport.serial.SerialPort;
@@ -40,19 +39,20 @@ import org.slf4j.LoggerFactory;
  * @author Peter Kristensen - Adopted for ZmartModbus
  * 
  */
-@NonNullByDefault
+
 public class ModbusSerialTransceiver extends ModbusTransceiver {
 
-    private Logger logger = LoggerFactory.getLogger(ModbusSerialTransceiver.class);
+    private final Logger logger = LoggerFactory.getLogger(ModbusSerialTransceiver.class);
 
     private SerialPortManager serialPortManager;
 
     protected ModbusSerialConfiguration serialConfig;
 
-    @Nullable SerialPort serialPort = null;
+    @Nullable
+    SerialPort serialPort = null;
 
-    public ModbusSerialTransceiver(SerialPortManager serialPortManager, ModbusSerialConfiguration serialConfig,
-            ModbusCounters counters) {
+    public ModbusSerialTransceiver(final SerialPortManager serialPortManager,
+            final ModbusSerialConfiguration serialConfig, final ModbusCounters counters) {
         super(counters);
         this.serialPortManager = serialPortManager;
         this.serialConfig = serialConfig;
@@ -61,18 +61,21 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
     @Override
     public void connect() throws ModbusProtocolException {
         // Call disconnect to ensure we are not connected
-        if (serialPort != null) disconnect();
+        if (serialPort != null)
+            disconnect();
 
         try {
-            String port = serialConfig.getPort();
+            final String port = serialConfig.getPort();
             logger.debug("Connecting to serial port '{}'", port);
 
-            SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(port);
+            final SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(port);
 
             if (portIdentifier == null) {
                 if (portIdentifier == null) {
-                    throw new ModbusProtocolException("Could not find a gateway on given path '" + port + "', "
-                            + serialPortManager.getIdentifiers().count() + " ports available.",ModbusProtocolErrorCode.NOT_AVAILABLE);
+                    throw new ModbusProtocolException(
+                            "Could not find a gateway on given path '" + port + "', "
+                                    + serialPortManager.getIdentifiers().count() + " ports available.",
+                            ModbusProtocolErrorCode.NOT_AVAILABLE);
                 }
             }
 
@@ -91,19 +94,19 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
             outputStream = serialPort.getOutputStream();
 
             setConnected(true);
-        } catch (PortInUseException e) {
+        } catch (final PortInUseException e) {
             logger.error("PortInUse");
             if (serialPort != null) {
                 logger.debug("Trying to close the port");
                 serialPort.close();
             }
             throw new ModbusProtocolException(ModbusProtocolErrorCode.SERIAL_INUSE);
-        } catch (UnsupportedCommOperationException e) {
+        } catch (final UnsupportedCommOperationException e) {
             logger.error("Unsupported");
             throw new ModbusProtocolException(ModbusProtocolErrorCode.SERIAL_UNSUPPORTED);
-        } catch (IOException e) {
+        } catch (final IOException e) {
             logger.error("IOException {}", e.getMessage());
-            throw new ModbusProtocolException(e.getMessage(), e.getCause(),ModbusProtocolErrorCode.CONNECTION_FAILURE);
+            throw new ModbusProtocolException(e.getMessage(), e.getCause(), ModbusProtocolErrorCode.CONNECTION_FAILURE);
         }
 
         logger.info("ModbusSerialTransceiver initialized");
@@ -144,7 +147,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
      */
 
     @Override
-    public byte[] msgTransaction(byte[] msg, int customCode) throws ModbusProtocolException {
+    public byte[] msgTransaction(final byte[] msg, final int customCode) throws ModbusProtocolException {
         byte[] cmd = null;
 
         // Update message counter
@@ -156,7 +159,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                 cmd[i] = msg[i];
             }
             // Add crc calculation to end of message
-            int crc = Crc16.getCrc16(msg, msg.length, 0x0ffff);
+            final int crc = Crc16.getCrc16(msg, msg.length, 0x0ffff);
             cmd[msg.length] = (byte) crc;
             cmd[msg.length + 1] = (byte) (crc >> 8);
         } else if (serialConfig.getTxMode() == ModbusBindingConstants.ASCII_MODE) {
@@ -169,8 +172,8 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
             //
             try {
                 Thread.sleep(serialConfig.getTimeBetweenTransactionsMillis()); // ensure delay between polling
-            } catch (InterruptedException e) {
-                throw new ModbusProtocolException("Thread interrupted",ModbusProtocolErrorCode.TRANSACTION_FAILURE);
+            } catch (final InterruptedException e) {
+                throw new ModbusProtocolException("Thread interrupted", ModbusProtocolErrorCode.TRANSACTION_FAILURE);
             }
 
             synchronized (outputStream) {
@@ -197,23 +200,27 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                         boolean endFrame = false;
                         // while (respIndex < minimumLength) {
                         while (!endFrame) {
-                            long start = System.currentTimeMillis();
+                            final long start = System.currentTimeMillis();
                             while (inputStream.available() == 0) {
                                 try {
                                     Thread.sleep(5); // avoid a high cpu load
-                                } catch (InterruptedException e) {
-                                    throw new ModbusProtocolException("Thread interrupted",ModbusProtocolErrorCode.TRANSACTION_FAILURE);
+                                } catch (final InterruptedException e) {
+                                    throw new ModbusProtocolException("Thread interrupted",
+                                            ModbusProtocolErrorCode.TRANSACTION_FAILURE);
                                 }
 
-                                long elapsed = System.currentTimeMillis() - start;
+                                final long elapsed = System.currentTimeMillis() - start;
                                 if (elapsed > timeOut) {
-                    
-                                    String failMsg = String.format("Recv timeout %d : minLength=%d respIndex=%d #%d cmd=%s", elapsed,
-                                             minimumLength, respIndex, counters.getMessageCounter(), DatatypeConverter.printHexBinary(cmd));
+
+                                    final String failMsg = String.format(
+                                            "Recv timeout %d : minLength=%d respIndex=%d #%d cmd=%s", elapsed,
+                                            minimumLength, respIndex, counters.getMessageCounter(),
+                                            DatatypeConverter.printHexBinary(cmd));
 
                                     // Increase Response Time Out counter
                                     counters.incrementTimeOutCounter();
-                                    throw new ModbusProtocolException(failMsg, ModbusProtocolErrorCode.RESPONSE_TIMEOUT);
+                                    throw new ModbusProtocolException(failMsg,
+                                            ModbusProtocolErrorCode.RESPONSE_TIMEOUT);
                                 }
                             }
                             // address byte must match first
@@ -245,11 +252,12 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
 
                         // if ASCII mode convert response
                         if (serialConfig.getTxMode() == ModbusBindingConstants.ASCII_MODE) {
-                            byte lrcRec = asciiLrcCalc(response, respIndex);
+                            final byte lrcRec = asciiLrcCalc(response, respIndex);
                             response = convertAsciiResponseToBin(response, respIndex);
-                            byte lrcCalc = (byte) binLrcCalc(response);
+                            final byte lrcCalc = (byte) binLrcCalc(response);
                             if (lrcRec != lrcCalc) {
-                                throw new ModbusProtocolException("Bad LRC", ModbusProtocolErrorCode.TRANSACTION_FAILURE);
+                                throw new ModbusProtocolException("Bad LRC",
+                                        ModbusProtocolErrorCode.TRANSACTION_FAILURE);
                             }
                         }
 
@@ -257,7 +265,8 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                         if ((response[1] & 0x80) == 0x80) {
                             if (serialConfig.getTxMode() == ModbusBindingConstants.ASCII_MODE
                                     || Crc16.getCrc16(response, 5, 0xffff) == 0) {
-                                throw new ModbusProtocolException("Exception response = " + Byte.toString(response[2]),ModbusProtocolErrorCode.TRANSACTION_FAILURE);
+                                throw new ModbusProtocolException("Exception response = " + Byte.toString(response[2]),
+                                        ModbusProtocolErrorCode.TRANSACTION_FAILURE);
                             }
                         } else {
                             // then check for a valid message
@@ -270,7 +279,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                     minimumLength = 6;
                                 } else if (serialConfig.getTxMode() == ModbusBindingConstants.ASCII_MODE
                                         || Crc16.getCrc16(response, 8, 0xffff) == 0) {
-                                    byte[] ret = new byte[6];
+                                    final byte[] ret = new byte[6];
                                     for (int i = 0; i < 6; i++) {
                                         ret[i] = response[i];
                                     }
@@ -286,7 +295,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                     minimumLength = 8;
                                 } else if (serialConfig.getTxMode() == ModbusBindingConstants.ASCII_MODE
                                         || Crc16.getCrc16(response, 8, 0xffff) == 0) {
-                                    byte[] ret = new byte[6];
+                                    final byte[] ret = new byte[6];
                                     for (int i = 0; i < 6; i++) {
                                         ret[i] = response[i];
                                     }
@@ -310,7 +319,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                                     minimumLength = byteCnt;
                                 } else if (serialConfig.getTxMode() == ModbusBindingConstants.ASCII_MODE
                                         || Crc16.getCrc16(response, byteCnt, 0xffff) == 0) {
-                                    byte[] ret = new byte[byteCnt];
+                                    final byte[] ret = new byte[byteCnt];
                                     for (int i = 0; i < byteCnt; i++) {
                                         ret[i] = response[i];
                                     }
@@ -334,19 +343,19 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                     }
                 }
             }
-        } catch (IOException e) {
+        } catch (final IOException e) {
             // e.printStackTrace();
-            throw new ModbusProtocolException(e.getMessage(),ModbusProtocolErrorCode.TRANSACTION_FAILURE);
+            throw new ModbusProtocolException(e.getMessage(), ModbusProtocolErrorCode.TRANSACTION_FAILURE);
         }
-        throw new ModbusProtocolException("Too much activity on recv line",ModbusProtocolErrorCode.TRANSACTION_FAILURE
-                );
+        throw new ModbusProtocolException("Too much activity on recv line",
+                ModbusProtocolErrorCode.TRANSACTION_FAILURE);
     }
 
     public ModbusSerialConfiguration getSerialConfig() {
         return serialConfig;
     }
 
-    public void setSerialConfig(ModbusSerialConfiguration serialConfig) {
+    public void setSerialConfig(final ModbusSerialConfiguration serialConfig) {
         this.serialConfig = serialConfig;
     }
 
@@ -354,7 +363,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
         return serialPortManager;
     }
 
-    public void setSerialPortManager(SerialPortManager serialPortManager) {
+    public void setSerialPortManager(final SerialPortManager serialPortManager) {
         this.serialPortManager = serialPortManager;
     }
 

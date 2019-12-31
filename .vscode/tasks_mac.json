@@ -2,12 +2,12 @@
     "version": "2.0.0",
     "options": {
         "env": {
-            
-            "openhab_home": "/Volumes/openHAB_share",
-            "openhab_runtime": "/Volumes/openHAB_share/runtime",
-            "openhab_addons": "/Volumes/openHAB_share/addons",
-            "openhab_logs": "/Volumes/openHAB_log",
-            "dist": "org.openhab.binding.zmartmodbus-2.5.0-SNAPSHOT.jar"
+            "openhab_version": "2.5.0-SNAPSHOT",
+            "openhab_home": "/Volumes/openHAB_home",
+            "openhab_runtime": "/Volumes/openHAB_home/runtime",
+            "openhab_addons": "/Volumes/openHAB_addons",
+            "openhab_logs": "/volumes/openHAB_log",
+            "dist": "org.openhab.binding.zmartmodbus-$openhab_version.jar"
         }
     },
     "tasks": [

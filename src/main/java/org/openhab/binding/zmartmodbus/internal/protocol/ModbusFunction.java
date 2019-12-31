@@ -637,7 +637,7 @@ public class ModbusFunction {
     }
 
     public void getDeviceInfo(ThingUID thingUID) {
-        // TODO: currently do nothing
+        // 
     }
 
     /**
