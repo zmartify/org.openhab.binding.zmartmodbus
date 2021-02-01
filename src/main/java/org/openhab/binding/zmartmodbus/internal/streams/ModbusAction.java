@@ -18,7 +18,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;

@@ -26,17 +26,17 @@ import java.util.Map.Entry;
 import java.util.TimeZone;
 
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.core.status.ConfigStatusMessage;
-import org.eclipse.smarthome.core.thing.Channel;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.ThingStatusDetail;
-import org.eclipse.smarthome.core.thing.ThingStatusInfo;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.binding.ConfigStatusThingHandler;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.eclipse.smarthome.core.types.Command;
+import org.openhab.core.config.core.status.ConfigStatusMessage;
+import org.openhab.core.thing.Channel;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingStatus;
+import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingStatusInfo;
+import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.ConfigStatusThingHandler;
+import org.openhab.core.thing.binding.ThingHandler;
+import org.openhab.core.types.Command;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataSetClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
@@ -401,6 +401,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
             return modbusThingConfig.getId();
     }
 
+    @Nullable
     private ThingUID getParentThingUID() {
         String idStr = this.getThing().getProperties().get(ModbusBindingConstants.PROPERTY_PARENTTHINGUID);
         if (idStr == null) {

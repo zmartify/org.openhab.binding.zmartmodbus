@@ -18,7 +18,7 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.toHex;
 
 import java.util.Arrays;
 
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusActionClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
@@ -379,7 +379,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
                     // That was expected
                     break;
                 default:
-                    logger.error("enumeration RESET got an error {} {} {} {}", e.getCode(), e.getMessage(),
+                    logger.error("enumeration RESET got an error {} {} \n\t {} {}", e.getCode(), e.getMessage(),
                             e.getClass(), e.getCause());
                     break;
             }

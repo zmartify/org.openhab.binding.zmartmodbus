@@ -19,8 +19,8 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataSetClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusFeedRepeat;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusMessageClass;

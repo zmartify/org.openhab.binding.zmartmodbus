@@ -12,8 +12,8 @@
  */
 package org.openhab.binding.zmartmodbus.internal.streams;
 
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.types.State;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.types.State;
 
 /**
  *

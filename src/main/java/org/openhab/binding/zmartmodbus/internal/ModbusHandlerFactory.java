@@ -20,15 +20,15 @@ import java.util.Map;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.config.discovery.DiscoveryService;
-import org.eclipse.smarthome.core.thing.Bridge;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.binding.BaseThingHandlerFactory;
-import org.eclipse.smarthome.core.thing.binding.ThingHandler;
-import org.eclipse.smarthome.core.thing.binding.ThingHandlerFactory;
-import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
+import org.openhab.core.config.discovery.DiscoveryService;
+import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.BaseThingHandlerFactory;
+import org.openhab.core.thing.binding.ThingHandler;
+import org.openhab.core.thing.binding.ThingHandlerFactory;
+import org.openhab.core.io.transport.serial.SerialPortManager;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusNodeClass;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
@@ -53,7 +53,7 @@ import org.slf4j.LoggerFactory;
 @NonNullByDefault
 @Component(immediate = true, service = ThingHandlerFactory.class, configurationPid = CONFIGURATION_PID)
 public class ModbusHandlerFactory extends BaseThingHandlerFactory {
-    private final Logger logger = LoggerFactory.getLogger(BaseThingHandlerFactory.class);
+    private final Logger logger = LoggerFactory.getLogger(ModbusHandlerFactory.class);
 
     private final Map<ThingUID, ServiceRegistration<?>> discoveryServiceRegs = new HashMap<>();
 
@@ -104,7 +104,7 @@ public class ModbusHandlerFactory extends BaseThingHandlerFactory {
                         DiscoveryService.class.getName(), discoveryService, new Hashtable<String, Object>()));
 
                 controller.setDiscoveryService(discoveryService);
-                
+
                 return controller;
             }
         } else if (SUPPORTED_THING_TYPES_UIDS.contains(thingTypeUID)) {

@@ -21,9 +21,9 @@ import static org.openhab.binding.zmartmodbus.internal.util.Register.registerToU
 
 import java.util.Arrays;
 
-import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
+import org.openhab.core.library.types.StringType;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusDeviceInfo;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;

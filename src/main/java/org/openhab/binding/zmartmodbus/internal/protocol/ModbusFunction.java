@@ -16,7 +16,7 @@ package org.openhab.binding.zmartmodbus.internal.protocol;
 import java.util.Arrays;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;

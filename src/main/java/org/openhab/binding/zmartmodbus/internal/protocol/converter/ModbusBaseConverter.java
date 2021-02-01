@@ -45,16 +45,16 @@ import com.google.gson.JsonParser;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.core.library.types.DateTimeType;
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.library.types.OnOffType;
-import org.eclipse.smarthome.core.library.types.QuantityType;
-import org.eclipse.smarthome.core.library.types.StringType;
-import org.eclipse.smarthome.core.library.unit.ImperialUnits;
-import org.eclipse.smarthome.core.library.unit.SIUnits;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.State;
-import org.eclipse.smarthome.core.types.UnDefType;
+import org.openhab.core.library.types.DateTimeType;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.library.types.OnOffType;
+import org.openhab.core.library.types.QuantityType;
+import org.openhab.core.library.types.StringType;
+import org.openhab.core.library.unit.ImperialUnits;
+import org.openhab.core.library.unit.SIUnits;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.State;
+import org.openhab.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.WeekDayClass;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;
@@ -231,7 +231,7 @@ public class ModbusBaseConverter {
         Object payload = null;
         BigDecimal value;
 
-        if (state.getClass().equals(org.eclipse.smarthome.core.library.types.OnOffType.class)) {
+        if (state.getClass().equals(org.openhab.core.library.types.OnOffType.class)) {
             value = new BigDecimal((((OnOffType) state) == OnOffType.ON) ? 1 : 0);
         } else {
             // Handle Units of Measure channels

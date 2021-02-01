@@ -17,8 +17,8 @@ import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusValueClass;
 import org.openhab.binding.zmartmodbus.internal.controller.ModbusThingChannel;

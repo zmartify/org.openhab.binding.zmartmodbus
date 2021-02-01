@@ -27,8 +27,8 @@ import gnu.io.SerialPort;
  */
 @NonNullByDefault
 public class ModbusSerialConfiguration {
-    @Nullable
-    private String port;
+
+    private String port = "";
     private int baud;
     @Nullable
     private String stopBits;
@@ -54,7 +54,7 @@ public class ModbusSerialConfiguration {
     private int timeBetweenCounterUpdates;
 
 
-    public @Nullable String getPort() {
+    public String getPort() {
         return port;
     }
 

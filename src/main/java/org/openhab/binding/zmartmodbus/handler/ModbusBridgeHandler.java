@@ -12,21 +12,23 @@
  */
 package org.openhab.binding.zmartmodbus.handler;
 
+import java.util.List;
 import java.util.concurrent.ScheduledFuture;
 import java.util.concurrent.TimeUnit;
 
-import org.eclipse.smarthome.core.library.types.DecimalType;
-import org.eclipse.smarthome.core.thing.Bridge;
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.Thing;
-import org.eclipse.smarthome.core.thing.ThingStatus;
-import org.eclipse.smarthome.core.thing.ThingStatusDetail;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.thing.binding.BaseBridgeHandler;
-import org.eclipse.smarthome.core.types.Command;
-import org.eclipse.smarthome.core.types.RefreshType;
-import org.eclipse.smarthome.core.types.State;
-import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
+import org.openhab.core.library.types.DecimalType;
+import org.openhab.core.thing.Bridge;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.Thing;
+import org.openhab.core.thing.ThingStatus;
+import org.openhab.core.thing.ThingStatusDetail;
+import org.openhab.core.thing.ThingUID;
+import org.openhab.core.thing.binding.BaseBridgeHandler;
+import org.openhab.core.types.Command;
+import org.openhab.core.types.RefreshType;
+import org.openhab.core.types.State;
+import org.openhab.core.io.transport.serial.SerialPortManager;
+import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusBridgeConfiguration;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
@@ -179,7 +181,8 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
      *
      */
     private void initializeActionFeeds() {
-        logger.debug("Starting action feeds slow = {} - fast = {}", modbusBridgeConfig.getSlowPoll(), modbusBridgeConfig.getFastPoll());
+        logger.debug("Starting action feeds slow = {} - fast = {}", modbusBridgeConfig.getSlowPoll(),
+                modbusBridgeConfig.getFastPoll());
 
         updateStatus(ThingStatus.OFFLINE, ThingStatusDetail.CONFIGURATION_PENDING, "Starting action feeds");
 
@@ -250,8 +253,6 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
         }
     }
 
-
-    @Override
     public void handleUpdate(ChannelUID uid, State state) {
         updateState(uid, state);
     }
@@ -331,5 +332,22 @@ public class ModbusBridgeHandler extends BaseBridgeHandler implements IModbusIOH
 
     public ModbusSerialConfiguration getModbusSerialConfig() {
         return modbusSerialConfig;
+    }
+
+    /**
+     * Finds and returns a child thing for a given UID of this bridge.
+     *
+     * @param uid uid of the child thing
+     * @return child thing with the given uid or null if thing was not found
+     */
+    public @Nullable Thing getThingByUID(ThingUID uid) {
+        Bridge bridge = getThing();
+        List<Thing> things = bridge.getThings();
+        for (Thing thing : things) {
+            if (thing.getUID().equals(uid)) {
+                return thing;
+            }
+        }
+        return null;
     }
 }

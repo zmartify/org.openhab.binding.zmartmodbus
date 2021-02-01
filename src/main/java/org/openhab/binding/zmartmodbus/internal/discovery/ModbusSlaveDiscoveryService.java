@@ -22,11 +22,11 @@ import static org.openhab.binding.zmartmodbus.ModbusBindingConstants.SUPPORTED_S
 import java.util.Set;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.smarthome.config.discovery.AbstractDiscoveryService;
-import org.eclipse.smarthome.config.discovery.DiscoveryResult;
-import org.eclipse.smarthome.config.discovery.DiscoveryResultBuilder;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.config.discovery.AbstractDiscoveryService;
+import org.openhab.core.config.discovery.DiscoveryResult;
+import org.openhab.core.config.discovery.DiscoveryResultBuilder;
+import org.openhab.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
 import org.openhab.binding.zmartmodbus.handler.ModbusThingHandler;
 import org.slf4j.Logger;

@@ -7,7 +7,7 @@
             "openhab_runtime": "/Volumes/openHAB_share/runtime",
             "openhab_addons": "/Volumes/openHAB_addons",
             "openhab_logs": "/Volumes/openHAB_log",
-            "dist": "org.openhab.binding.zmartmodbus-2.5.0-SNAPSHOT.jar"
+            "dist": "org.openhab.binding.zmartmodbus-2.5.5-SNAPSHOT.jar"
         }
     },
     "tasks": [

@@ -139,7 +139,7 @@ public class ModbusController {
      *
      */
     public ModbusController(ModbusBridgeHandler bridgeHandler) {
-        logger.debug("Starting ModbusFunction controller {} - {}", bridgeHandler);
+        logger.debug("Starting ModbusFunction controller {}", bridgeHandler);
         this.bridgeHandler = bridgeHandler;
         this.modbusHandler.setBridgeHandler(bridgeHandler);
 

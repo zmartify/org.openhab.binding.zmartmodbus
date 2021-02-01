@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.eclipse.smarthome.core.thing.ThingUID;
+import org.openhab.core.thing.ThingUID;
 import org.openhab.binding.zmartmodbus.internal.listener.ActionListener;
 import org.openhab.binding.zmartmodbus.internal.streams.ModbusAction;
 import org.slf4j.Logger;

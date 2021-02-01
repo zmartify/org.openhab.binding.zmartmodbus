@@ -18,7 +18,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import org.eclipse.jdt.annotation.NonNullByDefault;
-import org.eclipse.smarthome.core.thing.ThingTypeUID;
+import org.openhab.core.thing.ThingTypeUID;
 
 /**
  * The {@link ModbusBindingConstants} class defines some constants public that might be

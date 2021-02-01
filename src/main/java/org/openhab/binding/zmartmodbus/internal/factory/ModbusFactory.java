@@ -111,7 +111,7 @@ public class ModbusFactory {
 
             @Override
             public void onNext(final ModbusState modbusState) {
-                logger.debug("Factory received state change {} {}", modbusState.getState());
+                logger.debug("Factory received state change {}", modbusState.getState());
 
                 synchronized (dataSets.getChannels()) {
                     final ModbusThingChannel channel = dataSets.getChannel(modbusState.getUid());

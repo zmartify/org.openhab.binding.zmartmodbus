@@ -23,8 +23,8 @@ import javax.measure.quantity.Dimensionless;
 import javax.measure.quantity.Power;
 import javax.measure.quantity.Temperature;
 
-import org.eclipse.smarthome.core.library.unit.SIUnits;
-import org.eclipse.smarthome.core.library.unit.SmartHomeUnits;
+import org.openhab.core.library.unit.SIUnits;
+import org.openhab.core.library.unit.Units;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
 
@@ -479,11 +479,11 @@ public class ModbusBindingClass {
 
     // Units of measurement of the data delivered by the API
     public static final Unit<Temperature> API_TEMPERATURE_UNIT = SIUnits.CELSIUS;
-    public static final Unit<Dimensionless> API_HUMIDITY_UNIT = SmartHomeUnits.PERCENT;
-    public static final Unit<Dimensionless> API_CO2_UNIT = SmartHomeUnits.PARTS_PER_MILLION;
-    public static final Unit<Dimensionless> API_NOISE_UNIT = SmartHomeUnits.DECIBEL;
-    public static final Unit<Dimensionless> API_PERCENT_UNIT = SmartHomeUnits.PERCENT;
-    public static final Unit<Power> API_POWER_UNIT = SmartHomeUnits.WATT;
+    public static final Unit<Dimensionless> API_HUMIDITY_UNIT = Units.PERCENT;
+    public static final Unit<Dimensionless> API_CO2_UNIT = Units.PARTS_PER_MILLION;
+    public static final Unit<Dimensionless> API_NOISE_UNIT = Units.DECIBEL;
+    public static final Unit<Dimensionless> API_PERCENT_UNIT = Units.PERCENT;
+    public static final Unit<Power> API_POWER_UNIT = Units.WATT;
 
     public static enum ModbusUnitsOfMeasure {
         Temperature("temperature", API_TEMPERATURE_UNIT),

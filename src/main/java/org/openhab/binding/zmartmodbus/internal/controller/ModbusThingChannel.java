@@ -12,10 +12,10 @@
  */
 package org.openhab.binding.zmartmodbus.internal.controller;
 
-import org.eclipse.smarthome.core.thing.ChannelUID;
-import org.eclipse.smarthome.core.thing.ThingUID;
-import org.eclipse.smarthome.core.types.State;
-import org.eclipse.smarthome.core.types.UnDefType;
+import org.openhab.core.thing.ChannelUID;
+import org.openhab.core.thing.ThingUID;
+import org.openhab.core.types.State;
+import org.openhab.core.types.UnDefType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusDataType;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusReportOn;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass.ModbusUnitsOfMeasure;

@@ -17,12 +17,13 @@ import java.io.IOException;
 import javax.xml.bind.DatatypeConverter;
 
 import org.apache.commons.io.IOUtils;
+import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
-import org.eclipse.smarthome.io.transport.serial.PortInUseException;
-import org.eclipse.smarthome.io.transport.serial.SerialPort;
-import org.eclipse.smarthome.io.transport.serial.SerialPortIdentifier;
-import org.eclipse.smarthome.io.transport.serial.SerialPortManager;
-import org.eclipse.smarthome.io.transport.serial.UnsupportedCommOperationException;
+import org.openhab.core.io.transport.serial.PortInUseException;
+import org.openhab.core.io.transport.serial.SerialPort;
+import org.openhab.core.io.transport.serial.SerialPortIdentifier;
+import org.openhab.core.io.transport.serial.SerialPortManager;
+import org.openhab.core.io.transport.serial.UnsupportedCommOperationException;
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.internal.config.ModbusSerialConfiguration;
@@ -44,18 +45,19 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
 
     private final Logger logger = LoggerFactory.getLogger(ModbusSerialTransceiver.class);
 
-    private SerialPortManager serialPortManager;
+    private @Nullable SerialPortManager serialPortManager;
+    private @Nullable SerialPort serialPort;
+
+    private static int SLEEP_WHEN_NO_INPUT = 50; // Thread sleeps when input stream is empty
 
     protected ModbusSerialConfiguration serialConfig;
-
-    @Nullable
-    SerialPort serialPort = null;
 
     public ModbusSerialTransceiver(final SerialPortManager serialPortManager,
             final ModbusSerialConfiguration serialConfig, final ModbusCounters counters) {
         super(counters);
         this.serialPortManager = serialPortManager;
         this.serialConfig = serialConfig;
+        this.serialPort = null;
     }
 
     @Override
@@ -68,16 +70,15 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
             final String port = serialConfig.getPort();
             logger.debug("Connecting to serial port '{}'", port);
 
-            final SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(port);
+            @Nullable final SerialPortIdentifier portIdentifier = serialPortManager.getIdentifier(port);
 
-            if (portIdentifier == null) {
                 if (portIdentifier == null) {
                     throw new ModbusProtocolException(
                             "Could not find a gateway on given path '" + port + "', "
                                     + serialPortManager.getIdentifiers().count() + " ports available.",
                             ModbusProtocolErrorCode.NOT_AVAILABLE);
                 }
-            }
+
 
             serialPort = portIdentifier.open(ModbusBindingConstants.BINDING_ID, 2000);
 
@@ -203,7 +204,7 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
                             final long start = System.currentTimeMillis();
                             while (inputStream.available() == 0) {
                                 try {
-                                    Thread.sleep(5); // avoid a high cpu load
+                                    Thread.sleep(SLEEP_WHEN_NO_INPUT); // avoid a high cpu load
                                 } catch (final InterruptedException e) {
                                     throw new ModbusProtocolException("Thread interrupted",
                                             ModbusProtocolErrorCode.TRANSACTION_FAILURE);
