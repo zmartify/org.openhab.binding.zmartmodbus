@@ -2,7 +2,12 @@
 <features xmlns="http://karaf.apache.org/xmlns/features/v1.6.0" name="org.openhab.binding.zmartmodbus">
     <feature name="org.openhab.binding.zmartmodbus" description="openHAB Add-ons :: Bundles :: ZmartModbus Binding" version="{project.version}">
         <details>This project contains the official add-ons of openHAB</details>
-        <bundle start-level="80">mvn:org.reactivestreams/reactive-streams/1.0.2</bundle>
-        <bundle start-level="80">mvn:io.reactivex.rxjava2/rxjava/2.2.9</bundle>
+        <feature>openhab-runtime-base</feature>
+        <feature>openhab-transport-serial</feature>
+        <bundle dependency="true">mvn:org.reactivestreams/reactive-streams/1.0.2</bundle>
+        <!--bundle start-level="80">mvn:org.reactivestreams/reactive-streams/1.0.2</-bundle-->
+        <bundle depency="true">mvn:io.reactivex.rxjava2/rxjava/2.2.9</bundle>
+        <!--bundle start-level="80">mvn:io.reactivex.rxjava2/rxjava/2.2.9</-bundle-->
+        <bundle start-level="80">mvn:org.openhab.binding.zmartmodbus/{project.version}</bundle>
     </feature>
 </features>
