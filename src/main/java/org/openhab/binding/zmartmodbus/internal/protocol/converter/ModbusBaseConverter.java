@@ -31,6 +31,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.ByteBuffer;
 import java.nio.charset.StandardCharsets;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
@@ -43,7 +44,7 @@ import javax.measure.Unit;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.apache.commons.lang.ArrayUtils;
+import org.eclipse.californium.elements.util.Bytes;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.library.types.DecimalType;
@@ -146,7 +147,7 @@ public class ModbusBaseConverter {
                 int endIndexExclusive = startIndexInclusive + 6;
 
                 BitVector bv = BitVector.createBitVector(
-                        ArrayUtils.subarray(((byte[]) payload), startIndexInclusive, endIndexExclusive));
+                        Arrays.copyOfRange(((byte[]) payload), startIndexInclusive, endIndexExclusive));
                 schedule.addProperty(day.getDay(), bv.toString());
             }
             state = new StringType(schedule.toString());
@@ -159,7 +160,7 @@ public class ModbusBaseConverter {
             int startIndex = index + 4;
             int endIndex = startIndex + 10;
 
-            byte[] textAsByte = ArrayUtils.subarray((byte[]) payload, startIndex, endIndex);
+            byte[] textAsByte = Arrays.copyOfRange((byte[]) payload, startIndex, endIndex);
             // Swap the bytes
             for (int i = 0; i < 8; i = i + 2) {
                 byte b = textAsByte[i];
@@ -184,10 +185,10 @@ public class ModbusBaseConverter {
                 textAsByte[i] = b;
             }
             BitVector attrib = new BitVector(16);
-            attrib.setBytes(ArrayUtils.subarray(textAsByte, 8, 2));
+            attrib.setBytes(Arrays.copyOfRange(textAsByte, 8, 2));
             // logger.info("Attrib: {}", attrib.toString());
 
-            state = new StringType(new String(ArrayUtils.subarray(textAsByte, 0, 8), StandardCharsets.ISO_8859_1));
+            state = new StringType(new String(Arrays.copyOfRange(textAsByte, 0, 8), StandardCharsets.ISO_8859_1));
             break;
         case Nilan_time:
             int second = registerToShort((byte[]) payload, index);
@@ -304,7 +305,8 @@ public class ModbusBaseConverter {
             payload = shortToRegister(schedule.get("kind").getAsShort());
             for (WeekDayClass day : WeekDayClass.values()) {
                 BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
-                payload = ArrayUtils.addAll((byte[]) payload, bv.getBytes());
+                payload = ByteBuffer.allocate(((byte[]) payload).length + bv.byteSize())
+                .put((byte[]) payload).put(bv.getBytes()).array();
             }
             break;
         case Nilan_time:

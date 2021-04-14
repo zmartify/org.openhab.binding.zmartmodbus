@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<thing:thing-descriptions bindingId="zmartmodbus" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:thing="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0" xsi:schemaLocation="http://eclipse.org/smarthome/schemas/thing-description/v1.0.0 http://eclipse.org/smarthome/schemas/thing-description-1.0.0.xsd">
+
+    <thing-type id="jablotron_actuator" listed="false">
+        <label>Wavin Actuator</label>
+        <description>Wavin Actuator</description>
+
+        <channels>
+            <channel id="OverCurrentAlarm" typeId="sensor_binary_advanced">
+                <label>Overcurrent Alarm</label>
+                <description>Overcurrent alarm when excessive current is drawn from actuator output</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x0F</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="FrostAlarm" typeId="sensor_binary_advanced">
+                <label>Frost Alarm</label>
+                <description>Freezing alarm when air temperature drops below low alarm temperature</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x0E</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="EnableActivationCycle" typeId="switch_binary">
+                <label>Enable Activation Cycle</label>
+                <description>Enables periodic activation cycles</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x0D</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="Blocked" typeId="switch_binary_advanced">
+                <label>Blocked</label>
+                <description>Output is blocked by magnetic contact</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x0C</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="Lost" typeId="sensor_binary">
+                <label>Channel Lost</label>
+                <description>One or more elements in the channel is not alive</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x0B</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="OutputActive" typeId="sensor_binary">
+                <label>Output Active</label>
+                <description>Channel output is active</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x04</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="TimerEvent" typeId="jablotron_timerevent">
+                <label>Timer event</label>
+                <description>Current timer event</description>
+                <properties>
+                    <property name="dataset">teventstatus</property>
+                    <property name="index">0x00</property>
+                    <property name="valuetype">
+                        jablotron_modeset
+                        <!-- -->
+                    </property>
+                </properties>
+            </channel>
+            <channel id="AllThermostatsLost" typeId="sensor_binary_advanced">
+                <label>All Thermostats Lost</label>
+                <description>All Thermostats in the channel are lost</description>
+                <properties>
+                    <property name="dataset">pelementstatus</property>
+                    <property name="index">0x0A</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="AlarmHigh" typeId="sensor_binary_advanced">
+                <label>Alarm High</label>
+                <description>Indicates that any Thermostat in the channel reached ALARM HIGH temperature</description>
+                <properties>
+                    <property name="dataset">pelementstatus</property>
+                    <property name="index">0x09</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="AlarmLow" typeId="sensor_binary_advanced">
+                <label>Alarm Low</label>
+                <description>Indicates that any Thermostat in the channel reached ALARM LOW temperature</description>
+                <properties>
+                    <property name="dataset">pelementstatus</property>
+                    <property name="index">0x08</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="PartyEnable" typeId="sensor_binary_advanced">
+                <label>
+                    Party enabled
+                    <![CDATA[ ]]>
+                </label>
+                <description>Specifies whether the channel has a Party mode allowed.</description>
+                <properties>
+                    <property name="dataset">pelementstatus</property>
+                    <property name="index">0x07</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="HolidayEnable" typeId="sensor_binary_advanced">
+                <label>Holiday enabled</label>
+                <description>Specifies whether the channel has a Holiday mode allowed.</description>
+                <properties>
+                    <property name="dataset">pelementstatus</property>
+                    <property name="index">0x06</property>
+                    <property name="valuetype">bit</property>
+                </properties>
+            </channel>
+            <channel id="PowerConsumption" typeId="meter_watts">
+                <label>Power Consumption</label>
+                <description>Current consumption in watts of an actuator connected to the channel</description>
+                <properties>
+                    <property name="dataset">consumption</property>
+                    <property name="index">0x00</property>
+                    <property name="valuetype">jablotron_power16</property>
+                    <property name="unit">power</property>
+                    <property name="scale">3</property>
+                </properties>
+            </channel>
+        </channels>
+
+        <!-- DATATYPE:SLOWorFAST:REPORTON:LENGTH:CATEGORY:INDEX:PAGE -->
+
+        <properties>
+            <property name="dataset_teventstatus">coil:slow:change:0x10:0x03:0x00:channel</property>
+            <property name="dataset_consumption">holding:slow:change:0x01:0x03:0x01:channel</property>
+            <property name="dataset_pelementstatus">coil:slow:change:0x10:0x03:0x02:channel</property>
+        </properties>
+    </thing-type>
+</thing:thing-descriptions>

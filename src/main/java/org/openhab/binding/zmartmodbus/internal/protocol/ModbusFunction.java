@@ -13,10 +13,11 @@
 
 package org.openhab.binding.zmartmodbus.internal.protocol;
 
+import java.nio.ByteBuffer;
 import java.util.Arrays;
 
-import org.apache.commons.lang.ArrayUtils;
 import org.openhab.core.thing.ThingUID;
+
 import org.openhab.binding.zmartmodbus.ModbusBindingClass;
 import org.openhab.binding.zmartmodbus.ModbusBindingConstants;
 import org.openhab.binding.zmartmodbus.handler.ModbusBridgeHandler;
@@ -311,7 +312,8 @@ public class ModbusFunction {
         /*
          * send the message and get the response
          */
-        resp = msgTransaction(ArrayUtils.addAll(cmd, data.getBytes()));
+        resp = msgTransaction(ByteBuffer.allocate(cmd.length + data.byteSize())
+        .put(cmd).put(data.getBytes()).array());
 
         /*
          * process the response

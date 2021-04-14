@@ -1,0 +1,63 @@
+Manifest-Version: 1.0
+Automatic-Module-Name: org.openhab.binding.zmartmodbus
+Bnd-LastModified: 1618433128241
+Bundle-Activator: org.openhab.binding.zmartmodbus.internal.ModbusActiv
+ ator
+Bundle-Description: This project contains the official add-ons of open
+ HAB
+Bundle-Developers: zmartify;email="peter@zmartify.dk";name="Peter Kris
+ tensen";organization=Zmartify
+Bundle-DocURL: https://github.com/openhab/infrastructure/org.openhab.a
+ ddons.reactor/org.openhab.binding.zmartmodbus
+Bundle-License: "Eclipse Public License 2.0";link="https://www.eclipse
+ .org/legal/epl-2.0/"
+Bundle-ManifestVersion: 2
+Bundle-Name: openHAB Add-ons :: Bundles :: ZmartModbus Binding
+Bundle-SCM: url="https://github.com/zmartify/org.openhab.binding.zmart
+ modbus",connection="scm:git:https://github.com/zmartify/org.openhab.b
+ inding.zmartmodbus.git",developer-connection="scm:git:https://github.
+ com/zmartify/org.openhab.binding.zmartmodbus.git",tag=HEAD
+Bundle-SymbolicName: org.openhab.binding.zmartmodbus
+Bundle-Vendor: openHAB.org
+Bundle-Version: 3.1.0.202104142045
+Created-By: 11.0.10 (Oracle Corporation)
+Export-Package: org.openhab.binding.zmartmodbus;uses:="javax.measure,j
+ avax.measure.quantity,org.openhab.core.thing";version="3.1.0",org.ope
+ nhab.binding.zmartmodbus.handler;uses:="org.openhab.binding.zmartmodb
+ us,org.openhab.core.config.core.status,org.openhab.core.io.transport.
+ serial,org.openhab.core.thing,org.openhab.core.thing.binding,org.open
+ hab.core.types";version="3.1.0"
+Import-Package: org.openhab.core.config.core,org.openhab.core.config.c
+ ore.status,org.openhab.core.config.discovery,org.openhab.core.io.tran
+ sport.serial,org.openhab.core.library.types,org.openhab.core.library.
+ unit,org.openhab.core.thing,org.openhab.core.thing.binding,org.openha
+ b.core.types,com.google.gson;version="[2.8,3)",com.thoughtworks.xstre
+ am.converters;version="[1.4,2)",com.thoughtworks.xstream.io;version="
+ [1.4,2)",io.reactivex;version="[2.2,3)",io.reactivex.disposables;vers
+ ion="[2.2,3)",io.reactivex.flowables;version="[2.2,3)",io.reactivex.f
+ unctions;version="[2.2,3)",javax.measure;version="[1.0,2)",javax.meas
+ ure.quantity;version="[1.0,2)",javax.xml.bind;version="[2.3,3)",org.a
+ pache.commons.io;version="[2.2,3)",org.apache.commons.lang;version="[
+ 2.6,3)",org.osgi.framework;version="[1.8,2)",org.slf4j;version="[1.7,
+ 2)"
+Private-Package: OH-INF.binding,OH-INF.i18n,OH-INF.thing,org.openhab.b
+ inding.zmartmodbus.internal,org.openhab.binding.zmartmodbus.internal.
+ config,org.openhab.binding.zmartmodbus.internal.controller,org.openha
+ b.binding.zmartmodbus.internal.discovery,org.openhab.binding.zmartmod
+ bus.internal.exceptions,org.openhab.binding.zmartmodbus.internal.fact
+ ory,org.openhab.binding.zmartmodbus.internal.listener,org.openhab.bin
+ ding.zmartmodbus.internal.protocol,org.openhab.binding.zmartmodbus.in
+ ternal.protocol.converter,org.openhab.binding.zmartmodbus.internal.st
+ reams,org.openhab.binding.zmartmodbus.internal.transceiver,org.openha
+ b.binding.zmartmodbus.internal.util
+Provide-Capability: osgi.service;objectClass:List<String>="org.openhab
+ .core.thing.binding.ThingHandlerFactory";uses:="org.openhab.core.thin
+ g.binding"
+Require-Capability: osgi.service;filter:="(objectClass=org.openhab.cor
+ e.io.transport.serial.SerialPortManager)";effective:=active,osgi.exte
+ nder;filter:="(&(osgi.extender=osgi.component)(version>=1.4.0)(!(vers
+ ion>=2.0.0)))",osgi.ee;filter:="(&(osgi.ee=JavaSE)(version=11))"
+Service-Component: OSGI-INF/org.openhab.binding.zmartmodbus.internal.M
+ odbusHandlerFactory.xml
+Tool: Bnd-5.3.0.202102221516
+
