@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -16,8 +16,6 @@ import java.io.IOException;
 
 import javax.xml.bind.DatatypeConverter;
 
-import org.apache.commons.io.IOUtils;
-import org.eclipse.jdt.annotation.NonNull;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.io.transport.serial.PortInUseException;
 import org.openhab.core.io.transport.serial.SerialPort;
@@ -120,11 +118,22 @@ public class ModbusSerialTransceiver extends ModbusTransceiver {
 
         if (outputStream != null) {
             logger.debug("Closing serial output stream");
-            IOUtils.closeQuietly(outputStream);
+            try {
+                outputStream.close();
+            } catch (IOException e) {
+                logger.warn("Error while closing the output stream: {}", e.getMessage());
+            }
+            outputStream = null;
         }
+
         if (inputStream != null) {
             logger.debug("Closing serial input stream");
-            IOUtils.closeQuietly(inputStream);
+            try {
+                inputStream.close();
+            } catch (IOException e) {
+                logger.warn("Error while closing the input stream: {}", e.getMessage());
+            }
+            inputStream = null;
         }
 
         if (serialPort != null) {

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -21,6 +21,7 @@ import org.slf4j.LoggerFactory;
 /**
  * Bundle activator to register the zwave service providers
  *
+ * 
  * @author Chris Jackson
  * @author Peter Kristensen - adapted for ZmartModbus
  */

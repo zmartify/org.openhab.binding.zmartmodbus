@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -23,10 +23,10 @@ import javax.measure.quantity.Dimensionless;
 import javax.measure.quantity.Power;
 import javax.measure.quantity.Temperature;
 
-import org.openhab.core.library.unit.SIUnits;
-import org.openhab.core.library.unit.Units;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
+import org.openhab.core.library.unit.SIUnits;
+import org.openhab.core.library.unit.Units;
 
 /**
  * supported modbus commands

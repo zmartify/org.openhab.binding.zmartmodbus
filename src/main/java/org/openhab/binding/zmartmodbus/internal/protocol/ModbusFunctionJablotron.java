@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -379,7 +379,7 @@ public class ModbusFunctionJablotron extends ModbusFunction {
                     // That was expected
                     break;
                 default:
-                    logger.error("enumeration RESET got an error {} {} \n\t {} {}", e.getCode(), e.getMessage(),
+                    logger.error("enumeration RESET got an error {} {} {}", e.getCode(), e.getMessage(),
                             e.getClass(), e.getCause());
                     break;
             }

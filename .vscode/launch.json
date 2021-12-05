@@ -6,7 +6,7 @@
             "type": "java",
             "name": "Debug (Attach) - openHAB",
             "request": "attach",
-            "hostName": "localhost",
+            "hostName": "smarthouse",
             "port": 5005,
             "preLaunchTask": "Build"
         }

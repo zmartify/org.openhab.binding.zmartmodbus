@@ -2,11 +2,11 @@
     "version": "2.0.0",
     "options": {
         "env": {
-            "openhab_version": "2.5.0-SNAPSHOT",
-            "openhab_home": "/Volumes/openHAB_home",
-            "openhab_runtime": "/Volumes/openHAB_home/runtime",
-            "openhab_addons": "/Volumes/openHAB_addons",
-            "openhab_logs": "/volumes/openHAB_log",
+            "openhab_version": "3.2.0-SNAPSHOT",
+            "openhab_home": "/Volumes/smarthouse_home",
+            "openhab_runtime": "/Volumes/smarthouse_home/runtime",
+            "openhab_addons": "/Volumes/smarthouse_addons",
+            "openhab_logs": "/volumes/smarthouse_log",
             "dist": "org.openhab.binding.zmartmodbus-$openhab_version.jar"
         }
     },

@@ -3,11 +3,11 @@
     "options": {
         "env": {
 
-            "openhab_home": "/Volumes/openHAB_share",
-            "openhab_runtime": "/Volumes/openHAB_share/runtime",
-            "openhab_addons": "/Volumes/openHAB_addons",
-            "openhab_logs": "/Volumes/openHAB_log",
-            "dist": "org.openhab.binding.zmartmodbus-2.5.5-SNAPSHOT.jar"
+            "openhab_home": "/Volumes/smarthouse_share",
+            "openhab_runtime": "/Volumes/smarthouse_share/runtime",
+            "openhab_addons": "/Volumes/smarthouse_addons",
+            "openhab_logs": "/Volumes/smarthouse_log",
+            "dist": "org.openhab.binding.zmartmodbus-3.2.0-SNAPSHOT.jar"
         }
     },
     "tasks": [
@@ -77,7 +77,8 @@
             ],
             "dependsOn": [
                 "mvn Compile (Offline)"
-            ]
+            ],
+            "problemMatcher": []
         },
         {
             "label": "Build",

@@ -1,5 +1,5 @@
 /**
- * Copyright (c) 2010-2019 Contributors to the openHAB project
+ * Copyright (c) 2010-2021 Contributors to the openHAB project
  *
  * See the NOTICE file(s) distributed with this work for additional
  * information.
@@ -44,7 +44,6 @@ import javax.measure.Unit;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
-import org.eclipse.californium.elements.util.Bytes;
 import org.eclipse.jdt.annotation.Nullable;
 import org.openhab.core.library.types.DateTimeType;
 import org.openhab.core.library.types.DecimalType;
@@ -300,8 +299,7 @@ public class ModbusBaseConverter {
             payload = value.byteValue() & 0x7F;
             break;
         case Jablotron_schedule:
-            JsonParser parser = new JsonParser();
-            JsonObject schedule = parser.parse(state.toFullString()).getAsJsonObject();
+            JsonObject schedule = JsonParser.parseString(state.toFullString()).getAsJsonObject();
             payload = shortToRegister(schedule.get("kind").getAsShort());
             for (WeekDayClass day : WeekDayClass.values()) {
                 BitVector bv = BitVector.createBitVector(schedule.get(day.getDay()).getAsString());
