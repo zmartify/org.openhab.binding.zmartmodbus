@@ -181,8 +181,16 @@
         <state readOnly="true"></state>
     </channel-type>
 
-    <!-- Scene - Number -->
+    <!-- Switch - Percentage -->
     <channel-type id="switch_percent">
+        <item-type>Number:Dimensionless</item-type>
+        <label>Percentage</label>
+        <description>Used for percentage switches</description>
+        <category>counter</category>
+        <state pattern="%.0f %unit%" readOnly="false"></state>
+    </channel-type>
+
+    <channel-type id="switch_percent_advanced" advanced="true">
         <item-type>Number:Dimensionless</item-type>
         <label>Percentage</label>
         <description>Used for percentage switches</description>
@@ -198,6 +206,7 @@
         <category>sensor</category>
         <state readOnly="true"></state>
     </channel-type>
+
     <channel-type id="sensor_binary_advanced" advanced="true">
         <item-type>Switch</item-type>
         <label>Binary Sensor</label>

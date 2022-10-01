@@ -163,7 +163,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     }
 
     public void initializeThing() {
-        logger.debug("initializeThing {}", getThing().getUID());
+        logger.debug("InitializeThing {}", getThing().getUID());
 
         nodeClass = ModbusNodeClass.fromString(getThing().getThingTypeUID().getId());
 
@@ -200,6 +200,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
     }
 
     private void initializeDataSets(int channelId, int elementId) {
+        logger.debug("Thing {}: Initializing datasets channelId({}) elementId({})", thing.getUID(), channelId, elementId);
         String dataSetKey;
 
         Map<String, String> properties = getThing().getProperties();
@@ -227,9 +228,10 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                     case 8:
                         offset = addressWizard(cfg[7], channelId, elementId);
                     case 7:
-                        start = Jablotron.getAddress(/* category */ addressWizard(cfg[4], channelId, elementId),
-                                /* index */ addressWizard(cfg[5], channelId, elementId),
-                                /* page */ addressWizard(cfg[6], channelId, elementId));
+                        start = Jablotron.getAddress(
+                            /* category */  addressWizard(cfg[4], channelId, elementId),
+                            /* index */     addressWizard(cfg[5], channelId, elementId),
+                            /* page */      addressWizard(cfg[6], channelId, elementId));
                         break;
                     // Standard Modbus
                     case 6:
@@ -290,6 +292,7 @@ public class ModbusThingHandler extends ConfigStatusThingHandler {
                                 addressWizard(properties.get(PROPERTY_CHANNELCFG_INDEX), channelId, elementId),
                                 unitsOfMeasure, scale,
                                 ModbusReportOn.fromString(properties.get(PROPERTY_CHANNELCFG_REPORTON))));
+                logger.debug("Adding channel {}", channel.getUID());
             }
         }
     }

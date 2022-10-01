@@ -270,7 +270,7 @@
                 <properties>
                     <property name="dataset">packetstatus</property>
                     <property name="index">0x00</property>
-                    <property name="valuetype">Jablotron_modeset</property>
+                    <property name="valuetype">jablotron_modeset</property>
                 </properties>
             </channel>
             <channel id="MinTemp" typeId="thermostat_setpoint_advanced">

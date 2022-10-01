@@ -283,7 +283,7 @@ public class ModbusBaseConverter {
             logger.warn("'Jablotron_power16 and Jablotron_power32' - write not supported, read-only channel");
             return null;
         case Jablotron_modeset:
-            logger.debug("----->Jablotron_modeset {}", value.shortValue() & 0x0F);
+            logger.debug("----->Jablotron_modeset {} / {}", value.shortValue() & 0x0F, value.shortValue());
             payload = shortToRegister(value.shortValue());
             break;
         case Custom8_4bit:

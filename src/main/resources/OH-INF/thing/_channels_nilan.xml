@@ -207,6 +207,12 @@
         </state>
     </channel-type>
 
+    <channel-type id="nilan_day">
+        <item-type>Number</item-type>
+        <label>Day</label>
+        <state readOnly="false"></state>
+    </channel-type>
+
     <channel-type id="nilan_step">
         <item-type>Number</item-type>
         <label>Step</label>

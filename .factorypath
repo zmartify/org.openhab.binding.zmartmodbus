@@ -1,42 +1,62 @@
 <factorypath>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-compiler-eclipse/2.8.8/plexus-compiler-eclipse-2.8.8.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-utils/3.3.0/plexus-utils-3.3.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-component-annotations/2.1.0/plexus-component-annotations-2.1.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-compiler-api/2.8.8/plexus-compiler-api-2.8.8.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jdt/ecj/3.23.0/ecj-3.23.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-compiler-eclipse/2.11.1/plexus-compiler-eclipse-2.11.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-compiler-api/2.11.1/plexus-compiler-api-2.11.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-utils/3.4.1/plexus-utils-3.4.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-component-annotations/2.1.1/plexus-component-annotations-2.1.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-testing/1.1.0/plexus-testing-1.1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/sisu/org.eclipse.sisu.plexus/0.3.4/org.eclipse.sisu.plexus-0.3.4.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/javax/enterprise/cdi-api/1.0/cdi-api-1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/javax/annotation/jsr250-api/1.0/jsr250-api-1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/sisu/org.eclipse.sisu.inject/0.3.4/org.eclipse.sisu.inject-0.3.4.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/plexus/plexus-classworlds/2.5.2/plexus-classworlds-2.5.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/inject/guice/4.2.3/guice-4.2.3-no_aop.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/javax/inject/javax.inject/1/javax.inject-1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/aopalliance/aopalliance/1.0/aopalliance-1.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/guava/guava/27.1-jre/guava-27.1-jre.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/guava/failureaccess/1.0.1/failureaccess-1.0.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/guava/listenablefuture/9999.0-empty-to-avoid-conflict-with-guava/listenablefuture-9999.0-empty-to-avoid-conflict-with-guava.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/findbugs/jsr305/3.0.2/jsr305-3.0.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/checkerframework/checker-qual/2.5.2/checker-qual-2.5.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/errorprone/error_prone_annotations/2.2.0/error_prone_annotations-2.2.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/j2objc/j2objc-annotations/1.1/j2objc-annotations-1.1.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/codehaus/mojo/animal-sniffer-annotations/1.17/animal-sniffer-annotations-1.17.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/junit/jupiter/junit-jupiter-api/5.8.0/junit-jupiter-api-5.8.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/opentest4j/opentest4j/1.2.0/opentest4j-1.2.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/junit/platform/junit-platform-commons/1.8.0/junit-platform-commons-1.8.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/apiguardian/apiguardian-api/1.1.2/apiguardian-api-1.1.2.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jdt/ecj/3.28.0/ecj-3.28.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/osgi/osgi.core/7.0.0/osgi.core-7.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/osgi/osgi.cmpn/7.0.0/osgi.cmpn-7.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/osgi/osgi.annotation/7.0.0/osgi.annotation-7.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/slf4j/slf4j-api/1.7.32/slf4j-api-1.7.32.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jdt/org.eclipse.jdt.annotation/2.2.100/org.eclipse.jdt.annotation-2.2.100.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jdt/org.eclipse.jdt.annotation/2.2.600/org.eclipse.jdt.annotation-2.2.600.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/javax/annotation/javax.annotation-api/1.2/javax.annotation-api-1.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-lang3/3.9/commons-lang3-3.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/californium/californium-core/2.0.0/californium-core-2.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/californium/scandium/2.0.0/scandium-2.0.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/californium/element-connector/2.0.0/element-connector-2.0.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/google/code/gson/gson/2.8.9/gson-2.8.9.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/igormaznitsa/jbbp/1.4.1/jbbp-1.4.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-client/9.4.43.v20210629/jetty-client-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-http/9.4.43.v20210629/jetty-http-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-io/9.4.43.v20210629/jetty-io-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-proxy/9.4.43.v20210629/jetty-proxy-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-util/9.4.43.v20210629/jetty-util-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-server/9.4.43.v20210629/jetty-server-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-client/9.4.46.v20220331/jetty-client-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-http/9.4.46.v20220331/jetty-http-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-io/9.4.46.v20220331/jetty-io-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-proxy/9.4.46.v20220331/jetty-proxy-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-util/9.4.46.v20220331/jetty-util-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-server/9.4.46.v20220331/jetty-server-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/javax/servlet/javax.servlet-api/3.1.0/javax.servlet-api-3.1.0.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-servlet/9.4.43.v20210629/jetty-servlet-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-security/9.4.43.v20210629/jetty-security-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-util-ajax/9.4.43.v20210629/jetty-util-ajax-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/websocket/websocket-client/9.4.43.v20210629/websocket-client-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.4.43.v20210629/websocket-common-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/websocket/websocket-api/9.4.43.v20210629/websocket-api-9.4.43.v20210629.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-servlet/9.4.46.v20220331/jetty-servlet-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-security/9.4.46.v20220331/jetty-security-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/jetty-util-ajax/9.4.46.v20220331/jetty-util-ajax-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/websocket/websocket-client/9.4.46.v20220331/websocket-client-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/websocket/websocket-common/9.4.46.v20220331/websocket-common-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/eclipse/jetty/websocket/websocket-api/9.4.46.v20220331/websocket-api-9.4.46.v20220331.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/jmdns/jmdns/3.5.7/jmdns-3.5.7.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/jupnp/org.jupnp/2.6.0/org.jupnp-2.6.0.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/jupnp/org.jupnp/2.6.1/org.jupnp-2.6.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/si/uom/si-units/2.1/si-units-2.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/si/uom/si-quantity/2.1/si-quantity-2.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/jakarta/annotation/jakarta.annotation-api/1.3.4/jakarta.annotation-api-1.3.4.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/tech/units/indriya/2.1.2/indriya-2.1.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/tech/uom/lib/uom-lib-common/2.1/uom-lib-common-2.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/javax/inject/javax.inject/1/javax.inject-1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/hivemq/hivemq-mqtt-client/1.2.2/hivemq-mqtt-client-1.2.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/netty/netty-buffer/4.1.48.Final/netty-buffer-4.1.48.Final.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/netty/netty-codec/4.1.48.Final/netty-codec-4.1.48.Final.jar" enabled="true" runInBatchMode="false"/>
@@ -75,7 +95,7 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/jaxrs/jackson-jaxrs-json-provider/2.12.1/jackson-jaxrs-json-provider-2.12.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/jaxrs/jackson-jaxrs-base/2.12.1/jackson-jaxrs-base-2.12.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/com/fasterxml/jackson/module/jackson-module-jaxb-annotations/2.12.1/jackson-module-jaxb-annotations-2.12.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/com/thoughtworks/xstream/xstream/1.4.18/xstream-1.4.18.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/com/thoughtworks/xstream/xstream/1.4.19/xstream-1.4.19.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/github/x-stream/mxparser/1.2.2/mxparser-1.2.2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/xmlpull/xmlpull/1.1.3.1/xmlpull-1.1.3.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/de/jollyday/jollyday/0.5.10/jollyday-0.5.10.jar" enabled="true" runInBatchMode="false"/>
@@ -83,104 +103,105 @@
     <factorypathentry kind="VARJAR" id="M2_REPO/jakarta/xml/bind/jakarta.xml.bind-api/2.3.3/jakarta.xml.bind-api-2.3.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/servicemix/specs/org.apache.servicemix.specs.saaj-api-1.4/1.4_2/org.apache.servicemix.specs.saaj-api-1.4-1.4_2.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/bitbucket/b_c/jose4j/0.7.7/jose4j-0.7.7.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.test/3.2.0-SNAPSHOT/org.openhab.core.test-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.test.magic/3.2.0-SNAPSHOT/org.openhab.core.test.magic-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core/3.2.0-SNAPSHOT/org.openhab.core-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.karaf/3.2.0-SNAPSHOT/org.openhab.core.karaf-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.thing/3.2.0-SNAPSHOT/org.openhab.core.thing-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.audio/3.2.0-SNAPSHOT/org.openhab.core.audio-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.test/3.3.0-SNAPSHOT/org.openhab.core.test-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.test.magic/3.3.0-SNAPSHOT/org.openhab.core.test.magic-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core/3.3.0-SNAPSHOT/org.openhab.core-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.karaf/3.3.0-SNAPSHOT/org.openhab.core.karaf-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.thing/3.3.0-SNAPSHOT/org.openhab.core.thing-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.audio/3.3.0-SNAPSHOT/org.openhab.core.audio-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/javazoom/jlayer/1.0.1/jlayer-1.0.1.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ephemeris/3.2.0-SNAPSHOT/org.openhab.core.ephemeris-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.voice/3.2.0-SNAPSHOT/org.openhab.core.voice-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.binding.xml/3.2.0-SNAPSHOT/org.openhab.core.binding.xml-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.id/3.2.0-SNAPSHOT/org.openhab.core.id-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.persistence/3.2.0-SNAPSHOT/org.openhab.core.persistence-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.semantics/3.2.0-SNAPSHOT/org.openhab.core.semantics-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.thing.xml/3.2.0-SNAPSHOT/org.openhab.core.thing.xml-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.transform/3.2.0-SNAPSHOT/org.openhab.core.transform-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.auth.jaas/3.2.0-SNAPSHOT/org.openhab.core.auth.jaas-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.auth.oauth2client/3.2.0-SNAPSHOT/org.openhab.core.auth.oauth2client-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.net/3.2.0-SNAPSHOT/org.openhab.core.io.net-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.bin2json/3.2.0-SNAPSHOT/org.openhab.core.io.bin2json-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console/3.2.0-SNAPSHOT/org.openhab.core.io.console-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.http/3.2.0-SNAPSHOT/org.openhab.core.io.http-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest/3.2.0-SNAPSHOT/org.openhab.core.io.rest-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.mdns/3.2.0-SNAPSHOT/org.openhab.core.io.transport.mdns-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.modbus/3.2.0-SNAPSHOT/org.openhab.core.io.transport.modbus-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ephemeris/3.3.0-SNAPSHOT/org.openhab.core.ephemeris-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.voice/3.3.0-SNAPSHOT/org.openhab.core.voice-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.binding.xml/3.3.0-SNAPSHOT/org.openhab.core.binding.xml-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.id/3.3.0-SNAPSHOT/org.openhab.core.id-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.persistence/3.3.0-SNAPSHOT/org.openhab.core.persistence-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.semantics/3.3.0-SNAPSHOT/org.openhab.core.semantics-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.thing.xml/3.3.0-SNAPSHOT/org.openhab.core.thing.xml-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.transform/3.3.0-SNAPSHOT/org.openhab.core.transform-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.auth.jaas/3.3.0-SNAPSHOT/org.openhab.core.auth.jaas-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.auth.oauth2client/3.3.0-SNAPSHOT/org.openhab.core.auth.oauth2client-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.net/3.3.0-SNAPSHOT/org.openhab.core.io.net-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.bin2json/3.3.0-SNAPSHOT/org.openhab.core.io.bin2json-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console/3.3.0-SNAPSHOT/org.openhab.core.io.console-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.http/3.3.0-SNAPSHOT/org.openhab.core.io.http-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest/3.3.0-SNAPSHOT/org.openhab.core.io.rest-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.mdns/3.3.0-SNAPSHOT/org.openhab.core.io.transport.mdns-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.modbus/3.3.0-SNAPSHOT/org.openhab.core.io.transport.modbus-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/commons/commons-pool2/2.8.1/commons-pool2-2.8.1.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/net/wimpi/jamod/1.3.4.OH/jamod-1.3.4.OH.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial/3.2.0-SNAPSHOT/org.openhab.core.io.transport.serial-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console.eclipse/3.2.0-SNAPSHOT/org.openhab.core.io.console.eclipse-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console.rfc147/3.2.0-SNAPSHOT/org.openhab.core.io.console.rfc147-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console.karaf/3.2.0-SNAPSHOT/org.openhab.core.io.console.karaf-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.http.auth/3.2.0-SNAPSHOT/org.openhab.core.io.http.auth-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.monitor/3.2.0-SNAPSHOT/org.openhab.core.io.monitor-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial/3.3.0-SNAPSHOT/org.openhab.core.io.transport.serial-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console.eclipse/3.3.0-SNAPSHOT/org.openhab.core.io.console.eclipse-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console.rfc147/3.3.0-SNAPSHOT/org.openhab.core.io.console.rfc147-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.console.karaf/3.3.0-SNAPSHOT/org.openhab.core.io.console.karaf-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.http.auth/3.3.0-SNAPSHOT/org.openhab.core.io.http.auth-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.monitor/3.3.0-SNAPSHOT/org.openhab.core.io.monitor-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/dropwizard/metrics/metrics-core/4.0.7/metrics-core-4.0.7.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/micrometer/micrometer-core/1.6.3/micrometer-core-1.6.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/hdrhistogram/HdrHistogram/2.1.12/HdrHistogram-2.1.12.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/latencyutils/LatencyUtils/2.0.3/LatencyUtils-2.0.3.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.audio/3.2.0-SNAPSHOT/org.openhab.core.io.rest.audio-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.auth/3.2.0-SNAPSHOT/org.openhab.core.io.rest.auth-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.core/3.2.0-SNAPSHOT/org.openhab.core.io.rest.core-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.log/3.2.0-SNAPSHOT/org.openhab.core.io.rest.log-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.mdns/3.2.0-SNAPSHOT/org.openhab.core.io.rest.mdns-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.sitemap/3.2.0-SNAPSHOT/org.openhab.core.io.rest.sitemap-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.sse/3.2.0-SNAPSHOT/org.openhab.core.io.rest.sse-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.swagger/3.2.0-SNAPSHOT/org.openhab.core.io.rest.swagger-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.ui/3.2.0-SNAPSHOT/org.openhab.core.io.rest.ui-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.voice/3.2.0-SNAPSHOT/org.openhab.core.io.rest.voice-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.mqtt/3.2.0-SNAPSHOT/org.openhab.core.io.transport.mqtt-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial.javacomm/3.2.0-SNAPSHOT/org.openhab.core.io.transport.serial.javacomm-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial.rxtx/3.2.0-SNAPSHOT/org.openhab.core.io.transport.serial.rxtx-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial.rxtx.rfc2217/3.2.0-SNAPSHOT/org.openhab.core.io.transport.serial.rxtx.rfc2217-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.audio/3.3.0-SNAPSHOT/org.openhab.core.io.rest.audio-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.auth/3.3.0-SNAPSHOT/org.openhab.core.io.rest.auth-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.core/3.3.0-SNAPSHOT/org.openhab.core.io.rest.core-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.log/3.3.0-SNAPSHOT/org.openhab.core.io.rest.log-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.mdns/3.3.0-SNAPSHOT/org.openhab.core.io.rest.mdns-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.sitemap/3.3.0-SNAPSHOT/org.openhab.core.io.rest.sitemap-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.sse/3.3.0-SNAPSHOT/org.openhab.core.io.rest.sse-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.swagger/3.3.0-SNAPSHOT/org.openhab.core.io.rest.swagger-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.transform/3.3.0-SNAPSHOT/org.openhab.core.io.rest.transform-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.ui/3.3.0-SNAPSHOT/org.openhab.core.io.rest.ui-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.rest.voice/3.3.0-SNAPSHOT/org.openhab.core.io.rest.voice-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.mqtt/3.3.0-SNAPSHOT/org.openhab.core.io.transport.mqtt-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial.javacomm/3.3.0-SNAPSHOT/org.openhab.core.io.transport.serial.javacomm-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial.rxtx/3.3.0-SNAPSHOT/org.openhab.core.io.transport.serial.rxtx-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.serial.rxtx.rfc2217/3.3.0-SNAPSHOT/org.openhab.core.io.transport.serial.rxtx.rfc2217-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/commons-net/commons-net/3.7.2/commons-net-3.7.2.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.upnp/3.2.0-SNAPSHOT/org.openhab.core.io.transport.upnp-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.jetty.certificate/3.2.0-SNAPSHOT/org.openhab.core.io.jetty.certificate-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.transport.upnp/3.3.0-SNAPSHOT/org.openhab.core.io.transport.upnp-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.io.jetty.certificate/3.3.0-SNAPSHOT/org.openhab.core.io.jetty.certificate-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/bouncycastle/bcpkix-jdk15on/1.52/bcpkix-jdk15on-1.52.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/bouncycastle/bcprov-jdk15on/1.52/bcprov-jdk15on-1.52.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.core/3.2.0-SNAPSHOT/org.openhab.core.config.core-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery/3.2.0-SNAPSHOT/org.openhab.core.config.discovery-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.mdns/3.2.0-SNAPSHOT/org.openhab.core.config.discovery.mdns-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.usbserial/3.2.0-SNAPSHOT/org.openhab.core.config.discovery.usbserial-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.usbserial.linuxsysfs/3.2.0-SNAPSHOT/org.openhab.core.config.discovery.usbserial.linuxsysfs-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.usbserial.ser2net/3.2.0-SNAPSHOT/org.openhab.core.config.discovery.usbserial.ser2net-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.upnp/3.2.0-SNAPSHOT/org.openhab.core.config.discovery.upnp-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.dispatch/3.2.0-SNAPSHOT/org.openhab.core.config.dispatch-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.serial/3.2.0-SNAPSHOT/org.openhab.core.config.serial-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.xml/3.2.0-SNAPSHOT/org.openhab.core.config.xml-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation/3.2.0-SNAPSHOT/org.openhab.core.automation-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.module.script/3.2.0-SNAPSHOT/org.openhab.core.automation.module.script-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.module.media/3.2.0-SNAPSHOT/org.openhab.core.automation.module.media-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.module.script.rulesupport/3.2.0-SNAPSHOT/org.openhab.core.automation.module.script.rulesupport-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.rest/3.2.0-SNAPSHOT/org.openhab.core.automation.rest-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.core/3.2.0-SNAPSHOT/org.openhab.core.model.core-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.sitemap/3.2.0-SNAPSHOT/org.openhab.core.model.sitemap-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.item/3.2.0-SNAPSHOT/org.openhab.core.model.item-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.item.ide/3.2.0-SNAPSHOT/org.openhab.core.model.item.ide-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.item.runtime/3.2.0-SNAPSHOT/org.openhab.core.model.item.runtime-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.persistence/3.2.0-SNAPSHOT/org.openhab.core.model.persistence-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.persistence.ide/3.2.0-SNAPSHOT/org.openhab.core.model.persistence.ide-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.script/3.2.0-SNAPSHOT/org.openhab.core.model.script-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.rule/3.2.0-SNAPSHOT/org.openhab.core.model.rule-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.rule.ide/3.2.0-SNAPSHOT/org.openhab.core.model.rule.ide-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.script.ide/3.2.0-SNAPSHOT/org.openhab.core.model.script.ide-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.sitemap.ide/3.2.0-SNAPSHOT/org.openhab.core.model.sitemap.ide-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.thing/3.2.0-SNAPSHOT/org.openhab.core.model.thing-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.thing.ide/3.2.0-SNAPSHOT/org.openhab.core.model.thing.ide-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.lsp/3.2.0-SNAPSHOT/org.openhab.core.model.lsp-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.persistence.runtime/3.2.0-SNAPSHOT/org.openhab.core.model.persistence.runtime-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.rule.runtime/3.2.0-SNAPSHOT/org.openhab.core.model.rule.runtime-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.script.runtime/3.2.0-SNAPSHOT/org.openhab.core.model.script.runtime-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.sitemap.runtime/3.2.0-SNAPSHOT/org.openhab.core.model.sitemap.runtime-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.thing.runtime/3.2.0-SNAPSHOT/org.openhab.core.model.thing.runtime-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ui/3.2.0-SNAPSHOT/org.openhab.core.ui-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.core/3.3.0-SNAPSHOT/org.openhab.core.config.core-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery/3.3.0-SNAPSHOT/org.openhab.core.config.discovery-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.mdns/3.3.0-SNAPSHOT/org.openhab.core.config.discovery.mdns-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.usbserial/3.3.0-SNAPSHOT/org.openhab.core.config.discovery.usbserial-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.usbserial.linuxsysfs/3.3.0-SNAPSHOT/org.openhab.core.config.discovery.usbserial.linuxsysfs-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.usbserial.ser2net/3.3.0-SNAPSHOT/org.openhab.core.config.discovery.usbserial.ser2net-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.discovery.upnp/3.3.0-SNAPSHOT/org.openhab.core.config.discovery.upnp-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.dispatch/3.3.0-SNAPSHOT/org.openhab.core.config.dispatch-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.serial/3.3.0-SNAPSHOT/org.openhab.core.config.serial-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.config.xml/3.3.0-SNAPSHOT/org.openhab.core.config.xml-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation/3.3.0-SNAPSHOT/org.openhab.core.automation-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.module.script/3.3.0-SNAPSHOT/org.openhab.core.automation.module.script-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.module.media/3.3.0-SNAPSHOT/org.openhab.core.automation.module.media-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.module.script.rulesupport/3.3.0-SNAPSHOT/org.openhab.core.automation.module.script.rulesupport-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.automation.rest/3.3.0-SNAPSHOT/org.openhab.core.automation.rest-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.core/3.3.0-SNAPSHOT/org.openhab.core.model.core-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.sitemap/3.3.0-SNAPSHOT/org.openhab.core.model.sitemap-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.item/3.3.0-SNAPSHOT/org.openhab.core.model.item-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.item.ide/3.3.0-SNAPSHOT/org.openhab.core.model.item.ide-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.item.runtime/3.3.0-SNAPSHOT/org.openhab.core.model.item.runtime-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.persistence/3.3.0-SNAPSHOT/org.openhab.core.model.persistence-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.persistence.ide/3.3.0-SNAPSHOT/org.openhab.core.model.persistence.ide-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.script/3.3.0-SNAPSHOT/org.openhab.core.model.script-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.rule/3.3.0-SNAPSHOT/org.openhab.core.model.rule-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.rule.ide/3.3.0-SNAPSHOT/org.openhab.core.model.rule.ide-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.script.ide/3.3.0-SNAPSHOT/org.openhab.core.model.script.ide-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.sitemap.ide/3.3.0-SNAPSHOT/org.openhab.core.model.sitemap.ide-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.thing/3.3.0-SNAPSHOT/org.openhab.core.model.thing-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.thing.ide/3.3.0-SNAPSHOT/org.openhab.core.model.thing.ide-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.lsp/3.3.0-SNAPSHOT/org.openhab.core.model.lsp-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.persistence.runtime/3.3.0-SNAPSHOT/org.openhab.core.model.persistence.runtime-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.rule.runtime/3.3.0-SNAPSHOT/org.openhab.core.model.rule.runtime-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.script.runtime/3.3.0-SNAPSHOT/org.openhab.core.model.script.runtime-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.sitemap.runtime/3.3.0-SNAPSHOT/org.openhab.core.model.sitemap.runtime-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.model.thing.runtime/3.3.0-SNAPSHOT/org.openhab.core.model.thing.runtime-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ui/3.3.0-SNAPSHOT/org.openhab.core.ui-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/knowm/xchart/xchart/3.1.0/xchart-3.1.0.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/de/erichseifert/vectorgraphics2d/VectorGraphics2D/0.11/VectorGraphics2D-0.11.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ui.icon/3.2.0-SNAPSHOT/org.openhab.core.ui.icon-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.storage.json/3.2.0-SNAPSHOT/org.openhab.core.storage.json-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.addon.marketplace/3.2.0-SNAPSHOT/org.openhab.core.addon.marketplace-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.addon.marketplace.karaf/3.2.0-SNAPSHOT/org.openhab.core.addon.marketplace.karaf-3.2.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
-    <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/karaf/kar/org.apache.karaf.kar.core/4.3.3/org.apache.karaf.kar.core-4.3.3.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.ui.icon/3.3.0-SNAPSHOT/org.openhab.core.ui.icon-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.storage.json/3.3.0-SNAPSHOT/org.openhab.core.storage.json-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.addon.marketplace/3.3.0-SNAPSHOT/org.openhab.core.addon.marketplace-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/openhab/core/bundles/org.openhab.core.addon.marketplace.karaf/3.3.0-SNAPSHOT/org.openhab.core.addon.marketplace.karaf-3.3.0-SNAPSHOT.jar" enabled="true" runInBatchMode="false"/>
+    <factorypathentry kind="VARJAR" id="M2_REPO/org/apache/karaf/kar/org.apache.karaf.kar.core/4.3.7/org.apache.karaf.kar.core-4.3.7.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/javax/measure/unit-api/2.1.3/unit-api-2.1.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/org/reactivestreams/reactive-streams/1.0.3/reactive-streams-1.0.3.jar" enabled="true" runInBatchMode="false"/>
     <factorypathentry kind="VARJAR" id="M2_REPO/io/reactivex/rxjava2/rxjava/2.2.20/rxjava-2.2.20.jar" enabled="true" runInBatchMode="false"/>

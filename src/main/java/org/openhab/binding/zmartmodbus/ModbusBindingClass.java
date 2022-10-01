@@ -22,6 +22,7 @@ import javax.measure.Unit;
 import javax.measure.quantity.Dimensionless;
 import javax.measure.quantity.Power;
 import javax.measure.quantity.Temperature;
+import javax.measure.quantity.Time;
 
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunction;
 import org.openhab.binding.zmartmodbus.internal.protocol.ModbusFunctionJablotron;
@@ -484,6 +485,7 @@ public class ModbusBindingClass {
     public static final Unit<Dimensionless> API_NOISE_UNIT = Units.DECIBEL;
     public static final Unit<Dimensionless> API_PERCENT_UNIT = Units.PERCENT;
     public static final Unit<Power> API_POWER_UNIT = Units.WATT;
+    public static final Unit<Time> API_DAY_UNIT = Units.DAY;
 
     public static enum ModbusUnitsOfMeasure {
         Temperature("temperature", API_TEMPERATURE_UNIT),
@@ -491,7 +493,8 @@ public class ModbusBindingClass {
         Co2("co2", API_CO2_UNIT),
         Noise("noise", API_NOISE_UNIT),
         Percent("percent", API_PERCENT_UNIT),
-        Power("power", API_POWER_UNIT);
+        Power("power", API_POWER_UNIT),
+        Day("day", API_DAY_UNIT);
 
         private ModbusUnitsOfMeasure(final String text, final Unit<?> api) {
             this.text = text;

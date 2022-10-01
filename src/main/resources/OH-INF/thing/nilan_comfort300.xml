@@ -11,7 +11,6 @@
 		<description>Nilan Comfort 300 Air Ventilation controller</description>
 
 		<channels>
-
 			<!-- Channels from Input registers -->
 			<channel id="Input_AirFilter" typeId="alarm_general">
 				<label>Input.AirFilter</label>
@@ -50,7 +49,6 @@
 					<property name="valuetype">onoff16</property>
 				</properties>
 			</channel>
-
 			<channel id="Input_DamperOpen" typeId="sensor_binary_advanced">
 				<label>Input.DamperOpen</label>
 				<description>Air damper open position</description>
@@ -215,6 +213,130 @@
 					<property name="scale">1</property>
 				</properties>
 			</channel>
+			<channel id="AirFlow_VentSet" typeId="nilan_ventset">
+				<label>AirFlow.VentSet</label>
+				<description>Actual ventilation step setpoint</description>
+				<properties>
+					<property name="dataset">IAirFlow</property>
+					<property name="index">0</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="AirFlow_InletAct" typeId="nilan_ventset">
+				<label>AirFlow.InletAct</label>
+				<description>Actual inlet ventilation step setpoint</description>
+				<properties>
+					<property name="dataset">IAirFlow</property>
+					<property name="index">1</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="AirFlow_ExhaustAct" typeId="nilan_ventset">
+				<label>AirFlow.ExhaustAct</label>
+				<description>Actual exhaust ventilation step setpoint</description>
+				<properties>
+					<property name="dataset">IAirFlow</property>
+					<property name="index">2</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="AirFlow_SinceFiltDay" typeId="nilan_day">
+				<label>AirFlow.SinceFiltDay</label>
+				<description>Days since last air filter change alarm</description>
+				<properties>
+					<property name="dataset">IAirFlow</property>
+					<property name="index">3</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">day</property>
+					<property name="scale">0</property>
+				</properties>
+			</channel>
+			<channel id="AirFlow_ToFiltDay" typeId="nilan_day">
+				<label>AirFlow.ToFiltDay</label>
+				<description>Days to next air filter change alarm</description>
+				<properties>
+					<property name="dataset">IAirFlow</property>
+					<property name="index">3</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">day</property>
+					<property name="scale">0</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_IsSummer" typeId="nilan_runset">
+				<label>AirTemp.IsSummer</label>
+				<description>Summer state</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">0</property>
+					<property name="valuetype">int16</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_TempInletSet" typeId="thermostat_setpoint_advanced">
+				<label>AirTemp.TempInletSet</label>
+				<description>Inlet temperature request (T7 setpoint)</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">1</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_TempControl" typeId="sensor_temperature_advanced">
+				<label>AirTemp.TempControl</label>
+				<description>Actual value for controlled temperature</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">2</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_TempRoom" typeId="sensor_temperature_advanced">
+				<label>AirTemp.TempRoom</label>
+				<description>Actual room temperature (T15 or T10)</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">3</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">temperature</property>
+					<property name="scale">2</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_EffPct" typeId="switch_percent_advanced">
+				<label>AirTemp.EffPct</label>
+				<description>Passive heat exchanger efficiency</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">4</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">percent</property>
+					<property name="scale">2</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_CapSet" typeId="switch_percent_advanced">
+				<label>AirTemp.CapSet</label>
+				<description>Requested capacity</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">5</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">percent</property>
+					<property name="scale">2</property>
+				</properties>
+			</channel>
+			<channel id="AirTemp_CapAct" typeId="switch_percent_advanced">
+				<label>AirTemp.CapAct</label>
+				<description>Actual capacity</description>
+				<properties>
+					<property name="dataset">IAirTemp</property>
+					<property name="index">6</property>
+					<property name="valuetype">int16</property>
+					<property name="unit">percent</property>
+					<property name="scale">2</property>
+				</properties>
+			</channel>
 
 			<!-- Alarm -->
 			<channel id="Alarm_L1_ID" typeId="nilan_alarmlist">
@@ -282,7 +404,6 @@
 					<property name="valuetype">nilan_text</property>
 				</properties>
 			</channel>
-
 			<channel id="Text2" typeId="displayText">
 				<label>Display.Text2</label>
 				<description>2nd line of display</description>
@@ -383,6 +504,7 @@
 					<property name="scale">2</property>
 				</properties>
 			</channel>
+
 
 			<!-- Program -->
 			<channel id="HProgram_Select" typeId="nilan_programselect">
@@ -782,6 +904,9 @@
 			<property name="dataset_IInput2">input:fast:change:23:200</property>
 			<property name="dataset_IDisplay">input:fast:change:12:2000</property>
 			<property name="dataset_IAlarm">input:slow:change:10:400</property>
+			<property name="dataset_IControl">input:slow:change:4:1000</property>
+			<property name="dataset_IAirFlow">input:slow:change:5:1100</property>
+			<property name="dataset_IAirTemp">input:slow:change:7:1200</property>
 
 			<!-- Holding registers, prefixed with H -->
 			<property name="dataset_HOutput1">holding:slow:change:28:100</property>
@@ -790,7 +915,7 @@
 			<property name="dataset_HAlarm">holding:slow:change:1:400</property>
 			<property name="dataset_HProgram5">holding:slow:change:1:500</property>
 			<property name="dataset_HProgram60">holding:slow:change:6:600</property>
-			<property name="dataset_HProgram61">holding:slow:change:6:600</property>
+			<property name="dataset_HProgram61">holding:slow:change:6:610</property>
 			<property name="dataset_HControl">holding:slow:change:8:1000</property>
 			<property name="dataset_HAirFlow">holding:slow:change:5:1100</property>
 			<property name="dataset_HAirTemp">holding:slow:change:8:1200</property>
